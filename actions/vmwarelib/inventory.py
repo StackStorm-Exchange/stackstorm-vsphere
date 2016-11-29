@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pyVmomi import vim
+from pyVmomi import vim  # pylint: disable-msg=E0611
 
 
 def get_managed_entity(content, vimtype, moid=None, name=None):

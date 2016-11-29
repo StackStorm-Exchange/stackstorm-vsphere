@@ -14,7 +14,7 @@
 # limitations under the License.
 
 import eventlet
-from pyVmomi import vim
+from pyVmomi import vim  # pylint: disable-msg=E0611
 
 from vmwarelib import inventory
 from vmwarelib import checkinputs

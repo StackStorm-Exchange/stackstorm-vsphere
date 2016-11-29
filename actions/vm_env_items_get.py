@@ -15,7 +15,7 @@
 
 from vmwarelib import inventory
 from vmwarelib.actions import BaseAction
-from pyVmomi import vim
+from pyVmomi import vim  # pylint: disable-msg=E0611
 
 
 class GetItems(BaseAction):
