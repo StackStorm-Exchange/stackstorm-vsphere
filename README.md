@@ -8,20 +8,23 @@ You will need to specificy the details of the vcenter instance you will be conne
 You can specificy multiple environments using nested values
 
 ```yaml
-  vsphere:
-    dev:
-      host:
-      port:
-      user:
-      passwd:
-    staging:
-      host:
-      port:
-      user:
-      passwd:
+---
+ssl_verify: 
+vsphere:
+  dev:
+    host:
+    port:
+    user:
+    passwd:
+  staging:
+    host:
+    port:
+    user:
+    passwd:
 ```
 Note: To ensure backward compatability and ease for single environment use. If no vsphere value is passed to the actions it will look for v0.3 config.yaml structure:
 ```yaml
+  ssl_verify:
   host:
   port:
   user:
