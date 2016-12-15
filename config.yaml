@@ -1,7 +1,8 @@
 ---
-  vsphere:
-    default:
-      host:
-      port:
-      user:
-      passwd:
+ssl_verify: yes
+vsphere:
+  default:
+    host:
+    port:
+    user:
+    passwd:

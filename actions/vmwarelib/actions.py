@@ -18,6 +18,9 @@ import eventlet
 
 from pyVim import connect
 from pyVmomi import vim  # pylint: disable-msg=E0611
+
+
+
 from st2actions.runners.pythonrunner import Action
 
 CONNECTION_ITEMS = ['host', 'port', 'user', 'passwd']
@@ -39,6 +42,20 @@ class BaseAction(Action):
                     pass
                 else:
                     raise KeyError("Config.yaml Mising: %s" % (item))
+
+        if "ssl_verify" in config:
+            if not config['ssl_verify']:
+                import requests
+                requests.packages.urllib3.disable_warnings()
+                import ssl
+
+                try:
+                    _create_unverified_https_context = ssl._create_unverified_context
+                except AttributeError:
+                    pass
+                else:
+                    ssl._create_default_https_context = _create_unverified_https_context
+
 
     def establish_connection(self, vsphere):
         self.si = self._connect(vsphere)
