@@ -18,6 +18,7 @@ from vmwarelib.serialize import MyJSONEncoder
 from vmwarelib.actions import BaseAction
 import json
 
+
 class GetVMDetails(BaseAction):
     def run(self, vm_ids, vm_names, vsphere=None):
         """
@@ -45,11 +46,11 @@ class GetVMDetails(BaseAction):
                 vm = inventory.get_virtualmachine(self.si_content, moid=vid)
                 if vm:
                     if vm.name not in results:
-                        results[vm.name] = json.loads(json.dumps(vm.summary,cls=MyJSONEncoder))
+                        results[vm.name] = json.loads(json.dumps(vm.summary, cls=MyJSONEncoder))
         if vm_names:
             for vm in vm_names:
                 vm = inventory.get_virtualmachine(self.si_content, name=vm)
                 if vm:
                     if vm.name not in results:
-                        results[vm.name] = json.loads(json.dumps(vm.summary,cls=MyJSONEncoder))
+                        results[vm.name] = json.loads(json.dumps(vm.summary, cls=MyJSONEncoder))
         return results
