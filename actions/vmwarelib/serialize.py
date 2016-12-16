@@ -10,22 +10,8 @@ class MyJSONEncoder(json.JSONEncoder):
 
         except TypeError:
 
-            if type(obj) in (vim.Network.Summary,
-                vim.Datastore.Summary,
-                vim.ClusterComputeResource.Summary,
-                vim.host.Summary,
-                vim.host.Summary.HardwareSummary,
-                vim.host.Summary.ConfigSummary,
-                vim.Network,
-                vim.AboutInfo,
-                vim.vm.Summary,
-                vim.vm.Summary.ConfigSummary,
-                vim.vm.Summary.StorageSummary,
-                vim.vm.Summary.GuestSummary,
-                vim.Datastore,
-                vim.vm.RuntimeInfo,
-                vim.vm.DeviceRuntimeInfo):
-                    return obj.__dict__
+            if type(obj) in (vim.Network.Summary, vim.Datastore.Summary, vim.ClusterComputeResource.Summary, vim.host.Summary, vim.host.Summary.HardwareSummary, vim.host.Summary.ConfigSummary, vim.Network, vim.AboutInfo, vim.vm.Summary, vim.vm.Summary.ConfigSummary, vim.vm.Summary.StorageSummary, vim.vm.Summary.GuestSummary, vim.Datastore, vim.vm.RuntimeInfo, vim.vm.DeviceRuntimeInfo):
+                return obj.__dict__
 
             # For anything else
             return "__{}__".format(obj.__class__.__name__)
