@@ -1,6 +1,7 @@
 import json
 from pyVmomi import vim  # pylint: disable-msg=E0611
 
+
 class MyJSONEncoder(json.JSONEncoder):
 
     def default(self, obj):
@@ -8,7 +9,6 @@ class MyJSONEncoder(json.JSONEncoder):
             return super(MyJSONEncoder, self).default(obj)
 
         except TypeError:
-
 
             if type(obj) in (vim.Network.Summary,
                 vim.Datastore.Summary,
@@ -25,7 +25,7 @@ class MyJSONEncoder(json.JSONEncoder):
                 vim.Datastore,
                 vim.vm.RuntimeInfo,
                 vim.vm.DeviceRuntimeInfo):
-                return obj.__dict__
+                    return obj.__dict__
 
             # For anything else
             return "__{}__".format(obj.__class__.__name__)
