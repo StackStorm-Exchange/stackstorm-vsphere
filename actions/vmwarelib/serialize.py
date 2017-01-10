@@ -23,7 +23,7 @@ NON_JSON_SERILIZABLE_TYPES = [
 
 
 class MyJSONEncoder(json.JSONEncoder):
-    def default(self, obj):
+    def default(self, obj):  # pylint: disable=E0202
         try:
             return super(MyJSONEncoder, self).default(obj)
         except TypeError:
