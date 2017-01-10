@@ -13,10 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import ssl
 import atexit
+
 import eventlet
+import requests
 from pyVim import connect
 from pyVmomi import vim  # pylint: disable-msg=E0611
+
 from st2actions.runners.pythonrunner import Action
 
 CONNECTION_ITEMS = ['host', 'port', 'user', 'passwd']
@@ -39,18 +43,17 @@ class BaseAction(Action):
                 else:
                     raise KeyError("Config.yaml Mising: %s" % (item))
 
-        if "ssl_verify" in config:
-            if not config['ssl_verify']:
-                import requests
-                requests.packages.urllib3.disable_warnings()
-                import ssl
+        ssl_verify = config.get('ssl_verify', None)
+        if ssl_verify is False:
+            # Don't print out ssl warnings
+            requests.packages.urllib3.disable_warnings()
 
-                try:
-                    _create_unverified_https_context = ssl._create_unverified_context
-                except AttributeError:
-                    pass
-                else:
-                    ssl._create_default_https_context = _create_unverified_https_context
+            try:
+                _create_unverified_https_context = ssl._create_unverified_context
+            except AttributeError:
+                pass
+            else:
+                ssl._create_default_https_context = _create_unverified_https_context
 
     def establish_connection(self, vsphere):
         self.si = self._connect(vsphere)
