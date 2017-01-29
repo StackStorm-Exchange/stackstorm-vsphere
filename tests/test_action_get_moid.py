@@ -47,7 +47,7 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
 
         # invoke action with valid parameters
         mock_entity = "''vim.VirtualMachine:vm-1234''"
-        with mock.patch.object(inventory,'get_managed_entity', return_value=mock_entity):
+        with mock.patch.object(inventory, 'get_managed_entity', return_value=mock_entity):
             # test for each object types
             for object_type in object_types:
                 result = self._action.run(object_names=['hoge'], object_type=object_type)

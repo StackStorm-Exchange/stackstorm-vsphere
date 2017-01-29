@@ -11,8 +11,14 @@ parameters:
         required: true
     object_type:
         type: string
-        description: The type of object name (VirtualMachine|Network|Datastore|Datacenter|Host)
+        description: The type of object to get
         required: true
+        enum:
+          - VirtualMachine
+          - Network
+          - Datastore
+          - Datacenter
+          - Host
     vsphere:
         type: string
         description: Pre-Configured vsphere connection details
