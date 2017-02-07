@@ -1,0 +1,27 @@
+---
+name: get_moid
+runner_type: run-python
+description: Returns the MOID of vSphere managed entity corresponding to the specified parameters
+enabled: true
+entry_point: get_moid.py
+parameters:
+    object_names:
+        type: array
+        description: Object names to convert to MOID
+        required: true
+    object_type:
+        type: string
+        description: The type of object to get
+        required: true
+        enum:
+          - VirtualMachine
+          - Network
+          - Datastore
+          - Datacenter
+          - Host
+    vsphere:
+        type: string
+        description: Pre-Configured vsphere connection details
+        required: false
+        position: 1
+        default: ~
