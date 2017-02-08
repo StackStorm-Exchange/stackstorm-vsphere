@@ -6,3 +6,8 @@ vsphere:
     port:
     user:
     passwd:
+
+sensors:
+  taskinfo:
+    tasknum: # indicates the task numbers to check at once
+    vsphere:

@@ -1,0 +1,21 @@
+---
+class_name: TaskInfoSensor
+entry_point: taskinfo_sensor.py
+description: Sensor which monitors vSphere task events
+poll_interval: 30
+trigger_types:
+  - name: taskinfo
+    description: Trigger which indicates that a new task information of vSphere has arrived
+    payload_schema:
+      type: object
+      properties:
+        task_id:
+          type: string
+        operation_name:
+          type: string
+        queue_time:
+          type: string
+        start_time:
+          type: string
+        completed_time:
+          type: string
