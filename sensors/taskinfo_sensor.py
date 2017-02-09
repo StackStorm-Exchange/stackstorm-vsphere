@@ -1,5 +1,4 @@
 from pyVmomi import vim  # pylint: disable-msg=E0611
-from pyVmomi import vmodl
 from base import VSphereSensor
 from datetime import datetime
 
@@ -26,10 +25,11 @@ class TaskInfoSensor(VSphereSensor):
         self._collector = self._get_task_collector()
 
     def poll(self):
-        for task in self._collector.ReadNextTasks(self._tasknum):
-            self._log.debug('Found a TaskInfo: %s' % task)
+        if self._collector:
+            for task in self._collector.ReadNextTasks(self._tasknum):
+                self._log.debug('Found a TaskInfo: %s' % task)
 
-            self._dispatch_taskinfo(task)
+                self._dispatch_taskinfo(task)
 
     def _get_task_collector(self):
         # set filter to get TaskInfo which is queued in the vSphere after executing this Sensor
@@ -37,12 +37,12 @@ class TaskInfoSensor(VSphereSensor):
         time_filter.timeType = vim.TaskFilterSpec.TimeOption.queuedTime
         time_filter.beginTime = datetime.now()
 
+        filter_spec = vim.TaskFilterSpec(time=time_filter)
+
         try:
-            return self.si_content.taskManager.CreateCollectorForTasks(
-                    filter=vim.TaskFilterSpec(time=time_filter))
-        except vmodl.fault.InvalidArgument as e:
+            return self.si_content.taskManager.CreateCollectorForTasks(filter=filter_spec)
+        except Exception as e:
             self._log.error(e)
-            return []
 
     def _dispatch_taskinfo(self, taskinfo):
         self.sensor_service.dispatch(trigger='vsphere.taskinfo', payload={
