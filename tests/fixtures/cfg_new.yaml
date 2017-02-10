@@ -5,3 +5,8 @@
       port: 443
       user: Admin
       passwd: password
+
+  sensors:
+    taskinfo:
+      interval: 5
+      vsphere: default

@@ -4,3 +4,8 @@
       host: 192.168.0.1
       port: 443
       user: Admin
+
+  sensors:
+    taskinfo:
+      interval: 5
+      vsphere: default
