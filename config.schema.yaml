@@ -21,7 +21,6 @@ vsphere:
         user:
           description: Authentication user-id for the vSphere Server.
           type: string
-          secret: true
           required: true
         passwd:
           description: The password of the specified user.
