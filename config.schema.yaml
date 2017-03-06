@@ -27,3 +27,18 @@ vsphere:
           type: string
           secret: true
           required: true
+
+sensors:
+  type: object
+  properties:
+    taskinfo:
+      type: object
+      properties:
+        tasknum:
+          description: The number of tasks to check at a polling processing
+          type: integer
+          default: 1
+        vsphere:
+          description: vSphere environment which is specified in the config (set this parameter if you set to anything vSphere environemnt other than `defualt`)
+          type: string
+          default: 'default'
