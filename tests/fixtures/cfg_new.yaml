@@ -8,5 +8,5 @@
 
   sensors:
     taskinfo:
-      interval: 5
+      tasknum: 5
       vsphere: default
