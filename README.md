@@ -85,18 +85,28 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 
 ## Actions
 
-* `vsphere.vm_end_items_get` - Retrieve json list of objects from vsphere
+* `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
+* `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
+* `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
+* `vsphere.hello_vsphere` - Wait for a Task to complete and returns its result.
+* `vsphere.set_vm` - Changes configuration of a Virtual Machine.
+* `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
+* `vsphere.vm_create_from_template` - Create a new VM from existing template.
+* `vsphere.vm_env_items_get` - Retrieve list of Objects from VSphere
+* `vsphere.vm_hw_barebones_create` - Create BareBones VM (CPU, Ram, Graphics Only)
 * `vsphere.vm_hw_basic_build` - Minstral Flow to Build Basic Server and power it on.
 * `vsphere.vm_hw_cpu_mem_edit` - Adjust the CPU and RAM values assigned to a Virtual Machine
 * `vsphere.vm_hw_detail_get` - Retrieve Vsphere Data about a virtual machine
 * `vsphere.vm_hw_hdd_add` - Add a HardDrive Object to a Virtual Machine
+* `vsphere.vm_hw_moid_get` - Retrieve VM MOID
 * `vsphere.vm_hw_nic_add` - Add a Network Device to VM and attach to designated network.
 * `vsphere.vm_hw_nic_edit` - Edit Network Device on Virtual machine (V0.2 only allows to switch network)
 * `vsphere.vm_hw_power_off` - Perform VM Power off - Equivilant of Holding power button
 * `vsphere.vm_hw_power_on` - Power on Virtual Machine
+* `vsphere.vm_hw_remove` - Removes the Virtual Machine.
 * `vsphere.vm_hw_scsi_controller_add` - Add SCSI HDD Controller device to VM
 * `vsphere.vm_hw_uuid_get` - Retrieve VM UUID
-* `vsphere.vm_hw_moid_get` - Retrieve VM MOID
+* `vsphere.wait_task` - Wait for a Task to complete and returns its result.
 
 ## Known Bugs
 * Bug: vm_hw_hdd_add, Specifying datastore does not work. New files will be added to the same datastore as the core VM files. Note. Specifying a Datastore Cluster does still install files to the correct set of datastores.
