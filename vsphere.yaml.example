@@ -1,0 +1,8 @@
+ssl_verify: false
+vsphere:
+  vcentername:
+    host: vcenter.host
+    passwd: password
+    port: 443
+    user: username
+
