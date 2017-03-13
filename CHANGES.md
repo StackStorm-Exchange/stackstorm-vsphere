@@ -29,3 +29,7 @@ Update nic actions to factor in Distributed Port Groups. When setting a network 
  
 Added global ssl_verify configuration option to disable SSL certificate verification when connecting to vSphere servers.
 Added custom JSON Encoder class to serialize VM summary (`vsphere.vm_hw_details_get`) output, hence, allowing results to be a list of dicts instead of strings. Makes it easier to access the results later in the workflows or action chains.
+
+## V0.4.8
+
+Update config.schema.yaml to support any name for vcenters
