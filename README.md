@@ -4,7 +4,7 @@ This pack integrates with vsphere and allows for the creation and management of 
 
 ## Connection Configuration
 
-You will need to specificy the details of the vcenter instance you will be connecting to within the `config.yaml` file.
+You will need to specificy the details of the vcenter instance you will be connecting to within the `/opt/stackstorm/config/vsphere.yaml` file.
 You can specificy multiple environments using nested values
 
 ```yaml
