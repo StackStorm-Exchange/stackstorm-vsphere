@@ -56,6 +56,7 @@ This trigger is emitted for every task information that is invoked on the specif
 Here is a example of a trigger payload.
 ```
 {
+  state: success,
   queue_time: 2017/03/10 02:08:39,
   start_time: 2017/03/10 02:08:39,
   complete_time: 2017/03/10 02:08:40,
@@ -67,6 +68,7 @@ Each of parameters mean following.
 
 | params         | description                                                         |
 |:---------------|:--------------------------------------------------------------------|
+| state          | State of the task. The possible is same with [vim.TaskInfo.State](https://github.com/vmware/pyvmomi/blob/master/docs/vim/TaskInfo/State.rst) |
 | queue_time     | Time stamp when the task was created                                |
 | start_time     | Time stamp when the task started running                            |
 | complete_time  | Time stamp when the task was completed (whether success or failure) |
