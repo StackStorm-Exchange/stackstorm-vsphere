@@ -65,7 +65,7 @@ class TaskInfoSensorTestCase(BaseSensorTestCase):
         # replace TaskHistoryCollector object by mock that returns dummy TaskInfo object
         sensor._collector = mock.Mock()
         sensor._collector.ReadNextTasks = mock.Mock(
-                return_value=[self.MockUncompletedTaskInfo('task-1')])
+            return_value=[self.MockUncompletedTaskInfo('task-1')])
 
         sensor.poll()
 

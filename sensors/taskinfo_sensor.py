@@ -63,12 +63,12 @@ class TaskInfoSensor(VSphereSensor):
         self.sensor_service.dispatch(trigger='vsphere.taskinfo', payload={
             'task_id': taskinfo.key,
             'operation_name': taskinfo.descriptionId,
-            'queue_time': taskinfo.queueTime and
-                taskinfo.queueTime.strftime('%Y/%m/%d %H:%M:%S') or '',
-            'start_time': taskinfo.startTime and
-                taskinfo.startTime.strftime('%Y/%m/%d %H:%M:%S') or '',
-            'complete_time': taskinfo.completeTime and
-                taskinfo.completeTime.strftime('%Y/%m/%d %H:%M:%S') or '',
+            'queue_time':
+                taskinfo.queueTime and taskinfo.queueTime.strftime('%Y/%m/%d %H:%M:%S') or '',
+            'start_time':
+                taskinfo.startTime and taskinfo.startTime.strftime('%Y/%m/%d %H:%M:%S') or '',
+            'complete_time':
+                taskinfo.completeTime and taskinfo.completeTime.strftime('%Y/%m/%d %H:%M:%S') or '',
             'state': str(taskinfo.state),
         })
 
