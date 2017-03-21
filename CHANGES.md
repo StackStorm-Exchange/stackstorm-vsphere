@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.4.9
+
+Update the `TaskInfoSensor` to enable handling uncompleted Tasks.
+
 ## V0.4.8
 
 Update config.schema.yaml to support any name for vcenters
