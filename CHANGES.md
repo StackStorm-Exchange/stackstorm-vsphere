@@ -4,6 +4,18 @@
 
 Update config.schema.yaml to support any name for vcenters
 
+## V0.4.7
+
+Added schema file to apply the configuration schema to this pack.
+
+## V0.4.6
+
+Added 'taskinfo_sensor' to monitor the tasks which is executed on specified vSphere environment.
+
+## V0.4.5
+
+Added 'get_moid' action that enables to get object-id named MOID(Managed Object Reference ID) which is the identifier that uniquely identifies an object in vSphere from object-name and object-type.
+
 ## V0.4.4
 
 Added global ssl_verify configuration option to disable SSL certificate verification when connecting to vSphere servers.
