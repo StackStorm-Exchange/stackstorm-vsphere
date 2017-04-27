@@ -20,6 +20,7 @@
       type: "string"
       description: "Datacenter name - Specify if Multiple Datacenters within your VSphere instance."
       required: false
+      default: ~
     cluster:
       type: "string"
       description: "Cluster Name to Buid VM within"
