@@ -2,7 +2,7 @@
 ref: vsphere
 name: vsphere 
 description: st2 content pack containing vsphere integrations.
-version: 0.4.9
+version: 0.5.0
 author: Paul Mulvihill
 email: paul.mulvihill@pulsant.com
 contributors:

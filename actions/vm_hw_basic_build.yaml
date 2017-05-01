@@ -65,6 +65,12 @@ parameters:
     type: string
     description: Datastore core VM Files will be store against (vmx files). Use unless datastoreCluster is provided.
     position: 7
+  vm_dc: 
+    required: false
+    default: ~
+    type: string
+    description: DataCenter to Buid VM within
+    position: 2
   vm_dccluster: 
     required: true
     type: string

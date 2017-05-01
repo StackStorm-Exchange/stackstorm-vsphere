@@ -1,8 +1,12 @@
 ssl_verify: false
 vsphere:
-  vcentername:
-    host: vcenter.host
+  vcenter_dev:
+    host: vcenter.host.dev
     passwd: password
     port: 443
     user: username
-
+  vcenter_prod:
+    host: vcenter.host.prod
+    passwd: password
+    port: 443
+    user: username

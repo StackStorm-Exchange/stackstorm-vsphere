@@ -21,7 +21,7 @@ from vmwarelib.actions import BaseAction
 
 
 class VMCreateBareBones(BaseAction):
-    def run(self, vm_name, cluster, datastore_cluster,
+    def run(self, vm_name, cluster, datacenter, datastore_cluster,
             datastore, resourcepool, cpu_size, ram_size,
             guestos, version, description, vsphere=None):
         """
@@ -53,7 +53,11 @@ class VMCreateBareBones(BaseAction):
                                        datastore,
                                        "Datastore Cluster or Datastore")
 
-        data_center = self.si_content.rootFolder.childEntity[0]
+        
+        if datacenter:
+            data_center = inventory.get_datacenter(self.si_content, name=datacenter) 
+        else:
+            data_center = self.si_content.rootFolder.childEntity[0]
         cluster = inventory.get_cluster(self.si_content, name=cluster)
         data_store_cluster = inventory.get_datastore_cluster(
             self.si_content,

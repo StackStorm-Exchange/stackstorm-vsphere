@@ -12,6 +12,7 @@ vsphere.vm_hw_basic_build:
     - vm_dscluster
     - vm_datastore
     - vm_dccluster
+    - vm_dc
     - vm_guestos
     - vm_description
     - vm_ctrl_type
@@ -31,6 +32,7 @@ vsphere.vm_hw_basic_build:
         ram_size: <% $.vm_ram %>
         cpu_size: <% $.vm_cpu %>
         cluster: <% $.vm_dccluster %>
+        datacenter: <% $.vm_dc %>
         datastore_cluster: <% $.vm_dscluster %>
         datastore: <% $.vm_datastore %>
         resourcepool: <% $.vm_resourcepool %>

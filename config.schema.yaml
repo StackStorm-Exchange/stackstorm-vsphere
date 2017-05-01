@@ -32,6 +32,7 @@ vcenters:
       type: "string"
       secret: true
       required: true
+  additionalProperties: false
 
 sensors:
   type: object
