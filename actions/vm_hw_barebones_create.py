@@ -53,9 +53,8 @@ class VMCreateBareBones(BaseAction):
                                        datastore,
                                        "Datastore Cluster or Datastore")
 
-        
         if datacenter:
-            data_center = inventory.get_datacenter(self.si_content, name=datacenter) 
+            data_center = inventory.get_datacenter(self.si_content, name=datacenter)
         else:
             data_center = self.si_content.rootFolder.childEntity[0]
         cluster = inventory.get_cluster(self.si_content, name=cluster)

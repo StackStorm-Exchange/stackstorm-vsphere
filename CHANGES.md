@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.5.1
+
+Minor linting errors
+
 ## V0.5.0
 
 Addition of DataCenter imput field for VM creation action and workflow. Fall back continues to function as present Although this should be provided if Multiple Datacenters are under a single Vsphere instance.
