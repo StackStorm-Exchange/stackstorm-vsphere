@@ -4,6 +4,10 @@
 
 Addition of DataCenter imput field for VM creation action and workflow. Fall back continues to function as present Although this should be provided if Multiple Datacenters are under a single Vsphere instance.
 
+## V0.4.9
+
+Update the `TaskInfoSensor` to enable handling uncompleted Tasks.
+
 ## V0.4.8
 
 Update config.schema.yaml to support any name for vcenters

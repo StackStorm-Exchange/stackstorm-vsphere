@@ -1,3 +1,5 @@
+import threading
+
 from pyVmomi import vim  # pylint: disable-msg=E0611
 from base import VSphereSensor
 from datetime import datetime
@@ -26,10 +28,23 @@ class TaskInfoSensor(VSphereSensor):
 
     def poll(self):
         if self._collector:
-            for task in self._collector.ReadNextTasks(self._tasknum):
-                self._log.debug('Found a TaskInfo: %s' % task)
+            for taskinfo in self._collector.ReadNextTasks(self._tasknum):
+                self._log.debug('Found a TaskInfo: %s' % taskinfo)
 
-                self._dispatch_taskinfo(task)
+                # dispatches taskinfo trigger
+                self._dispatch_taskinfo(taskinfo)
+
+                # If task is uncompleted, waiting until it completes then dispatches it again
+                if taskinfo.state == vim.TaskInfo.State.running:
+                    threading.Thread(target=self._wait_until_task_complete,
+                                     args=[taskinfo.task]).start()
+
+    def _wait_until_task_complete(self, task):
+        """Waits until target task complete, then dispatch trigger"""
+        while task.info.state == vim.TaskInfo.State.running:
+            pass
+
+        self._dispatch_taskinfo(task.info)
 
     def _get_task_collector(self):
         # set filter to get TaskInfo which is queued in the vSphere after executing this Sensor
@@ -48,9 +63,13 @@ class TaskInfoSensor(VSphereSensor):
         self.sensor_service.dispatch(trigger='vsphere.taskinfo', payload={
             'task_id': taskinfo.key,
             'operation_name': taskinfo.descriptionId,
-            'queue_time': taskinfo.queueTime.strftime('%Y/%m/%d %H:%M:%S'),
-            'start_time': taskinfo.startTime.strftime('%Y/%m/%d %H:%M:%S'),
-            'complete_time': taskinfo.completeTime.strftime('%Y/%m/%d %H:%M:%S'),
+            'queue_time':
+                taskinfo.queueTime and taskinfo.queueTime.strftime('%Y/%m/%d %H:%M:%S') or '',
+            'start_time':
+                taskinfo.startTime and taskinfo.startTime.strftime('%Y/%m/%d %H:%M:%S') or '',
+            'complete_time':
+                taskinfo.completeTime and taskinfo.completeTime.strftime('%Y/%m/%d %H:%M:%S') or '',
+            'state': str(taskinfo.state),
         })
 
     def cleanup(self):

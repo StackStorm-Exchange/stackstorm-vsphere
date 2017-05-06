@@ -11,6 +11,8 @@ trigger_types:
       properties:
         task_id:
           type: string
+        state:
+          type: string
         operation_name:
           type: string
         queue_time:
