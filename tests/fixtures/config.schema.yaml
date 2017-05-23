@@ -1,38 +1,32 @@
 ---
 ssl_verify:
-  description: "Verify SSL certificate used with vCenter Server."
+  description: Using ssl/tls protocol to encrypt communications with vCenter Server.
   type: boolean
   default: True
 
 vsphere:
-  type: "object"
-  required: true
-  patternProperties:
-      "^\\w+":
-        "$ref": "#/properties/vcenters"
-  additionalProperties: false
-
-vcenters:
-  type: "object"
+  type: object
   properties:
-    host:
-      description: "Hostname or IP address of vSphere Server."
-      type: "string"
-      required: true
-    port:
-      description: "TCP port number for the vSphere Server."
-      type: "integer"
-      required: true
-    user:
-      description: "Authentication user-id for the vSphere Server."
-      type: "string"
-      required: true
-    passwd:
-      description: "The password of the specified user."
-      type: "string"
-      secret: true
-      required: true
-  additionalProperties: false
+    default:
+      type: object
+      properties:
+        host:
+          description: Hostname or IP address of accessing vSphere Server.
+          type: string
+          required: true
+        port:
+          description: TCP port number for the vSphere Server.
+          type: integer
+          required: true
+        user:
+          description: Authentication user-id for the vSphere Server.
+          type: string
+          required: true
+        passwd:
+          description: The password of the specified user.
+          type: string
+          secret: true
+          required: true
 
 sensors:
   type: object
@@ -41,10 +35,10 @@ sensors:
       type: object
       properties:
         tasknum:
-          description: "The number of tasks to check at a polling processing"
+          description: The number of tasks to check at a polling processing
           type: integer
           default: 1
         vsphere:
-          description: "vSphere environment to poll, as specified in the config. Uses 'default' if not set"
+          description: vSphere environment which is specified in the config (set this parameter if you set to anything vSphere environemnt other than `defualt`)
           type: string
           default: 'default'
