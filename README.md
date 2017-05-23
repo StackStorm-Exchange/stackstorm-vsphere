@@ -4,8 +4,8 @@ This pack integrates with vsphere and allows for the creation and management of 
 
 ## Connection Configuration
 
-You will need to specificy the details of the vcenter instance you will be connecting to within the `/opt/stackstorm/config/vsphere.yaml` file.
-You can specificy multiple environments using nested values
+You will need to specify the details of the vcenter instance you will be connecting to within the `/opt/stackstorm/config/vsphere.yaml` file.
+You can specify multiple environments using nested values
 
 ```yaml
 ---
@@ -22,39 +22,53 @@ vsphere:
     user:
     passwd:
 ```
-Note: To ensure backward compatability and ease for single environment use. If no vsphere value is passed to the actions it will look for v0.3 config.yaml structure:
+**Note**: Legacy configuration files (`/opt/stackstorm/packs/vsphere/config.yaml`) are no longer supported.
+If you are still using this configuration style, you will need to migrate.
+
+If you only have a single vSphere environment, set it up as `default`, and you won't need to specify it when running actions, e.g.:
+
 ```yaml
-  ssl_verify:
-  host:
-  port:
-  user:
-  passwd:
+---
+ssl_verify: true
+vsphere:
+  default:
+    host: "myvsphere.local"
+    port: "443"
+    user: "st2"
+    passwd: "ItsASecret"
 ```
 
-Please Note Configuration validation will raise an exception if config.yaml contains 'vsphere' but no defined endpoints.
+## Sensors
 
-# Sensors
-## TaskInfoSensor
-This sensor observes [TaskInfo](https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.TaskInfo.html)  which is invoked on the vSphere environment which is specified in the configuration after the `TaskInfoSensor` is started.
+### TaskInfoSensor
 
-This is the configuration parameters for this.
-```
+This sensor observes [TaskInfo](https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.TaskInfo.html)
+which is invoked on the vSphere environment specified in the configuration.
+
+The configuration looks like this:
+```yaml
 sensors:
   taskinfo:
     tasknum: # indicates the task numbers to check at once
     vsphere:
 ```
-These are the each parameters meaning to be set.
+These parameters need to be set:
 
-* __tasknum__: The maximum TaskInfo numbers to get from vCenter at once (`1` is set as default when setting this value is omitted). When you specify the number of greater than 1 and a number of Tasks which are less than the `tasknum` are occurred, vCenter returns the actual occurred `TaskInfo`s. And when a number of Tasks which are greater than the `tasknum` are occurred, `TaskInfoSensor` dispatches them iteratively until the all `TaskInfo`s is done during a polling interval.
+* `tasknum`: The maximum TaskInfo numbers to get from vCenter at once (By default, `1` is used if this value is omitted).
+  If you specify a number > 1, and the number of Tasks that occurred is less than `tasknum`, vCenter returns the actual
+  `TaskInfo`s. If more Tasks occurred than `tasknum`, `TaskInfoSensor` dispatches them iteratively until all `TaskInfo`s
+  have been received.
 
-* __vsphere__: The name of vSphere environment to observe (`default` is set as default when setting this value is omitted). This value must be same with the value of the name of vSphere environment which is specified in the configuration for connecting (please see [Connection Configuration](https://github.com/StackStorm-Exchange/stackstorm-vsphere#connection-configuration)).
+* `vsphere`: The name of vSphere environment to observe. This value must be the name of a vSphere
+  environment specified in the [Connection Configuration](https://github.com/StackStorm-Exchange/stackstorm-vsphere#connection-configuration).
+  If omitted, `default` is used.
 
 ### vsphere.taskinfo
+
 This trigger is emitted for every task information that is invoked on the specified vSphere environment in the configuration.
 
 Here is a example of a trigger payload.
-```
+```json
 {
   state: success,
   queue_time: 2017/03/10 02:08:39,
@@ -64,23 +78,24 @@ Here is a example of a trigger payload.
   task_id: task-5714
 }
 ```
-Each of parameters mean following.
+This is what each parameter means:
 
 | params         | description                                                         |
 |:---------------|:--------------------------------------------------------------------|
-| state          | State of the task. The possible is same with [vim.TaskInfo.State](https://github.com/vmware/pyvmomi/blob/master/docs/vim/TaskInfo/State.rst) |
-| queue_time     | Time stamp when the task was created                                |
-| start_time     | Time stamp when the task started running                            |
-| complete_time  | Time stamp when the task was completed (whether success or failure) |
-| operation_name | The name of the operation that created the task                     |
-| task_id        | The MOID (Managed Object Reference ID) that identifies target task  |
+| `state`          | State of the task. The is one of these values: [vim.TaskInfo.State](https://github.com/vmware/pyvmomi/blob/master/docs/vim/TaskInfo/State.rst) |
+| `queue_time`     | Time stamp when the task was created                                |
+| `start_time`     | Time stamp when the task started running                            |
+| `complete_time`  | Time stamp when the task was completed (whether success or failure) |
+| `operation_name` | The name of the operation that created the task                     |
+| `task_id`        | The MOID (Managed Object Reference ID) that identifies target task  |
 
 ## Todo
-* Create actions for vsphere environment data retrieval. Allowing for integration with external systems for accurate action calls with informed parameter values.
-* Review and implement ST2 1.5 config.yaml changes. Review how useable dynamic configuration can be in case of this Packs purpose.
+
+* Create actions for vsphere environment data retrieval. Allow for integration with external systems for accurate action calls with informed parameter values.
 * Expand base test files. Level of mocking required has limited this at present.
 
 ## Requirements
+
 This pack requires the python module PYVMOMI. At present the `requirements.txt` specifies version 5.5.0. 
 The version specification is to ensure compatibility with Python 2.7.6 (standard version with Ubuntu 14.04).
 PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due to elements of the SSL module being used.
@@ -111,4 +126,4 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.wait_task` - Wait for a Task to complete and returns its result.
 
 ## Known Bugs
-* Bug: vm_hw_hdd_add, Specifying datastore does not work. New files will be added to the same datastore as the core VM files. Note. Specifying a Datastore Cluster does still install files to the correct set of datastores.
+* Bug: `vm_hw_hdd_add`, Specifying datastore does not work. New files will be added to the same datastore as the core VM files. Note: Specifying a Datastore Cluster does still install files to the correct set of datastores.

@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.6.0
+
+Removed `config.yaml`, and updated README to remove references to legacy config support. Pack already supports `config.schema.yaml`
+
 ## V0.5.1
 
 Minor linting errors
