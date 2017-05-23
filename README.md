@@ -31,6 +31,8 @@ Note: To ensure backward compatability and ease for single environment use. If n
   passwd:
 ```
 
+For an example, please see the `vsphere.yaml.example` file. Do not forget to run `st2ctl reload --register-configs` after you make changes to your `configs/vsphere.yaml` file!
+
 Please Note Configuration validation will raise an exception if config.yaml contains 'vsphere' but no defined endpoints.
 
 # Sensors
