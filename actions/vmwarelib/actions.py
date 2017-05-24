@@ -41,7 +41,7 @@ class BaseAction(Action):
                 if item in config:
                     pass
                 else:
-                    raise KeyError("Config.yaml Mising: %s" % (item))
+                    raise KeyError("Config.yaml Missing: %s" % (item))
 
         ssl_verify = config.get('ssl_verify', None)
         if ssl_verify is False:
@@ -66,7 +66,7 @@ class BaseAction(Action):
                 if item in connection:
                     pass
                 else:
-                    raise KeyError("Config.yaml Mising: vsphere:%s:%s"
+                    raise KeyError("Config.yaml Missing: vsphere:%s:%s"
                                    % (vsphere, item))
         else:
             connection = self.config
