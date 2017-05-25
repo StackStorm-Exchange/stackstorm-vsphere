@@ -21,11 +21,7 @@ class VSphereSensor(PollingSensor):
             else:
                 pass
         else:
-            for item in self.CONNECTION_ITEMS:
-                if item in config:
-                    pass
-                else:
-                    raise KeyError("Config.yaml Mising: %s" % (item))
+            raise ValueError("No connection configuration details found")
 
         ssl_verify = config.get('ssl_verify', None)
         if ssl_verify is False:
@@ -44,16 +40,13 @@ class VSphereSensor(PollingSensor):
         self.si_content = self.si.RetrieveContent()
 
     def _connect(self, vsphere):
-        if vsphere:
-            connection = self.config['vsphere'].get(vsphere)
-            for item in self.CONNECTION_ITEMS:
-                if item in connection:
-                    pass
-                else:
-                    raise KeyError("Config.yaml Mising: vsphere:%s:%s"
-                                   % (vsphere, item))
-        else:
-            connection = self.config
+        connection = self.config['vsphere'].get(vsphere)
+        for item in self.CONNECTION_ITEMS:
+            if item in connection:
+                pass
+            else:
+                raise KeyError("vsphere.yaml Mising: vsphere:%s:%s"
+                               % (vsphere, item))
 
         try:
             si = connect.SmartConnect(host=connection['host'],

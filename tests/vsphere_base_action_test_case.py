@@ -60,15 +60,14 @@ class VsphereBaseActionTestCase(BaseActionTestCase):
         self.assertRaises(ValueError, self.action_cls, self.blank_config)
 
     def test_run_config_old(self):
-        action = self.get_action_instance(self.old_config)
-        self.assertIsInstance(action, self.action_cls)
+        self.assertRaises(ValueError, self.action_cls, self.old_config)
 
     def test_run_config_new(self):
         action = self.get_action_instance(self.new_config)
         self.assertIsInstance(action, self.action_cls)
 
     def test_run_config_old_partial(self):
-        self.assertRaises(KeyError, self.action_cls, self.old_config_partial)
+        self.assertRaises(ValueError, self.action_cls, self.old_config_partial)
 
     def test_run_config_new_partial(self):
         action = self.get_action_instance(self.new_config_partial)
