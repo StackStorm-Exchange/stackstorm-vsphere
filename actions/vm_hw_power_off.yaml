@@ -1,6 +1,6 @@
 ---
   name: "vm_hw_power_off"
-  runner_type: "run-python"
+  runner_type: "python-script"
   description: "Performs a Hardware Power Off of a VM. Note: This is not an OS shutdown."
   enabled: true
   entry_point: "vm_hw_power.py"

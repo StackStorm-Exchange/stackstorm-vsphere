@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.0
+
+Updated action `runner_type` from `run-python` to `python-script`
+
 ## V0.6.0
 
 Removed `config.yaml`, and updated README to remove references to legacy config support. Pack already supports `config.schema.yaml`

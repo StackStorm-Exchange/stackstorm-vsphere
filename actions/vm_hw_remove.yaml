@@ -1,6 +1,6 @@
 ---
   name: vm_hw_remove
-  runner_type: run-python
+  runner_type: python-script
   description: Removes the Virtual Machine.
   enabled: true
   entry_point: vm_hw_remove.py
