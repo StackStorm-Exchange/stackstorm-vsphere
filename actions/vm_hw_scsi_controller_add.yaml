@@ -1,6 +1,6 @@
 ---
     name: "vm_hw_scsi_controller_add"
-    runner_type: "run-python"
+    runner_type: "python-script"
     description: "Add SCSI Controller to VM. You must provide at least one of VM_ID or Name"
     enabled: true
     entry_point: "vm_hw_scsi_controller_add.py"

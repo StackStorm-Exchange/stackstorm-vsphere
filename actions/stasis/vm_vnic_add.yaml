@@ -1,6 +1,6 @@
 ---
   name: "vm_vnic_add"
-  runner_type: "run-python"
+  runner_type: "python-script"
   description: "Add nic to a VM."
   enabled: true
   entry_point: "vm_vnic_add.py"

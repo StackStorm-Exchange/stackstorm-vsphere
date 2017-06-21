@@ -1,6 +1,6 @@
 ---
     name: "vm_hw_nic_add"
-    runner_type: "run-python"
+    runner_type: "python-script"
     description: "Add New Hdd to Virtual Machine. You must Provide Either VM_ID or Name."
     enabled: true
     entry_point: "vm_hw_nic_add.py"

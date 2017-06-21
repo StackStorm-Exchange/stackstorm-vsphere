@@ -1,6 +1,6 @@
 ---
     name: get_vms
-    runner_type: run-python
+    runner_type: python-script
     description: Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
     enabled: true
     entry_point: get_vms.py

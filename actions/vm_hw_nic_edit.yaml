@@ -1,6 +1,6 @@
 ---
   name: "vm_hw_nic_edit"
-  runner_type: "run-python"
+  runner_type: "python-script"
   description: "Alter Configuration of Network Adapater"
   enabled: true
   entry_point: "vm_hw_nic_edit.py"
