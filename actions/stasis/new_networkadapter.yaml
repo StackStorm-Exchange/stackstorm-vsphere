@@ -1,6 +1,6 @@
 ---
     name: new_networkadapter
-    runner_type: run-python
+    runner_type: python-script
     description: Adds a new network adapter to provided Virtual Machines.
     enabled: true
     entry_point: new_networkadapter.py

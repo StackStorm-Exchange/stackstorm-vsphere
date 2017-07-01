@@ -1,6 +1,6 @@
 ---
   name: "vm_create_from_template"
-  runner_type: "run-python"
+  runner_type: "python-script"
   description: "Create a new VM from existing template."
   enabled: true
   entry_point: "vm_create_from_template.py"

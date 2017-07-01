@@ -1,6 +1,6 @@
 ---
     name: set_vm
-    runner_type: run-python
+    runner_type: python-script
     description: Changes configuration of a Virtual Machine.
     enabled: true
     entry_point: set_vm.py

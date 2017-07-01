@@ -1,6 +1,6 @@
 ---
   name: "vm_hw_barebones_create"
-  runner_type: "run-python"
+  runner_type: "python-script"
   description: "Create BareBones VM (CPU, Ram, Graphics Only)"
   enabled: true
   entry_point: "vm_hw_barebones_create.py"

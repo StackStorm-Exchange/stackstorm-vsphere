@@ -1,6 +1,6 @@
 ---
   name: vm_hw_moid_get
-  runner_type: run-python
+  runner_type: python-script
   description: Retrieve moid of a VM object
   entry_point: vm_hw_moid_get.py
   parameters:

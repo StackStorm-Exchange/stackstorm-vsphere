@@ -1,6 +1,6 @@
 ---
   name: vm_env_items_get
-  runner_type: run-python
+  runner_type: python-script
   description: Retrieve list of Objects from VSphere
   entry_point: vm_env_items_get.py
   parameters:

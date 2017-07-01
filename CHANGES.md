@@ -1,8 +1,12 @@
 # Change Log
 
-## V0.6.1
+## V0.7.1
 
 Fixed non-unique position parameters
+
+## V0.7.0
+
+Updated action `runner_type` from `run-python` to `python-script`
 
 ## V0.6.0
 
