@@ -21,7 +21,7 @@ parameters:
     description: Which Datastore Cluster should be used for this HDD. Blank = same as Base VM    
   vm_resourcepool: 
     type: string
-    position: 3
+    position: 4
   vm_version: 
     default: vmx-09
     type: string
@@ -30,12 +30,12 @@ parameters:
     default: 1
     type: integer
     description: Number of CPU's to attach to this VM
-    position: 4
+    position: 5
   vm_ram: 
     default: 2
     type: integer
     description: RAM (GB) assigned to server)
-    position: 5
+    position: 6
   vm_ctrl_type: 
     default: ParaVirtual
     type: string
@@ -44,22 +44,22 @@ parameters:
     default: 40
     type: integer
     description: Size of HDD in GB
-    position: 6
+    position: 9
   vm_nic_type: 
     default: vmxnet3
     type: string
     description: Type of Network Adapter to attach
-    position: 8
+    position: 10
   vm_nic_netname: 
     required: true
     type: string
     description: Which network do you want to attach to?
-    position: 9
+    position: 11
   vm_dscluster: 
     required: false
     type: string
     description: Datastore Cluster core VM Files will be store against (vmx files).
-    position: 7
+    position: 8
   vm_datastore: 
     required: false
     type: string
@@ -75,17 +75,17 @@ parameters:
     required: true
     type: string
     description: DataCenter Cluster to Buid VM within
-    position: 2
+    position: 3
   vm_guestos: 
     default: rhel6_64guest
     type: string
-    position: 10
+    position: 12
   vm_description: 
     description: Simple description about Virtual Machine
     type: string
-    position: 11
+    position: 13
   vm_poweron:
     description: Power VM on after creation (default=True)
     type: boolean
     default: false
-    position: 12
+    position: 14
