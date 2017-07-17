@@ -42,7 +42,7 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
             'Network',
             'Datastore',
             'Datacenter',
-            'Host',
+            'HostSystem',
         ]
 
         # invoke action with valid parameters
