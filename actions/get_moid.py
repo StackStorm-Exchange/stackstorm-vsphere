@@ -32,17 +32,9 @@ class GetMoid(BaseAction):
         - dict: key value pair of object_name and moid.
         """
 
-        if object_type == 'VirtualMachine':
-            vimtype = vim.VirtualMachine
-        elif object_type == 'Network':
-            vimtype = vim.Network
-        elif object_type == 'Datastore':
-            vimtype = vim.Datastore
-        elif object_type == 'Datacenter':
-            vimtype = vim.Datacenter
-        elif object_type == 'Host':
-            vimtype = vim.HostSystem
-        else:
+        try:
+            vimtype = getattr(vim, object_type)
+        except AttributeError:
             self.logger.warning("specified object_type ('%s') is not supported" % object_type)
             return (False, {})
 

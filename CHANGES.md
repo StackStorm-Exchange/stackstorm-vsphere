@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.2
+
+Changed to be able to handle all vim Objects that pyvmomi prepared
+
 ## V0.7.1
 
 Fixed non-unique position parameters

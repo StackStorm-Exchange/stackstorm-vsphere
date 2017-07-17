@@ -14,11 +14,46 @@ parameters:
         description: The type of object to get
         required: true
         enum:
-          - VirtualMachine
-          - Network
-          - Datastore
+          - AuthorizationManager
+          - ClusterComputeResource
+          - ComputeResource
+          - CustomFieldsManager
           - Datacenter
-          - Host
+          - Datastore
+          - DiagnosticManager
+          - DistributedVirtualSwitch
+          - DrsStatsManager/InjectorWorkload
+          - Extension
+          - ExtensionManager
+          - HbrManager
+          - HostSystem
+          - HttpNfcLease
+          - IpPoolManager
+          - LatencySensitivity
+          - LicenseAssignmentManager
+          - LicenseManager
+          - LocalizationManager
+          - ManagedEntity
+          - Network
+          - OpaqueNetwork
+          - OvfConsumer
+          - OvfManager
+          - PerformanceManager
+          - ResourcePlanningManager
+          - ResourcePool
+          - ServiceInstance
+          - ServiceManager
+          - SessionManager
+          - SharesInfo
+          - SimpleCommand
+          - StoragePod
+          - StorageResourceManager
+          - TaskFilterSpec
+          - TaskInfo
+          - UpdateVirtualMachineFilesResult
+          - VirtualApp
+          - VirtualDiskManager
+          - VirtualMachine
     vsphere:
         type: string
         description: Pre-Configured vsphere connection details
