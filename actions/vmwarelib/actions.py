@@ -80,6 +80,7 @@ class BaseAction(Action):
         return si
 
     def _wait_for_task(self, task):
-        while task.info.state == vim.TaskInfo.State.running:
+        while (task.info.state == vim.TaskInfo.State.queued or
+               task.info.state == vim.TaskInfo.State.running):
             eventlet.sleep(1)
         return task.info.state == vim.TaskInfo.State.success
