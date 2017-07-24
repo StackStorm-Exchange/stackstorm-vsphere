@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.3
+
+Fixed the problem to looking over the task state checking in the action library
+
 ## V0.7.2
 
 Changed to be able to handle all vim Objects that pyvmomi prepared
