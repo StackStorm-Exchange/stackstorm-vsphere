@@ -23,6 +23,7 @@ class VMCreateFromTemplate(BaseAction):
 
     def run(self, name, template_id, datacenter_id, resourcepool_id,
             datastore_id, vsphere=None):
+        is_success = True
         self.establish_connection(vsphere)
 
         # convert ids to stubs
@@ -49,6 +50,7 @@ class VMCreateFromTemplate(BaseAction):
                                      spec=clonespec)
         self._wait_for_task(task)
         if task.info.state != vim.TaskInfo.State.success:
-            raise Exception(task.info.error.msg)
+            is_success = False
+            self.logger.warning(task.info.error.msg)
 
-        return {'task_id': task._moId, 'vm_id': task.info.result._moId}
+        return (is_success, {'task_id': task._moId, 'vm_id': task.info.result._moId})
