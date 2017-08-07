@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.4
+
+Enabled to specify IP Address for each NetworkAdapters in the 'vm_create_from_template' action
+
 ## V0.7.3
 
 Fixed the problem to looking over the task state checking in the action library

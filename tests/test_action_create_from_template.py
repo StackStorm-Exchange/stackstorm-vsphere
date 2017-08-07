@@ -100,6 +100,74 @@ class CreateFromTemplateTestCase(VsphereBaseActionTestCase):
         # stopping mock task
         mock_task_thread.stop()
 
+    @mock.patch.object(vm_create_from_template, 'vim')
+    @mock.patch.object(vm_create_from_template, 'inventory')
+    def test_action_with_network_params(self, mock_inventory, mock_vim):
+        def side_effect(folder, name, spec):
+            mock_task = mock.Mock()
+            mock_task.info.state = vim.TaskInfo.State.success
+
+            # Checks to set customization parameters
+            self.assertEqual(len(spec.customization.nicSettingMap), len(params['networks']))
+            self.assertEqual(spec.customization.nicSettingMap[0].adapter.subnetMask,
+                             '255.255.255.0')
+
+            return mock_task
+
+        # To check task state, set to return TaskInfo.State value
+        mock_vim.TaskInfo.State = vim.TaskInfo.State
+        mock_template = mock.Mock()
+        mock_template.CloneVM_Task.side_effect = side_effect
+        mock_inventory.get_virtualmachine.return_value = mock_template
+
+        params = {
+            'name': 'creating_vm',
+            'template_id': 'vm-1',
+            'datacenter_id': 'datacenter-1',
+            'resourcepool_id': 'resourcepool-1',
+            'datastore_id': 'datastore-1',
+            'networks': [
+                {'ipaddr': '192.168.0.11'},
+                {'ipaddr': '192.168.0.12', 'netmask': '255.255.255.0', 'gateway': '192.168.0.1'},
+            ],
+        }
+        result = self._action.run(**params)
+
+        self.assertTrue(result[0])
+
+    @mock.patch.object(vm_create_from_template, 'vim')
+    @mock.patch.object(vm_create_from_template, 'inventory')
+    def test_action_with_invalid_network_params(self, mock_inventory, mock_vim):
+        def side_effect(folder, name, spec):
+            mock_task = mock.Mock()
+            mock_task.info.state = vim.TaskInfo.State.success
+
+            # Checks to set only valid configuration
+            self.assertEqual(len(spec.customization.nicSettingMap), 1)
+
+            return mock_task
+
+        # To check task state, set to return TaskInfo.State value
+        mock_vim.TaskInfo.State = vim.TaskInfo.State
+        mock_template = mock.Mock()
+        mock_template.CloneVM_Task.side_effect = side_effect
+        mock_inventory.get_virtualmachine.return_value = mock_template
+
+        params = {
+            'name': 'creating_vm',
+            'template_id': 'vm-1',
+            'datacenter_id': 'datacenter-1',
+            'resourcepool_id': 'resourcepool-1',
+            'datastore_id': 'datastore-1',
+            'networks': [
+                {'ipaddr': '192.168.0.11'},
+                {'ipaddr': '192.168.3.'},  # invalid format of IPAddress
+            ],
+        }
+        result = self._action.run(**params)
+
+        self.assertTrue(result[0])
+
 
 # This is the class to emulate the Task to change the state every second.
 class MockTaskThread(threading.Thread):

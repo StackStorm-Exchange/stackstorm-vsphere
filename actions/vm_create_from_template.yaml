@@ -30,4 +30,25 @@
       type: "string"
       description: "Datastore in which to place VM."
       required: true
-
+    networks:
+      type: "array"
+      description: "(Optional) Configuration to set IP addresses for each Network-adapters"
+      additionalProperties: false
+      properties:
+        ipaddr:
+          type: "string"
+          description: "IP Address to set to the Network Adapter"
+          default: '0.0.0.0'
+        netmask:
+          type: "string"
+          description: "Subnetmask of the specified IP Address"
+          default: '255.255.255.0'
+        gateway:
+          type: "string"
+          description: "Gateway address associated with the specified IP Address"
+          default: '0.0.0.0'
+        domain:
+          type: "string"
+          description: "Domain name which is set to the target Network Adapter"
+          default: 'localhost'
+      default: []
