@@ -21,7 +21,7 @@ import requests
 from pyVim import connect
 from pyVmomi import vim  # pylint: disable-msg=E0611
 
-from st2actions.runners.pythonrunner import Action
+from st2common.runners.base_action import Action
 
 CONNECTION_ITEMS = ['host', 'port', 'user', 'passwd']
 
