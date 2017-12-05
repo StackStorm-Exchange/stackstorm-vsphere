@@ -47,6 +47,42 @@ vsphere:
            remember to tell StackStorm to load these new values by running
            `st2ctl reload --register-configs`
 
+## What is my VM ID?
+
+Many of the actions in this pack use a VM ID parameter (i.e. in `vmid` or `vm_id` parameters) to determine which VM(s)
+to act upon. This is known as a Managed Object Reference ID (MOID). Note that this is **not** the same as the VM's name.
+
+If you use the wrong MOID for one of these actions, you might get this error message:
+
+```
+Exception: Inventory Error: Unable to Find Object (<class 'pyVmomi.VmomiSupport.vim.VirtualMachine'>): SuperAwesomeVM
+```
+
+This means you're not using the correct MOID. In order to perform an action that requires an ID, you'll have to first
+retrieve it's MOID. That can be done with the `vsphere.get_moid` action. For instance, if we wanted to find the MOID
+of a VM we called "SuperAwesomeVM", we could feed that into the `vsphere.get_moid` action to retrieve the MOID for
+that VM.
+
+```yaml
+mierdin@stackstorm:~$ st2 run vsphere.get_moid object_names="SuperAwesomeVM" object_type="VirtualMachine"
+.
+id: 5a25e85502ebd558f14a686c
+status: succeeded
+parameters:
+  object_names:
+  - SuperAwesomeVM
+  object_type: VirtualMachine
+result:
+  exit_code: 0
+  result:
+    SuperAwesomeVM: '56'
+  stderr: ''
+  stdout: ''
+```
+
+That MOID value (in this case, `56` - you may see something like `vm-123456`) can now be used in other `vsphere` actions
+that require an ID.
+
 ## Sensors
 
 ### TaskInfoSensor
