@@ -38,7 +38,7 @@ ssl_verify: true
 vsphere:
   default:
     host: "myvsphere.local"
-    port: "443"
+    port: 443
     user: "st2"
     passwd: "ItsASecret"
 ```
