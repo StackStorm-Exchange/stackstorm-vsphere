@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.6
+
+Minor linting fixes
+
 ## V0.7.4
 
 Enabled to specify IP Address for each NetworkAdapters in the 'vm_create_from_template' action
