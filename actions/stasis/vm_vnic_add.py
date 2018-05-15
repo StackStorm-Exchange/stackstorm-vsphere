@@ -78,7 +78,7 @@ class VMAddNic(BaseAction):
 
         try:
             self.si_content.customizationSpecManager.CreateCustomizationSpec(cust_item)
-        except:
+        except Exception:
             self.logger.exception('Failed to create customization spec.')
             raise
 

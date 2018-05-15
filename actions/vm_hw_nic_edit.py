@@ -50,7 +50,7 @@ class VMNicEdit(BaseAction):
             nettype = "dist"
             network_obj = inventory.get_distributedportgroup(self.si_content,
                                                              name=network_name)
-        except:
+        except Exception:
             nettype = "std"
             network_obj = inventory.get_network(self.si_content,
                                                 name=network_name)

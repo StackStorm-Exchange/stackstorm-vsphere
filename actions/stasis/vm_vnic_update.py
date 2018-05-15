@@ -75,7 +75,7 @@ class VMUpdateNic(BaseAction):
         try:
             customize_task = virtualmachine.Customize(spec=customspec)
             successfully_customized = self._wait_for_task(customize_task)
-        except:
+        except Exception:
             self.logger.exception('Failed to create customization spec.')
             raise
         msg = 'Updated nic and assigned IP.' if successfully_customized else 'Failed to assign ip.'
