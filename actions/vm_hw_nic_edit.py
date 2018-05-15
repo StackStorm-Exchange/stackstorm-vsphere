@@ -65,7 +65,7 @@ class VMNicEdit(BaseAction):
         # isn't instantiated if not found
         try:
             nic
-        except:
+        except Exception:
             raise Exception('Unable to find Network Adapter provided')
 
         # Create object for new Specification
