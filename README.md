@@ -115,12 +115,12 @@ This trigger is emitted for every task information that is invoked on the specif
 Here is a example of a trigger payload.
 ```json
 {
-  state: success,
-  queue_time: 2017/03/10 02:08:39,
-  start_time: 2017/03/10 02:08:39,
-  complete_time: 2017/03/10 02:08:40,
-  operation_name: VirtualMachine.destroy,
-  task_id: task-5714
+  "state": "success",
+  "queue_time": "2017/03/10 02:08:39",
+  "start_time": "2017/03/10 02:08:39",
+  "complete_time": "2017/03/10 02:08:40",
+  "operation_name": "VirtualMachine.destroy",
+  "task_id": "task-5714"
 }
 ```
 This is what each parameter means:
@@ -155,6 +155,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
 * `vsphere.vm_create_from_template` - Create a new VM from existing template.
 * `vsphere.vm_env_items_get` - Retrieve list of Objects from VSphere
+* `vsphere.vm_guest_info_get` - Retrieve Guest details of a VM object
 * `vsphere.vm_hw_barebones_create` - Create BareBones VM (CPU, Ram, Graphics Only)
 * `vsphere.vm_hw_basic_build` - Minstral Flow to Build Basic Server and power it on.
 * `vsphere.vm_hw_cpu_mem_edit` - Adjust the CPU and RAM values assigned to a Virtual Machine

@@ -1,5 +1,11 @@
 # Change Log
 
+## V0.7.7
+
+Added a new action `vsphere.vm_guest_info_get` that retrieves the Guest information for a VM.
+
+Contributed by Nick Maludy (Encore Technologies).
+
 ## V0.7.6
 
 Minor linting fixes
