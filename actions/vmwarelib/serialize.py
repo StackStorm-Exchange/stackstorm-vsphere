@@ -65,6 +65,7 @@ HOST_GET_NON_JSON_SERILIZABLE_TYPES = [
     vim.host.SystemIdentificationInfo,
 ]
 
+
 class MyJSONEncoder(json.JSONEncoder):
     def default(self, obj):  # pylint: disable=E0202
         try:
@@ -75,6 +76,7 @@ class MyJSONEncoder(json.JSONEncoder):
 
             # For anything else just return the class name
             return "__{}__".format(obj.__class__.__name__)
+
 
 class HostGetJSONEncoder(json.JSONEncoder):
     def default(self, obj):  # pylint: disable=E0202
@@ -87,6 +89,7 @@ class HostGetJSONEncoder(json.JSONEncoder):
             # For anything else just return the class name
             return "__{}__".format(obj.__class__.__name__)
 
+
 class PhysicalNicJSONEncoder(json.JSONEncoder):
     def default(self, obj):  # pylint: disable=E0202
         try:
@@ -97,6 +100,7 @@ class PhysicalNicJSONEncoder(json.JSONEncoder):
 
             # For anything else just return the class name
             return "__{}__".format(obj.__class__.__name__)
+
 
 class VmRuntimeInfoJSONEncoder(json.JSONEncoder):
     def default(self, obj):  # pylint: disable=E0202
