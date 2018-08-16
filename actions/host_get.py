@@ -46,12 +46,14 @@ class GetHost(BaseAction):
                 host = inventory.get_hostsystem(self.si_content, moid=hid)
                 if host:
                     if host.name not in results:
-                        results[host.name] = json.loads(json.dumps(host.summary, cls=HostGetJSONEncoder))
+                        results[host.name] = json.loads(json.dumps(host.summary,
+                                                                   cls=HostGetJSONEncoder))
         if host_names:
             for host in host_names:
                 host = inventory.get_hostsystem(self.si_content, name=host)
                 if host:
                     if host.name not in results:
                         print host.name
-                        results[host.name] = json.loads(json.dumps(host.summary, cls=HostGetJSONEncoder))
+                        results[host.name] = json.loads(json.dumps(host.summary,
+                                                                   cls=HostGetJSONEncoder))
         return results

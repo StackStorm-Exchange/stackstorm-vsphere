@@ -46,11 +46,13 @@ class GetVMRuntimeInfo(BaseAction):
                 vm = inventory.get_virtualmachine(self.si_content, moid=vid)
                 if vm:
                     if vm.name not in results:
-                        results[vm.name] = json.loads(json.dumps(vm.runtime, cls=VmRuntimeInfoJSONEncoder))
+                        results[vm.name] = json.loads(json.dumps(vm.runtime,
+                                                                 cls=VmRuntimeInfoJSONEncoder))
         if vm_names:
             for vm in vm_names:
                 vm = inventory.get_virtualmachine(self.si_content, name=vm)
                 if vm:
                     if vm.name not in results:
-                        results[vm.name] = json.loads(json.dumps(vm.runtime, cls=VmRuntimeInfoJSONEncoder))
+                        results[vm.name] = json.loads(json.dumps(vm.runtime,
+                                                                 cls=VmRuntimeInfoJSONEncoder))
         return results
