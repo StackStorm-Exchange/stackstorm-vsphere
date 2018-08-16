@@ -2,7 +2,11 @@
 
 ## V0.7.7
 
-Added a new action `vsphere.vm_guest_info_get` that retrieves the Guest information for a VM.
+Added a new action actions:
+* `vsphere.host_get` - retrieves the Summary information for an ESX host.
+* `vsphere.host_network_hints_get` - retrieves the Network Hints for an ESX host.
+* `vsphere.vm_guest_info_get` - retrieves the Guest information for a VM.
+* `vsphere.vm_runtime_info_get` - retrieves the Runtime information for a VM.
 
 Contributed by Nick Maludy (Encore Technologies).
 

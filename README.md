@@ -151,6 +151,8 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
 * `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
 * `vsphere.hello_vsphere` - Wait for a Task to complete and returns its result.
+* `vsphere.host_get` - Retrieves the Summary information for an ESX host.
+* `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
 * `vsphere.set_vm` - Changes configuration of a Virtual Machine.
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
 * `vsphere.vm_create_from_template` - Create a new VM from existing template.
@@ -169,6 +171,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.vm_hw_remove` - Removes the Virtual Machine.
 * `vsphere.vm_hw_scsi_controller_add` - Add SCSI HDD Controller device to VM
 * `vsphere.vm_hw_uuid_get` - Retrieve VM UUID
+* `vsphere.vm_runtime_info_get` - Retrieves the Runtime information for a VM.
 * `vsphere.wait_task` - Wait for a Task to complete and returns its result.
 
 ## Known Bugs
