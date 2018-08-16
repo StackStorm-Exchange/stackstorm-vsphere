@@ -1,0 +1,23 @@
+---
+  name: host_get
+  pack: vsphere
+  runner_type: python-script
+  description: Retrieve summary information for given Hosts (ESXi)
+  entry_point: host_get.py
+  parameters:
+    host_ids:
+      type: array
+      description: Comma seperated list of Host IDs
+      required: false
+      position: 0
+    host_names:
+      type: array
+      description: Comma seperated list of Host Names
+      required: false
+      position: 1
+      default: ~
+    vsphere:
+      type: string
+      description: Pre-configured vsphere endpoint
+      required: false
+      position: 2
