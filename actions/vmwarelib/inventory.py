@@ -87,6 +87,9 @@ def get_datastore(content, moid=None, name=None):
     return get_managed_entity(content, vim.Datastore,
                               moid=moid, name=name)
 
+def get_hostsystem(content, moid=None, name=None):
+    return get_managed_entity(content, vim.HostSystem,
+                              moid=moid, name=name)
 
 def get_network(content, moid=None, name=None):
     return get_managed_entity(content, vim.Network,
