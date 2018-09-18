@@ -79,6 +79,36 @@ class BaseAction(Action):
         atexit.register(connect.Disconnect, si)
         return si
 
+    def _connect_rest(self, vsphere):
+        if vsphere:
+            connection = self.config['vsphere'].get(vsphere)
+        else:
+            connection = self.config['vsphere'].get('default')
+
+        for item in CONNECTION_ITEMS:
+            if item in connection:
+                pass
+            else:
+                raise KeyError("vsphere.yaml Mising: vsphere:%s:%s"
+                               % (vsphere, item))
+
+        try:
+            session = requests.Session()
+            session.verify = False
+            session.auth = (connection['user'], connection['passwd'])
+
+            login_url = "https://%s/rest/com/vmware/cis/session" % connection['host']
+
+            response = session.post(login_url)
+
+            response.raise_for_status()
+
+        except Exception as e:
+            raise Exception(e)
+
+        return session
+            
+
     def _wait_for_task(self, task):
         while (task.info.state == vim.TaskInfo.State.queued or
                task.info.state == vim.TaskInfo.State.running):
