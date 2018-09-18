@@ -55,7 +55,7 @@ class BaseAction(Action):
         self.si = self._connect(vsphere)
         self.si_content = self.si.RetrieveContent()
 
-    def _connect(self, vsphere):
+    def _get_connection_info(self, vsphere):
         if vsphere:
             connection = self.config['vsphere'].get(vsphere)
         else:
@@ -68,6 +68,11 @@ class BaseAction(Action):
                 raise KeyError("vsphere.yaml Mising: vsphere:%s:%s"
                                % (vsphere, item))
 
+        return connection
+
+    def _connect(self, vsphere):
+        connection = self._get_connection_info(vsphere)
+
         try:
             si = connect.SmartConnect(host=connection['host'],
                                       port=connection['port'],
@@ -78,6 +83,39 @@ class BaseAction(Action):
 
         atexit.register(connect.Disconnect, si)
         return si
+
+    def _connect_rest(self, vsphere):
+        connection = self._get_connection_info(vsphere)
+
+        try:
+            session = requests.Session()
+            session.verify = False
+            session.auth = (connection['user'], connection['passwd'])
+
+            login_url = "https://%s/rest/com/vmware/cis/session" % connection['host']
+
+            session.post(login_url)
+
+        except Exception as e:
+            raise Exception(e)
+
+        return session
+
+    def _rest_api_call(self, vsphere, api_endpoint, api_verb, post_params=None):
+        # The connection info is needed to add the hostname to the API endpoint
+        connection = self._get_connection_info(vsphere)
+
+        session = self._connect_rest(vsphere)
+
+        api_endpoint = "https://%s%s" % (connection['host'], api_endpoint)
+
+        # Create a prepared request so we can use the verb that was passed
+        req = requests.Request(api_verb, api_endpoint, json=post_params)
+        prepped = session.prepare_request(req)
+
+        response = session.send(prepped)
+
+        return response.json()
 
     def _wait_for_task(self, task):
         while (task.info.state == vim.TaskInfo.State.queued or
