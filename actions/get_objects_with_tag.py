@@ -1,49 +1,39 @@
-import requests
+# Licensed to the StackStorm, Inc ('StackStorm') under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from vmwarelib.actions import BaseAction
 
 
 class GetObjectsWithTag(BaseAction):
-    def __init__(self, config):
-        super(BaseAction, self).__init__(config)
-
-    def get_objects_from_tag(self, kwargs_dict, session):
-        """
-        Make a REST API request that returns a list of all objects with a given tag
-
-        Args:
-        - kwargs_dict: Dictionary list of all inputs for this action
-        - session: The session that's returned from the _connect_rest method
-
-        Returns:
-        - dict: The REST response from the API call
-        """
-        tag_id = kwargs_dict.get("tag_id")
-        # Get the server from the vsphere config file
-        if kwargs_dict.get("vsphere"):
-            server = self.config['vsphere'].get(kwargs_dict.get("vsphere"))['host']
-        else:
-            server = self.config['vsphere'].get("default")['host']
-
-        tag_url = "https://%s/rest/com/vmware/cis/tagging/tag-association/id:%s?~action=" \
-                  "list-attached-objects" % (server, tag_id)
-
-        response = session.post(tag_url)
-        response.raise_for_status()
-        return response.json()
-
     def run(self, **kwargs):
         """
         Connect to the REST API and retrieve a list of objects with a given tag
 
         Args:
         - kwargs: inputs to the aciton
+          - tag_id: ID og the tag in VMWare
+            (urn:vmomi:InventoryServiceTag:2f331011-d577-45a6-ab41-c6688de073f9:GLOBAL)
+          - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
         - list: List of objects that are tagged with a given value
         """
         kwargs_dict = dict(kwargs)
 
-        session = self._connect_rest(kwargs_dict.get("vsphere"))
+        api_endpoint = "/rest/com/vmware/cis/tagging/tag-association/id:%s?~action=" \
+                       "list-attached-objects" % (kwargs_dict.get("tag_id"))
 
-        object_list = self.get_objects_from_tag(kwargs_dict, session)
+        object_list = self._rest_api_call(kwargs_dict.get("vsphere"), api_endpoint, "post")
+
         return object_list['value']
