@@ -1,55 +1,44 @@
-import requests
+# Licensed to the StackStorm, Inc ('StackStorm') under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from vmwarelib.actions import BaseAction
 
 
 class GetTagsOnObject(BaseAction):
-    def __init__(self, config):
-        super(BaseAction, self).__init__(config)
-
-    def get_tag_list(self, kwargs_dict, session):
-        """
-        Make a REST API request that returns a list of all tags on a given object
-
-        Args:
-        - kwargs_dict: Dictionary list of all inputs for this action
-        - session: The session that's returned from the _connect_rest method
-                                                                                                                                               
-        Returns:
-        - dict: The REST response from the API call
-        """
-        if kwargs_dict.get("vsphere"):
-            server = self.config['vsphere'].get(kwargs_dict.get("vsphere"))['host']
-        else:
-            server = self.config['vsphere'].get("default")['host']
-
-        object_id = kwargs_dict.get("object_id")
-        object_type = kwargs_dict.get("object_type")
-
-        tag_url = "https://%s/rest/com/vmware/cis/tagging/tag-association?~action=list-attached-tags" % server
-        data = {
-            "object_id": {
-                "id": object_id,
-                "type": object_type
-            }
-        }
-
-        response = session.post(tag_url, json=data)
-        response.raise_for_status()
-        return response.json()
-
     def run(self, **kwargs):
         """
         Connect to the REST API and retrieve a list of tags on a given object
 
         Args:
         - kwargs: inputs to the aciton
+          - object_id: VMWare Object ID to get tags from (vm-1234)
+          - object_type: Object type that corresponds to the ID (VirtualMachine)
+          - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
         - list: List of tags that are on a given object
         """
         kwargs_dict = dict(kwargs)
 
-        session = self._connect_rest(kwargs_dict.get("vsphere"))
+        api_endpoint = "/rest/com/vmware/cis/tagging/tag-association?~action=list-attached-tags"
+        data = {
+            "object_id": {
+                "id": kwargs_dict.get("object_id"),
+                "type": kwargs_dict.get("object_type")
+            }
+        }
 
-        tag_list = self.get_tag_list(kwargs_dict, session)
+        tag_list = self._rest_api_call(kwargs_dict.get("vsphere"), api_endpoint, "post", data)
+
         return tag_list['value']
