@@ -24,9 +24,6 @@ class GetObjectsWithTag(BaseAction):
         else:
             server = self.config['vsphere'].get("default")['host']
 
-        print("Test")
-        print(server)
-
         tag_url = "https://%s/rest/com/vmware/cis/tagging/tag-association/id:%s?~action=" \
                   "list-attached-objects" % (server, tag_id)
 
