@@ -88,7 +88,7 @@ class BaseAction(Action):
         connection = self._get_connection_info(vsphere)
 
         session = requests.Session()
-        session.verify = False
+        session.verify = self.config['ssl_verify']
         session.auth = (connection['user'], connection['passwd'])
 
         login_url = "https://%s/rest/com/vmware/cis/session" % connection['host']
