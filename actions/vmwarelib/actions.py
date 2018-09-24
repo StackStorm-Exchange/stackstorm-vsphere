@@ -87,21 +87,17 @@ class BaseAction(Action):
     def _connect_rest(self, vsphere):
         connection = self._get_connection_info(vsphere)
 
-        try:
-            session = requests.Session()
-            session.verify = False
-            session.auth = (connection['user'], connection['passwd'])
+        session = requests.Session()
+        session.verify = False
+        session.auth = (connection['user'], connection['passwd'])
 
-            login_url = "https://%s/rest/com/vmware/cis/session" % connection['host']
+        login_url = "https://%s/rest/com/vmware/cis/session" % connection['host']
 
-            session.post(login_url)
-
-        except Exception as e:
-            raise Exception(e)
+        session.post(login_url)
 
         return session
 
-    def _rest_api_call(self, vsphere, api_endpoint, api_verb, post_params=None):
+    def _rest_api_call(self, vsphere, api_endpoint, api_verb, payload=None):
         # The connection info is needed to add the hostname to the API endpoint
         connection = self._get_connection_info(vsphere)
 
@@ -110,7 +106,7 @@ class BaseAction(Action):
         api_endpoint = "https://%s%s" % (connection['host'], api_endpoint)
 
         # Create a prepared request so we can use the verb that was passed
-        req = requests.Request(api_verb, api_endpoint, json=post_params)
+        req = requests.Request(api_verb, api_endpoint, json=payload)
         prepped = session.prepare_request(req)
 
         response = session.send(prepped)

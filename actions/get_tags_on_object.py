@@ -29,16 +29,15 @@ class GetTagsOnObject(BaseAction):
         Returns:
         - list: List of tags that are on a given object
         """
-        kwargs_dict = dict(kwargs)
 
         api_endpoint = "/rest/com/vmware/cis/tagging/tag-association?~action=list-attached-tags"
         data = {
             "object_id": {
-                "id": kwargs_dict.get("object_id"),
-                "type": kwargs_dict.get("object_type")
+                "id": kwargs.get("object_id"),
+                "type": kwargs.get("object_type")
             }
         }
 
-        tag_list = self._rest_api_call(kwargs_dict.get("vsphere"), api_endpoint, "post", data)
+        tag_list = self._rest_api_call(kwargs["vsphere"], api_endpoint, "post", data)
 
         return tag_list['value']
