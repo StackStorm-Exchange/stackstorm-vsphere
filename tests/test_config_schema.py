@@ -35,7 +35,7 @@ class ConfigSchemaTestCase(BasePackResourceTestCase):
         # set dummy paramters
         def side_effect_prompt(msg, **kwargs):
             if re.compile(r'^ssl_verify').match(msg):
-                return 'y'
+                return False
             elif re.compile(r'^default.host').match(msg):
                 return '192.168.0.1'
             elif re.compile(r'^default.port').match(msg):
