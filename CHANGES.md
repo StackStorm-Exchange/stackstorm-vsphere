@@ -3,7 +3,11 @@
 ## v0.7.8
 
 Added a method in vmwarelib/actions.py to connect to the REST API.
-Added action to return a list of objects with a given vmware tag and action to return a list of vmware tags on a given object
+Added new actions:
+* `vsphere.get_objects_with_tag` - return a list of objects with a given vmware tag
+* `vsphere.get_tags_on_object` - return a list of vmware tags on a given object
+
+Contributed by John Schoewe (Encore Technologies).
 
 ## V0.7.7
 
