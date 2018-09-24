@@ -2,7 +2,7 @@
 ssl_verify:
   description: Using ssl/tls protocol to encrypt communications with vCenter Server.
   type: boolean
-  default: True
+  default: False
 
 vsphere:
   type: object

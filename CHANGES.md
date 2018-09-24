@@ -1,5 +1,10 @@
 # Change Log
 
+## v0.7.8
+
+Added a method in vmwarelib/actions.py to connect to the REST API.
+Added action to return a list of objects with a given vmware tag and action to return a list of vmware tags on a given object
+
 ## V0.7.7
 
 Added a new action actions:
