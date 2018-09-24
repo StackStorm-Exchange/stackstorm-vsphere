@@ -34,7 +34,7 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
 
     def test_init_blank_config(self):
         with self.assertRaises(ValueError):
-            action = self.get_action_instance(self._blank_config)
+            self.get_action_instance(self._blank_config)
 
     def test_get_connection_info(self):
         action = self.get_action_instance(self._new_config)
@@ -47,7 +47,7 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
 
         # invoke action with a valid config
         result = action._get_connection_info(test_vsphere)
-        
+
         self.assertEqual(result, expected_result)
 
     def test_get_connection_info_partial(self):
@@ -58,7 +58,7 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
 
         # invoke action with an invalid config
         with self.assertRaises(KeyError):
-            result = action._get_connection_info(test_vsphere)
+            action._get_connection_info(test_vsphere)
 
     @mock.patch("vmwarelib.actions.atexit.register")
     @mock.patch("vmwarelib.actions.connect.SmartConnect")
@@ -83,7 +83,8 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
 
         # define test variables
         test_vsphere = "default"
-        test_endpoint = "https://%s/rest/com/vmware/cis/session" % self._new_config['vsphere']['default']['host']
+        test_endpoint = "https://%s/rest/com/vmware/cis/session" % \
+                        self._new_config['vsphere']['default']['host']
 
         expected_result = mock.MagicMock()
 
