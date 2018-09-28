@@ -1,0 +1,45 @@
+---
+  name: guest_file_create
+  runner_type: python-script
+  description: "Creates a temporary file inside the guest."
+  enabled: true
+  entry_point: guest_file_create.py
+  parameters:
+    vm_id:
+      type: string
+      description: "VM to modify."
+      required: true
+      position: 0
+    username:
+      type: string
+      description: "Username within the guest to perform the action."
+      required: true
+      position: 1
+    password:
+      type: string
+      description: "Password for the given username."
+      required: true
+      secret: true
+      position: 2
+    guest_directory:
+      type: string
+      description: "Directory in the guest where the file should go."
+      required: true
+      position: 3
+    prefix:
+      type: string
+      description: "Prefix for the file name."
+      required: true
+      position: 4
+    suffix:
+      type: string
+      description: "Suffix for the file name."
+      required: true
+      position: 5
+    vsphere:
+      type: string
+      description: "Pre-configured vSphere connection details."
+      required: false
+      position: 6
+      default: ~
+

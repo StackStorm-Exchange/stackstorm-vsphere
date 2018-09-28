@@ -1,0 +1,123 @@
+version: '1.0'
+
+description: Run a script inside a guest.
+
+input:
+  - vm_id
+  - username
+  - password
+  - interpreter
+  - interpreter_arguments
+  - script
+  - script_arguments
+  - vsphere
+
+vars:
+  - script_exit_code: -1
+  - script_in_guest: ''
+  - script_stdout: ''
+  - script_stderr: ''
+  - tempdir: ''
+
+output:
+  - exit_code: <% ctx().script_exit_code %>
+  - stderr: <% ctx().script_stderr %>
+  - stdout: <% ctx().script_stdout %>
+
+tasks:
+  dir_create:
+    action: vsphere.guest_dir_create
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      prefix: "stackstorm_"
+      suffix: "_scriptrunner"
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% succeeded() %>
+        publish: tempdir=<% result().result %>
+        do: file_upload
+
+  file_upload:
+    action: vsphere.guest_file_upload
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      local_path: <% ctx().script %>
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% succeeded() %>
+        publish:
+          - script_in_guest: <% result().result %>
+        do: process_start
+      - when: <% failed() %>
+        do: dir_delete
+
+  process_start:
+    action: vsphere.guest_process_start
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      command: <% ctx().interpreter %>
+      arguments: <% ctx().interpreter_arguments %> <% ctx().script_in_guest %> <% ctx().script_arguments %> 1> stdout 2> stderr
+      workdir: <% ctx().tempdir %>
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% succeeded() %>
+        publish: pid=<% result().result %>
+        do: process_wait
+      - when: <% failed() %>
+        do: dir_delete
+
+  process_wait:
+    action: vsphere.guest_process_wait
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      pid: <% ctx().pid %>
+    next:
+      - publish: script_exit_code=<% result().exit_code %>
+        do: get_stdout
+
+  get_stdout:
+    action: vsphere.guest_file_read
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      guest_file: <% stdout %>
+    next:
+      - publish: script_stdout=<% result().result %>
+        do: get_stderr
+
+  get_stderr:
+    action: vsphere.guest_file_read
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      guest_file: <% stderr %>
+    next:
+      - publish: script_stderr=<% result().result %>
+        do: dir_delete
+
+  dir_delete:
+    action: vsphere.guest_dir_delete
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      recursive: true
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% ctx().script_exit_code != 0 %>
+        do: fail
+      

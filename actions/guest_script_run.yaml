@@ -1,0 +1,49 @@
+---
+  name: guest_script_run
+  runner_type: orquesta
+  entry_point: workflows/guest_script_run.yaml
+  enabled: true
+  description: "Run a script inside the guest."
+  parameters:
+    vm_id:
+      type: string
+      description: "VM to modify."
+      required: true
+      position: 0
+    username:
+      type: string
+      description: "Username within the guest to perform the action."
+      required: true
+      position: 1
+    password:
+      type: string
+      description: "Password for the given username."
+      required: true
+      secret: true
+      position: 2
+    interpreter:
+      type: string
+      description: "Full path to script interpreter in the guest.  Interpreter must be able to redirect stdout with 1> and stderr with 2>."
+      required: true
+      position: 3
+    interpreter_arguments:
+      type: string
+      description: "Arguments to pass to the interpreter before the script name."
+      required: false
+      position: 4
+    script:
+      type: string
+      description: "Local path to script.  This can be a full path in StackStorm's runtime context, or if prefixed with 'pack:' then a relative path to the 'packs' directory.  If the current pack is in packs.dev, then 'pack:' will be relative to 'packs.dev'."
+      required: true
+      position: 5
+    script_arguments:
+      type: string
+      description: "Arguments to pass into the script."
+      required: false
+      position: 6
+    vsphere:
+      type: string
+      description: "Pre-configured vSphere connection details."
+      required: false
+      position: 7
+      default: ~

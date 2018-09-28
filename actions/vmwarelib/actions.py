@@ -52,8 +52,16 @@ class BaseAction(Action):
                 ssl._create_default_https_context = _create_unverified_https_context
 
     def establish_connection(self, vsphere):
+        """
+        Sets:
+        - content
+        """
         self.si = self._connect(vsphere)
         self.si_content = self.si.RetrieveContent()
+
+    @property
+    def content(self):
+        return self.si_content
 
     def _connect(self, vsphere):
         if vsphere:

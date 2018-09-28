@@ -1,0 +1,40 @@
+---
+  name: guest_dir_create
+  runner_type: python-script
+  description: "Creates a temporary directory inside the guest."
+  enabled: true
+  entry_point: guest_dir_create.py
+  parameters:
+    vm_id:
+      type: string
+      description: "VM to modify."
+      required: true
+      position: 0
+    username:
+      type: string
+      description: "Username within the guest to perform the action."
+      required: true
+      position: 1
+    password:
+      type: string
+      description: "Password for the given username."
+      required: true
+      secret: true
+      position: 2
+    prefix:
+      type: string
+      description: "Prefix for the directory name."
+      required: true
+      position: 3
+    suffix:
+      type: string
+      description: "Suffix for the directory name."
+      required: true
+      position: 4
+    vsphere:
+      type: string
+      description: "Pre-configured vSphere connection details."
+      required: false
+      position: 5
+      default: ~
+

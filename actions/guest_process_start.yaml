@@ -1,0 +1,50 @@
+---
+  name: guest_process_start
+  runner_type: python-script
+  description: "Start a process inside the guest."
+  enabled: true
+  entry_point: guest_process_start.py
+  parameters:
+    vm_id:
+      type: string
+      description: "VM to run the process within."
+      required: true
+      position: 0
+    username:
+      type: string
+      description: "Username within the guest to perform the action."
+      required: true
+      position: 1
+    password:
+      type: string
+      description: "Password for the given username."
+      required: true
+      secret: true
+      position: 2
+    command:
+      type: string
+      description: "Command to execute."
+      required: true
+      position: 3
+    arguments:
+      type: string
+      description: "Argument(s) to the command."
+      required: false
+      position: 4
+    workdir:
+      type: string
+      description: "Working directory for new process."
+      required: false
+      position: 5
+    envvar:
+      type: array
+      description: "Environment variable(s) (key=value)."
+      required: false
+      position: 6
+    vsphere:
+      type: string
+      description: "Pre-configured vSphere connection details."
+      required: false
+      position: 7
+      default: ~
+

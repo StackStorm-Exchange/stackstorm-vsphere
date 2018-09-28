@@ -105,7 +105,7 @@ def get_distributedportgroup(content, moid=None, name=None):
 
 def get_virtualmachine(content, moid=None, name=None):
     return get_managed_entity(content, vim.VirtualMachine,
-                              moid=moid, name=name)
+                            moid=moid, name=name)
 
 
 def get_virtualmachines(content):
