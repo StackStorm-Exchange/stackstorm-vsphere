@@ -207,6 +207,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 ## Actions
 
 * `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
+* `vsphere.get_properties` - Retrieves some or all properties of some or all objects through the PropertyCollector.
 * `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
 * `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
 * `vsphere.guest_dir_create` - Create a directory inside the guest.
@@ -224,8 +225,8 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.set_vm` - Changes configuration of a Virtual Machine.
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
 * `vsphere.vm_create_from_template` - Create a new VM from existing template.
-* `vsphere.vm_env_items_get` - Retrieve list of Objects from VSphere
-* `vsphere.vm_guest_info_get` - Retrieve Guest details of a VM object
+* `vsphere.vm_env_items_get` - Retrieve list of Objects from VSphere (alternatively, use get_properties type=<type> property=name)
+* `vsphere.vm_guest_info_get` - Retrieve Guest details of a VM object (deprecated: use get_properties type=VirtualMachine property=guest)
 * `vsphere.vm_hw_barebones_create` - Create BareBones VM (CPU, Ram, Graphics Only)
 * `vsphere.vm_hw_basic_build` - Minstral Flow to Build Basic Server and power it on.
 * `vsphere.vm_hw_cpu_mem_edit` - Adjust the CPU and RAM values assigned to a Virtual Machine
@@ -239,7 +240,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.vm_hw_remove` - Removes the Virtual Machine.
 * `vsphere.vm_hw_scsi_controller_add` - Add SCSI HDD Controller device to VM
 * `vsphere.vm_hw_uuid_get` - Retrieve VM UUID
-* `vsphere.vm_runtime_info_get` - Retrieves the Runtime information for a VM.
+* `vsphere.vm_runtime_info_get` - Retrieves the Runtime information for a VM (deprecated: use get_properties type=VirtualMachine property=runtime)
 * `vsphere.wait_task` - Wait for a Task to complete and returns its result.
 
 ## Known Bugs
