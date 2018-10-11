@@ -1,0 +1,35 @@
+---
+  name: guest_process_wait
+  runner_type: python-script
+  description: "Wait for a process inside the guest to exit."
+  enabled: true
+  entry_point: guest_process_wait.py
+  parameters:
+    vm_id:
+      type: string
+      description: "VM to run the process within."
+      required: true
+      position: 0
+    username:
+      type: string
+      description: "Username within the guest to perform the action."
+      required: true
+      position: 1
+    password:
+      type: string
+      description: "Password for the given username."
+      required: true
+      secret: true
+      position: 2
+    pid:
+      type: integer
+      description: "Process ID to wait for."
+      required: true
+      position: 3
+    vsphere:
+      type: string
+      description: "Pre-configured vSphere connection details."
+      required: false
+      position: 4
+      default: ~
+
