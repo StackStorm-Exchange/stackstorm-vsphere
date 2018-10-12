@@ -1,0 +1,19 @@
+---
+  name: "vm_shutdown"
+  runner_type: "python-script"
+  description: "Initiates a clean shutdown of the guest.  Returns immediately without waiting for the guest to complete shutdown."
+# Privilege VirtualMachine.Interact.PowerOff is required
+  enabled: true
+  entry_point: "vm_shutdown.py"
+  parameters:
+    id:
+      type: array
+      description: "VM(s) to shutdown."
+      required: true
+      position: 0
+    vsphere:
+      type: string
+      description: "Pre-configured vSphere connection details."
+      required: false
+      position: 1
+
