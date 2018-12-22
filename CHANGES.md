@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.8
+
+- Bumped version to fix tagging issue. No code changes. 
+
 ## V0.7.7
 
 Added a new action actions:
