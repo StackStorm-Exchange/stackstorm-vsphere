@@ -1,8 +1,9 @@
 # Change Log
 
-## V0.7.9
+## V0.8.0
 
 - Disable flake8 on W503 vs W504 line
+- Minor linting changes
 
 ## V0.7.8
 
