@@ -1,5 +1,9 @@
 # Change Log
 
+## V0.7.9
+
+- Disable flake8 on W503 vs W504 line
+
 ## V0.7.8
 
 - Bumped version to fix tagging issue. No code changes. 
