@@ -1,11 +1,12 @@
 ---
 ref: vsphere
-name: vsphere 
+name: vsphere
 description: VMware vSphere
-version: 0.7.8
+version: 0.7.9
 author: Paul Mulvihill
 email: paul.mulvihill@pulsant.com
 contributors:
   - Igor Cherkaev <emptywee@gmail.com>
   - Hiroyasu OHYAMA <user.localhost2000@gmail.com>
   - Nick Maludy <nmaludy@gmail.com>
+  - Bradley Bishop <bishopbm1@gmail.com>
