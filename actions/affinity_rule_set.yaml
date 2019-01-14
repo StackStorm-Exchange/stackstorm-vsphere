@@ -4,7 +4,6 @@
     runner_type: "python-script"
     entry_point: affinity_rule_set.py
     name: affinity_rule_set
-    pack: encore
     parameters:
         cluster_name:
             type: string

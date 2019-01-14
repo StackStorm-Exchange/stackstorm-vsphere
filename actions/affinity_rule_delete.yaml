@@ -4,7 +4,6 @@
     runner_type: "python-script"
     entry_point: affinity_rule_delete.py
     name: affinity_rule_delete
-    pack: encore
     parameters:
         cluster_name:
             type: string
