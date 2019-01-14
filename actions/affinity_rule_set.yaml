@@ -1,0 +1,34 @@
+---
+    description: "Creates an affinity rule for vms to hosts"
+    enabled: true
+    runner_type: "python-script"
+    entry_point: affinity_rule_set.py
+    name: affinity_rule_set
+    pack: encore
+    parameters:
+        cluster_name:
+            type: string
+            description: "Name of the Cluster that a VM is on in VMWare"
+            required: true
+        host_names:
+            type: array
+            description: "Name of the hosts to associate the VMs to"
+            required: false
+        vm_names:
+            type: array
+            description: "Name of the VMs as they appear in VMWare"
+            required: true
+        vm_wait_retry:
+            type: integer
+            description: "How many retires to wait for a vm"
+            default: 30
+        rule_name:
+            type: string
+            description: "Name of the rule as it appears in VMWare"
+            required: true
+        vsphere:
+            type: "string"
+            description: >
+                Pre-Configured vsphere connection details
+            required: false
+            default: ~

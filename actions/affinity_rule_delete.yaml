@@ -1,0 +1,21 @@
+---
+    description: "Deletes an affinity rule and the groups associated with it"
+    enabled: true
+    runner_type: "python-script"
+    entry_point: affinity_rule_delete.py
+    name: affinity_rule_delete
+    pack: encore
+    parameters:
+        cluster_name:
+            type: string
+            description: "Name of the Cluster that a VM is on in VMWare"
+        rule_name:
+            type: string
+            description: "Name of the rule as it appears in VMWare"
+            required: true
+        vsphere:
+            type: "string"
+            description: >
+                Pre-Configured vsphere connection details
+            required: false
+            default: ~
