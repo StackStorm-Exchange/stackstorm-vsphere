@@ -107,7 +107,7 @@ class AffinityRuleSet(BaseAction):
             try:
                 vm = inventory.get_virtualmachine(self.si_content, name=vm_name)
                 break
-            except:
+            except Exception:
                 count += 1
                 time.sleep(2)
 
