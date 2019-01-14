@@ -1,11 +1,27 @@
-# Disable message for: No name 'vim' in module 'pyVmomi' (no-name-in-module)
+# Licensed to the StackStorm, Inc ('StackStorm') under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from vmwarelib.actions import BaseAction
 from vmwarelib import inventory
+
+# Disable message for: No name 'vim' in module 'pyVmomi' (no-name-in-module)
 from pyVmomi import vim  # pylint: disable-msg=no-name-in-module
 import time
 
 
-class VmwareAffinityRuleSet(BaseAction):
+class AffinityRuleSet(BaseAction):
 
     def run(self, vm_names, vm_wait_retry, rule_name, cluster_name, host_names=None, vsphere=None):
         """Main entry point for the StackStorm actions to execute the operation.
@@ -31,11 +47,11 @@ class VmwareAffinityRuleSet(BaseAction):
         # Finds cluster by name
         cluster = inventory.get_cluster(self.si_content, name=cluster_name)
 
-        # Create vmWare Affinity groups
+        # Create Affinity groups
         vm_group_name, vm_group_spec = self.create_group(rule_name, vms, "vm")
         host_group_name, host_group_spec = self.create_group(rule_name, hosts, "host")
 
-        # Create vmWare Affinity rules
+        # Create Affinity rules
         affinity_rule_spec = self.create_rule(rule_name, vm_group_name, host_group_name)
 
         # Create cluster change config to be passed to vmware
@@ -82,8 +98,8 @@ class VmwareAffinityRuleSet(BaseAction):
 
     def wait_for_vm(self, vm_name, vm_wait_retry):
         """ The VM object has to exist before it can be added to the affinity
-        rule. Since we will likely kick off this method at the same time as a
-        provision we need to wait for the vm to be created.
+        rule. Since we will can kick off this method at the same time as a
+        provision we may need to wait for the vm to be created.
         """
         vm = None
         count = 0
