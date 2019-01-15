@@ -21,7 +21,7 @@ from pyVmomi import vim  # pylint: disable-msg=no-name-in-module
 import time
 
 
-class AffinityRuleSet(BaseAction):
+class AffinityRuleCreate(BaseAction):
 
     def run(self, vm_names, vm_wait_retry, rule_name, cluster_name, host_names=None, vsphere=None):
         """Main entry point for the StackStorm actions to execute the operation.

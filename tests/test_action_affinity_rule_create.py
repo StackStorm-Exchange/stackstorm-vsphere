@@ -16,27 +16,27 @@
 import mock
 
 # from vmwarelib import inventory
-from affinity_rule_set import AffinityRuleSet
+from affinity_rule_create import AffinityRuleCreate
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
 
 __all__ = [
-    'AffinityRuleSet'
+    'AffinityRuleCreate'
 ]
 
 
-class AffinityRuleSetTestCase(VsphereBaseActionTestCase):
+class AffinityRuleCreateTestCase(VsphereBaseActionTestCase):
     __test__ = True
-    action_cls = AffinityRuleSet
+    action_cls = AffinityRuleCreate
 
     def setUp(self):
-        super(AffinityRuleSetTestCase, self).setUp()
+        super(AffinityRuleCreateTestCase, self).setUp()
 
         self._action = self.get_action_instance(self.new_config)
 
         self._action.establish_connection = mock.Mock()
         self._action.si_content = mock.Mock()
 
-    @mock.patch("affinity_rule_set.vim")
+    @mock.patch("affinity_rule_create.vim")
     def test_create_group_vm(self, mock_vim):
         test_dict = {
             'rule_name': 'test_rule',
@@ -53,7 +53,7 @@ class AffinityRuleSetTestCase(VsphereBaseActionTestCase):
         self.assertEqual(result_value_name, expected_group_name)
         self.assertEqual(result_value_spec, expected_result)
 
-    @mock.patch("affinity_rule_set.vim")
+    @mock.patch("affinity_rule_create.vim")
     def test_create_group_host(self, mock_vim):
         test_dict = {
             'rule_name': 'test_rule',
@@ -70,7 +70,7 @@ class AffinityRuleSetTestCase(VsphereBaseActionTestCase):
         self.assertEqual(result_value_name, expected_group_name)
         self.assertEqual(result_value_spec, expected_result)
 
-    @mock.patch("affinity_rule_set.vim")
+    @mock.patch("affinity_rule_create.vim")
     def test_create_group_error(self, mock_vim):
         test_dict = {
             'rule_name': 'test_rule',
@@ -85,7 +85,7 @@ class AffinityRuleSetTestCase(VsphereBaseActionTestCase):
         with self.assertRaises(ValueError):
             self._action.create_group(**test_dict)
 
-    @mock.patch("affinity_rule_set.vim")
+    @mock.patch("affinity_rule_create.vim")
     def test_create_rule(self, mock_vim):
         test_dict = {
             'rule_name': 'test_rule',
@@ -132,7 +132,7 @@ class AffinityRuleSetTestCase(VsphereBaseActionTestCase):
         with self.assertRaises(ValueError):
             self._action.wait_for_vm(**test_dict)
 
-    @mock.patch("affinity_rule_set.vim")
+    @mock.patch("affinity_rule_create.vim")
     @mock.patch("vmwarelib.actions.BaseAction._wait_for_task")
     def test_run(self, mock__wait_for_task, mock_vim):
         test_dict = {

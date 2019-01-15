@@ -4,7 +4,7 @@
 
 Added new actions:
 * `vsphere.affinity_rule_delete` - Deletes an affinity rule
-* `vsphere.affinity_rule_set` - Creates an affinity rule and sets the proper informaiton
+* `vsphere.affinity_rule_create` - Creates an affinity rule and sets the proper informaiton
 
 Contributed by Bradley Bishop (Encore Technologies).
 

@@ -2,8 +2,8 @@
     description: "Creates an affinity rule for vms to hosts"
     enabled: true
     runner_type: "python-script"
-    entry_point: affinity_rule_set.py
-    name: affinity_rule_set
+    entry_point: affinity_rule_create.py
+    name: affinity_rule_create
     parameters:
         cluster_name:
             type: string
