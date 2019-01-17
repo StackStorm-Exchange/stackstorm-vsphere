@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.7.9
+
+Added new actions:
+* `vsphere.affinity_rule_delete` - Deletes an affinity rule
+* `vsphere.affinity_rule_create` - Creates an affinity rule and sets the proper informaiton
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.7.8
 
 Added a method in vmwarelib/actions.py to connect to the REST API.
@@ -102,6 +110,6 @@ Introduction of Multi Endpoint Configuration.
 Clean up of duplicate actions. Addition of moid retrieval function.
 
 ## V0.2
-  
+
 Addition of vm_hw atomic actions to create basic Virtual Machine.
 
