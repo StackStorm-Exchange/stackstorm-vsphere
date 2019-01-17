@@ -1,4 +1,11 @@
 # Change Log
+
+## V0.8.1
+
+- Unit tests fixes for python3 updates
+
+  Contributed by Nick Maludy (Encore Technologies).
+  
 ## V0.8.0
 
 - Disable flake8 on W503 vs W504 line
