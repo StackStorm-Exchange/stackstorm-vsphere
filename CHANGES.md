@@ -1,4 +1,8 @@
 # Change Log
+## V0.8.0
+
+- Disable flake8 on W503 vs W504 line
+- Minor linting changes
 
 ## v0.7.9
 
@@ -10,10 +14,11 @@ Contributed by Bradley Bishop (Encore Technologies).
 
 ## v0.7.8
 
-Added a method in vmwarelib/actions.py to connect to the REST API.
-Added new actions:
-* `vsphere.get_objects_with_tag` - return a list of objects with a given vmware tag
-* `vsphere.get_tags_on_object` - return a list of vmware tags on a given object
+* Bumped version to fix tagging issue. No code changes. 
+* Added a method in vmwarelib/actions.py to connect to the REST API.
+* Added new actions:
+  * `vsphere.get_objects_with_tag` - return a list of objects with a given vmware tag
+  * `vsphere.get_tags_on_object` - return a list of vmware tags on a given object
 
 Contributed by John Schoewe (Encore Technologies).
 
@@ -110,6 +115,6 @@ Introduction of Multi Endpoint Configuration.
 Clean up of duplicate actions. Addition of moid retrieval function.
 
 ## V0.2
-
+  
 Addition of vm_hw atomic actions to create basic Virtual Machine.
 

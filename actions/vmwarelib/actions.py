@@ -42,7 +42,7 @@ class BaseAction(Action):
         ssl_verify = config.get('ssl_verify', None)
         if ssl_verify is False:
             # Don't print out ssl warnings
-            requests.packages.urllib3.disable_warnings()
+            requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
 
             try:
                 _create_unverified_https_context = ssl._create_unverified_context
@@ -52,8 +52,16 @@ class BaseAction(Action):
                 ssl._create_default_https_context = _create_unverified_https_context
 
     def establish_connection(self, vsphere):
+        """
+        Sets:
+        - content
+        """
         self.si = self._connect(vsphere)
         self.si_content = self.si.RetrieveContent()
+
+    @property
+    def content(self):
+        return self.si_content
 
     def _get_connection_info(self, vsphere):
         if vsphere:
@@ -114,7 +122,7 @@ class BaseAction(Action):
         return response.json()
 
     def _wait_for_task(self, task):
-        while (task.info.state == vim.TaskInfo.State.queued or
+        while (task.info.state == vim.TaskInfo.State.queued or   # noqa: W504
                task.info.state == vim.TaskInfo.State.running):
             eventlet.sleep(1)
         return task.info.state == vim.TaskInfo.State.success

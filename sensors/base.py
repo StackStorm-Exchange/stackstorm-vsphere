@@ -26,7 +26,7 @@ class VSphereSensor(PollingSensor):
         ssl_verify = config.get('ssl_verify', None)
         if ssl_verify is False:
             # Don't print out ssl warnings
-            requests.packages.urllib3.disable_warnings()
+            requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
 
             try:
                 _create_unverified_https_context = ssl._create_unverified_context

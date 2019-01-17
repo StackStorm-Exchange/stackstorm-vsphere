@@ -134,6 +134,65 @@ This is what each parameter means:
 | `operation_name` | The name of the operation that created the task                     |
 | `task_id`        | The MOID (Managed Object Reference ID) that identifies target task  |
 
+## Guest Operations
+
+The Guest Operations API allows for direct file and process manipulation inside a virtual machine.
+Consider the use case where you want to run a PowerShell script inside a virtual machine.  Here are the steps you would take:
+
+1. Create a PowerShell script in your own pack (for example "mypack/scripts/Return.ps1" - see below)
+2. Execute the vsphere.guest_script_run workflow.
+3. Examine the result - if the script returns a non-zero exit code, the workflow will fail.  Orquesta [does not allow for output when a workflow fails](https://github.com/StackStorm/st2/issues/4336), so obtaining the exit code, stdout, and stderr from the process requires peeking at the subtasks.
+
+This currently requires a username and password known to the guest to be given as parameters.  It does not yet support vSphere SSO.
+
+The simplest example of this facility is to write a script that exits with the argument given.  Create a script called "Return.ps1" in a pack directory:
+```
+param (
+    [Parameter(Mandatory=$true)][int]$retval
+)
+echo "This is stdout, going to exit with $retval"
+Write-Error "This is stderr, going to exit with $retval"
+exit $retval
+```
+
+Now execute this script inside the guest using the following command:
+
+    # st2 run vsphere.guest_script_run vm_id=MOID username=USERNAME password=PASSWORD interpreter="C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\PowerShell.EXE" interpreter_arguments="-NonInteractive" script="pack:mypack/scripts/Return.ps1" script_arguments=0
+
+This in turn executes a Orquesta workflow that automates all the steps required:
+```
+status: succeeded
+start_timestamp: Tue, 02 Oct 2018 15:10:08 UTC
+end_timestamp: Tue, 02 Oct 2018 15:10:26 UTC
+result:
+  output:
+    exit_code: 0
+    stderr: "C:\Users\Administrator\AppData\Local\Temp\stackstorm_vmware246_scriptrunner\Return.ps1 : This is
+stderr, going to exit with 0
+At line:1 char:1
++ C:\Users\ADMINI~1\AppData\Local\Temp\stackstorm_vmware246_scriptrunne ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,Return.ps1
+
+"
+    stdout: "This is stdout, going to exit with 0
+"
++--------------------------+------------------------+---------------+-----------------------------+-------------------------------+
+| id                       | status                 | task          | action                      | start_timestamp               |
++--------------------------+------------------------+---------------+-----------------------------+-------------------------------+
+| 5bb38a5156d2c100359a856d | succeeded (2s elapsed) | dir_create    | vsphere.guest_dir_create    | Tue, 02 Oct 2018 15:10:09 UTC |
+| 5bb38a5356d2c100359a8570 | succeeded (2s elapsed) | file_upload   | vsphere.guest_file_upload   | Tue, 02 Oct 2018 15:10:11 UTC |
+| 5bb38a5656d2c100359a8573 | succeeded (1s elapsed) | process_start | vsphere.guest_process_start | Tue, 02 Oct 2018 15:10:14 UTC |
+| 5bb38a5856d2c100359a8576 | succeeded (1s elapsed) | process_wait  | vsphere.guest_process_wait  | Tue, 02 Oct 2018 15:10:16 UTC |
+| 5bb38a5a56d2c100359a8579 | succeeded (2s elapsed) | get_stdout    | vsphere.guest_file_read     | Tue, 02 Oct 2018 15:10:18 UTC |
+| 5bb38a5d56d2c100359a857c | succeeded (1s elapsed) | get_stderr    | vsphere.guest_file_read     | Tue, 02 Oct 2018 15:10:21 UTC |
+| 5bb38a5f56d2c100359a857f | succeeded (2s elapsed) | dir_delete__3 | vsphere.guest_dir_delete    | Tue, 02 Oct 2018 15:10:23 UTC |
++--------------------------+------------------------+---------------+-----------------------------+-------------------------------+
+```
+
+Changing the script_arguments to another number results in the action failing.
+
 ## Todo
 
 * Create actions for vsphere environment data retrieval. Allow for integration with external systems for accurate action calls with informed parameter values.
@@ -152,6 +211,15 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.get_tags_on_object` - Returns a list of vmware tags on a given object.
 * `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
 * `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
+* `vsphere.guest_dir_create` - Create a directory inside the guest.
+* `vsphere.guest_dir_delete` - Delete a directory inside the guest.
+* `vsphere.guest_file_create` - Create a file inside the guest.
+* `vsphere.guest_file_delete` - Delete a file inside the guest.
+* `vsphere.guest_file_read` - Read the contents of a file inside the guest.
+* `vsphere.guest_file_upload` - Upload the contents of a file to the guest.
+* `vsphere.guest_process_start` - Start a process inside the guest.
+* `vsphere.guest_process_wait` - Wait for a process to finish inside the guest.
+* `vsphere.guest_script_run` - Orquesta workflow to upload and run a script inside the guest, and capture results.
 * `vsphere.hello_vsphere` - Wait for a Task to complete and returns its result.
 * `vsphere.host_get` - Retrieves the Summary information for an ESX host.
 * `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
