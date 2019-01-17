@@ -42,7 +42,7 @@ class StartProgramInGuestTestCase(VsphereBaseActionTestCase):
                                 password='p', command='c',
                                 arguments=argdata, workdir='/tmp',
                                 envvar=envvars)
-            mockProcMgr.StartProgramInGuest.assert_called_once()
+            mockProcMgr.StartProgramInGuest.assert_called_once_with()
             cmdspec = mockProcMgr.StartProgramInGuest.call_args[0][2]
             self.assertEqual(cmdspec.programPath, 'c')
             expectedargs = argdata

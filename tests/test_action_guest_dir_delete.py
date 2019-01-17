@@ -33,5 +33,5 @@ class DeleteDirectoryInGuestTestCase(VsphereBaseActionTestCase):
         action.si_content.guestOperationsManager.fileManager = mockFileMgr
         result = action.run(vm_id='vm-12345', username='u', password='p',
                             guest_directory='/tmp/foo', recursive=True)
-        mockFileMgr.DeleteDirectoryInGuest.assert_called_once()
+        mockFileMgr.DeleteDirectoryInGuest.assert_called_once_with()
         self.assertEqual(result, None)

@@ -50,5 +50,5 @@ class InitiateFileTransferToGuestTestCase(VsphereBaseActionTestCase):
                                     password='p',
                                     guest_directory=guest_path[0],
                                     local_path=local_path)
-                mockFileMgr.InitiateFileTransferToGuest.assert_called_once()
+                mockFileMgr.InitiateFileTransferToGuest.assert_called_once_with()
                 self.assertEqual(result, guest_path[1])

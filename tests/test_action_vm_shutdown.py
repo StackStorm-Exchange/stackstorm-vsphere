@@ -29,4 +29,4 @@ class VMShutdownGuestTestCase(VsphereBaseActionTestCase):
         (action, mock_vm) = self.mock_one_vm('vm-12345')
         mock_vm.ShutdownGuest = mock.Mock()
         action.run(id=['vm-12345'])
-        mock_vm.ShutdownGuest.assert_called_once()
+        mock_vm.ShutdownGuest.assert_called_once_with()
