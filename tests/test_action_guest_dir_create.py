@@ -34,5 +34,7 @@ class CreateTemporaryDirectoryInGuestTestCase(VsphereBaseActionTestCase):
         action.si_content.guestOperationsManager.fileManager = mockFileMgr
         result = action.run(vm_id='vm-12345', username='u', password='p',
                             prefix='p', suffix='s')
-        mockFileMgr.CreateTemporaryDirectoryInGuest.assert_called_once_with()
+        mockFileMgr.CreateTemporaryDirectoryInGuest.assert_called_once_with(
+            mock_vm, action.guest_credentials, 'p', 's'
+        )
         self.assertEqual(result, '/tmp/foo')
