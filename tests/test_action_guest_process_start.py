@@ -25,7 +25,8 @@ class StartProgramInGuestTestCase(VsphereBaseActionTestCase):
     __test__ = True
     action_cls = StartProgramInGuest
 
-    def test_normal(self):
+    @mock.patch('pyVmomi.vim.vm.guest.ProcessManager')
+    def test_normal(self, mock_process_manager):
         # Vary the arguments list including passing None
         # Each tuple has two array items, [0] is arguments input
         #                                 [1] is expected cmdspec
@@ -37,18 +38,22 @@ class StartProgramInGuestTestCase(VsphereBaseActionTestCase):
             action.si_content.guestOperationsManager = mock.Mock()
             action.si_content.guestOperationsManager.processManager =\
                 mockProcMgr
+            mock_process_manager.ProgramSpec.return_value = 'cmdspec'
+
             envvars = ["A=B", "C=D"] if argdata else None
             result = action.run(vm_id='vm-12345', username='u',
                                 password='p', command='c',
                                 arguments=argdata, workdir='/tmp',
                                 envvar=envvars)
-            mockProcMgr.StartProgramInGuest.assert_called_once()
-            cmdspec = mockProcMgr.StartProgramInGuest.call_args[0][2]
-            self.assertEqual(cmdspec.programPath, 'c')
-            expectedargs = argdata
-            if not expectedargs:
-                expectedargs = ''
-            self.assertEqual(cmdspec.arguments, expectedargs)
-            self.assertEqual(cmdspec.workingDirectory, '/tmp')
-            self.assertEqual(cmdspec.envVariables, envvars)
+
+            mock_process_manager.ProgramSpec.assert_called_with(
+                arguments='' if not argdata else argdata,
+                envVariables=envvars,
+                programPath='c',
+                workingDirectory='/tmp'
+            )
+            mockProcMgr.StartProgramInGuest.assert_called_once_with(
+                mock_vm, action.guest_credentials, 'cmdspec',
+            )
+
             self.assertEqual(result, 12345)

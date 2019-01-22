@@ -1,13 +1,33 @@
 # Change Log
 
+## V0.8.1
+
+- Unit tests fixes for python3 updates
+
+  Contributed by Nick Maludy (Encore Technologies).
+  
 ## V0.8.0
 
 - Disable flake8 on W503 vs W504 line
 - Minor linting changes
 
-## V0.7.8
+## v0.7.9
 
-- Bumped version to fix tagging issue. No code changes. 
+Added new actions:
+* `vsphere.affinity_rule_delete` - Deletes an affinity rule
+* `vsphere.affinity_rule_create` - Creates an affinity rule and sets the proper informaiton
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.7.8
+
+* Bumped version to fix tagging issue. No code changes. 
+* Added a method in vmwarelib/actions.py to connect to the REST API.
+* Added new actions:
+  * `vsphere.get_objects_with_tag` - return a list of objects with a given vmware tag
+  * `vsphere.get_tags_on_object` - return a list of vmware tags on a given object
+
+Contributed by John Schoewe (Encore Technologies).
 
 ## V0.7.7
 

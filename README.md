@@ -207,6 +207,8 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 ## Actions
 
 * `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
+* `vsphere.get_objects_with_tag` - Returns a list of objects with a given vmware tag.
+* `vsphere.get_tags_on_object` - Returns a list of vmware tags on a given object.
 * `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
 * `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
 * `vsphere.guest_dir_create` - Create a directory inside the guest.

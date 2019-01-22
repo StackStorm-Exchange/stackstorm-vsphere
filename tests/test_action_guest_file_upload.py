@@ -27,8 +27,9 @@ class InitiateFileTransferToGuestTestCase(VsphereBaseActionTestCase):
 
     @mock.patch('__builtin__.open',
                 mock.mock_open(read_data="mockfilecontents"))
+    @mock.patch('pyVmomi.vim.vm.guest.FileManager')
     @mock.patch('requests.put')
-    def test_normal(self, mock_put):
+    def test_normal(self, mock_put, mock_guest_file_manager):
         # Exercise guest directory, one Windows, one Linux
         # guest_path[0] is the input guest_directory
         # guest_path[1] is the expected result
@@ -45,10 +46,15 @@ class InitiateFileTransferToGuestTestCase(VsphereBaseActionTestCase):
                 action.si_content.guestOperationsManager = mock.Mock()
                 action.si_content.guestOperationsManager.fileManager =\
                     mockFileMgr
+                mock_guest_file_manager.FileAttributes.return_value = 'attributes'
                 result = action.run(vm_id='vm-12345',
                                     username='u',
                                     password='p',
                                     guest_directory=guest_path[0],
                                     local_path=local_path)
-                mockFileMgr.InitiateFileTransferToGuest.assert_called_once()
+                filepath = action.joinpath(guest_path[0], 'myfile')
+                mockFileMgr.InitiateFileTransferToGuest.assert_called_once_with(
+                    mock_vm, action.guest_credentials, filepath, 'attributes',
+                    len("mockfilecontents"), True
+                )
                 self.assertEqual(result, guest_path[1])
