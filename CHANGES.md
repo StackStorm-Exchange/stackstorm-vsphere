@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.8.2
+
+- guest_process_run was missing the workflow file
+
 ## V0.8.1
 
 - Unit tests fixes for python3 updates
