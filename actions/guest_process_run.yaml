@@ -26,9 +26,9 @@
       description: "Full path to command executable in the guest."
       required: true
       position: 3
-    argument:
-      type: array 
-      description: "Argument(s) to pass to the command executable."
+    arguments:
+      type: string
+      description: "Arguments to pass to the command executable."
       required: false
       position: 4
     workdir:
