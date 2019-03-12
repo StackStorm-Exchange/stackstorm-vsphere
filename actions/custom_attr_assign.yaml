@@ -1,7 +1,7 @@
 ---
 name: custom_attr_assign
 runner_type: python-script
-description: Assign a custom attribute to a given VM
+description: Assign a custom attribute to a given object
 enabled: true
 entry_point: custom_attr_assign.py
 parameters:

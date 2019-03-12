@@ -22,7 +22,7 @@ from vmwarelib.actions import BaseAction
 class CustomAttrAssign(BaseAction):
     def run(self, custom_attr_name, custom_attr_value, object_id, object_type, vsphere=None):
         """
-        Transform object_name and object_type to MOID (Managed Object Reference ID).
+        Assign a given custom attribute to an object
 
         Args:
         - custom_attr_name: name of custom attribute to assign
@@ -43,7 +43,6 @@ class CustomAttrAssign(BaseAction):
         self.establish_connection(vsphere)
 
         # consult vSphere for the managed_entity object that is the specified name and type
-        # entity = inventory.get_managed_entity(self.si_content, vimtype, name=object_name)
         entity = inventory.get_managed_entity(self.si_content, vimtype, moid=object_id)
 
         cfm = self.si_content.customFieldsManager

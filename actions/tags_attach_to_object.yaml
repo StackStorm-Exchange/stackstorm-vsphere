@@ -1,7 +1,7 @@
 ---
     name: tags_attach_to_object
     runner_type: python-script
-    description: Retrieves list of tags that are present on a given object
+    description: Attach a list of tags to a given object
     enabled: true
     entry_point: tags_attach_to_object.py
     parameters:
