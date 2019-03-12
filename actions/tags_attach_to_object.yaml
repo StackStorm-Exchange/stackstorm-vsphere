@@ -1,0 +1,24 @@
+---
+    name: tags_attach_to_object
+    runner_type: python-script
+    description: Retrieves list of tags that are present on a given object
+    enabled: true
+    entry_point: tags_attach_to_object.py
+    parameters:
+        object_id:
+            type: 'string'
+            description: ID of the object to attach tag to
+            required: true
+        object_type:
+            type: 'string'
+            description: Type of object to attach tag to (e.g. VirtualMachine)
+            required: true
+        tag_ids:
+            type: 'array'
+            description: List of tag IDs to attach to the specified object (e.g. urn:vmomi:InventoryServiceTag:ce9509a3-34aa-4f82-966a-36f4fc37081c:GLOBAL)
+            required: true
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~
