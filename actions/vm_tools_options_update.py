@@ -34,6 +34,8 @@ class VMToolsOptionsUpdate(BaseAction):
 
         spec = vim.vm.ConfigSpec()
         spec.tools = vim.vm.ToolsConfigInfo()
+
+        # If any of the options are set to None then the value will not be changed.
         spec.tools.afterPowerOn = script_after_power_on
         spec.tools.afterResume = script_after_resume
         spec.tools.beforeGuestStandby = script_before_guest_standby

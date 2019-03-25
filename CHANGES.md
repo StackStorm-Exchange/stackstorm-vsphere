@@ -5,6 +5,9 @@
 Added new action:
 - `vsphere.vm_tools_options_update` - Update VM tools information
 
+Updated action:
+- `vsphere.vm_check_tools` - returns Tools Config as well as tools status
+
   Contributed by Bradley Bishop (Encore Technologies).
 
 ## V0.8.1
