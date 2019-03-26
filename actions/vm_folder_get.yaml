@@ -1,0 +1,22 @@
+---
+  name: vm_folder_get
+  runner_type: python-script
+  description: Retrieve the containing folder of a VM object
+  entry_point: vm_folder_get.py
+  parameters:
+    vm_id:
+      type: string
+      description: VM ID to get the containing folder for
+      required: false
+      position: 0
+    vm_name:
+      type: string
+      description: VM Name to get the containing folder for
+      required: false
+      position: 1
+      default: ~
+    vsphere:
+      type: string
+      description: Pre-configured vsphere endpoint
+      required: false
+      position: 2

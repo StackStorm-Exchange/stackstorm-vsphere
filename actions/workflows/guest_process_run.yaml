@@ -1,0 +1,103 @@
+version: '1.0'
+
+description: Run a process inside a guest.
+
+input:
+  - vm_id
+  - username
+  - password
+  - command
+  - arguments
+  - vsphere
+
+vars:
+  - proc_exit_code: -1
+  - script_in_guest: ''
+  - proc_stdout: ''
+  - proc_stderr: ''
+  - tempdir: ''
+
+output:
+  - exit_code: <% ctx().proc_exit_code %>
+  - stderr: <% ctx().proc_stderr %>
+  - stdout: <% ctx().proc_stdout %>
+
+tasks:
+  dir_create:
+    action: vsphere.guest_dir_create
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      prefix: "stackstorm_"
+      suffix: "_runner"
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% succeeded() %>
+        publish: tempdir=<% result().result %>
+        do: process_start
+
+  process_start:
+    action: vsphere.guest_process_start
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      command: <% ctx().command %>
+      arguments: <% ctx().arguments %> 1> stdout 2> stderr
+      workdir: <% ctx().tempdir %>
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% succeeded() %>
+        publish: pid=<% result().result %>
+        do: process_wait
+      - when: <% failed() %>
+        do: dir_delete
+
+  process_wait:
+    action: vsphere.guest_process_wait
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      pid: <% ctx().pid %>
+    next:
+      - publish: proc_exit_code=<% result().exit_code %>
+        do: get_stdout
+
+  get_stdout:
+    action: vsphere.guest_file_read
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      guest_file: <% stdout %>
+    next:
+      - publish: proc_stdout=<% result().result %>
+        do: get_stderr
+
+  get_stderr:
+    action: vsphere.guest_file_read
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      guest_file: <% stderr %>
+    next:
+      - publish: proc_stderr=<% result().result %>
+        do: dir_delete
+
+  dir_delete:
+    action: vsphere.guest_dir_delete
+    input:
+      vm_id: <% ctx().vm_id %>
+      username: <% ctx().username %>
+      password: <% ctx().password %>
+      guest_directory: <% ctx().tempdir %>
+      recursive: true
+      vsphere: <% ctx().vsphere %>
+    next:
+      - when: <% ctx().proc_exit_code != 0 %>
+        do: fail
