@@ -1,0 +1,53 @@
+---
+    name: vm_tools_options_update
+    runner_type: python-script
+    description: Changes configuration of a Virtual Machine tools options.
+    enabled: true
+    entry_point: vm_tools_options_update.py
+    parameters:
+        vm_id:
+            type: 'string'
+            description: moId of a Virtual Machine. e.g. "vm-1".
+            required: false
+        vm_name:
+            type: 'string'
+            description: "Name of a Virtual Machine."
+            required: false
+        vsphere:
+            type: 'string'
+            description: "Pre-Configured vsphere connection details"
+            required: false
+            default: ~
+        # https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vm.ToolsConfigInfo.html
+        script_after_power_on:
+            type: 'boolean'
+            description: "Flag to specify whether or not scripts should run after the virtual machine powers on."
+            required: false
+        script_after_resume:
+            type: 'boolean'
+            description: "Flag to specify whether or not scripts should run after the virtual machine resumes."
+            required: false
+        script_before_guest_standby:
+            type: 'boolean'
+            description: "Flag to specify whether or not scripts should run before the virtual machine reboots."
+            required: false
+        script_before_guest_shutdown:
+            type: 'boolean'
+            description: "Flag to specify whether or not scripts should run before the virtual machine powers off."
+            required: false
+        script_before_guest_reboot:
+            type: 'boolean'
+            description: "Flag to specify whether or not scripts should run before the virtual machine suspends."
+            required: false
+        sync_time_with_host:
+            type: 'boolean'
+            description: "Indicates whether or not the tools program will sync time with the host time."
+            required: false
+        tools_upgrade_policy:
+            type: 'string'
+            description: "Tools upgrade policy setting for the virtual machine."
+            # https://vdc-download.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.vm.ToolsConfigInfo.UpgradePolicy.html
+            enum:
+                - 'manual'
+                - 'upgradeAtPowerCycle'
+            required: false

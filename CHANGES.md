@@ -1,5 +1,15 @@
 # Change Log
 
+## V0.8.4
+
+Added new action:
+- `vsphere.vm_tools_options_update` - Update VM tools information
+
+Updated action:
+- `vsphere.vm_check_tools` - returns Tools Config as well as tools status
+
+  Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.8.3
 
 Added new actions:
@@ -17,7 +27,7 @@ Contributed by John Schoewe (Encore Technologies).
 - Unit tests fixes for python3 updates
 
   Contributed by Nick Maludy (Encore Technologies).
-  
+
 ## V0.8.0
 
 - Disable flake8 on W503 vs W504 line
@@ -33,7 +43,7 @@ Contributed by Bradley Bishop (Encore Technologies).
 
 ## v0.7.8
 
-* Bumped version to fix tagging issue. No code changes. 
+* Bumped version to fix tagging issue. No code changes.
 * Added a method in vmwarelib/actions.py to connect to the REST API.
 * Added new actions:
   * `vsphere.get_objects_with_tag` - return a list of objects with a given vmware tag
@@ -134,6 +144,6 @@ Introduction of Multi Endpoint Configuration.
 Clean up of duplicate actions. Addition of moid retrieval function.
 
 ## V0.2
-  
+
 Addition of vm_hw atomic actions to create basic Virtual Machine.
 

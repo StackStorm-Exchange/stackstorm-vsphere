@@ -14,11 +14,13 @@
 # limitations under the License.
 
 import eventlet
+import json
 
 from pyVmomi import vim  # pylint: disable-msg=E0611
 
 from vmwarelib import inventory
 from vmwarelib.actions import BaseAction
+from vmwarelib.serialize import MyJSONEncoder
 
 
 class VMCheckTools(BaseAction):
@@ -28,17 +30,23 @@ class VMCheckTools(BaseAction):
         # convert ids to stubs
         vm = inventory.get_virtualmachine(self.si_content, moid=vm_id)
 
+        # Get current Tools config information
+        # Decode the vmware object type into json format
+        return_value = json.loads(json.dumps(vm.config.tools, cls=MyJSONEncoder))
+
         # To correctly understand tools status need to consult 3 properties
-        # 'powerState' 'ttoolsVersionStatus2' and 'toolsRunningStatus'
+        # 'powerState' 'toolsVersionStatus2' and 'toolsRunningStatus'
 
         # If VM isn't powered on tools state is meaningless.
         if vm.runtime.powerState != vim.VirtualMachine.PowerState.poweredOn:
-            return {"status": vm.runtime.powerState}
+            return_value['status'] = vm.runtime.powerState
+            return return_value
 
         # Tools not installed.
         if vm.guest.toolsVersionStatus2 == \
            vim.vm.GuestInfo.ToolsVersionStatus.guestToolsNotInstalled:
-            return {"status": vm.guest.toolsVersionStatus2}
+            return_value['status'] = vm.guest.toolsVersionStatus2
+            return return_value
 
         # Scripts still running therefore wait.
         while vm.guest.toolsRunningStatus != \
@@ -46,4 +54,5 @@ class VMCheckTools(BaseAction):
             eventlet.sleep(1)
 
         # verify status is running.
-        return {"status": vm.guest.toolsRunningStatus}
+        return_value['status'] = vm.guest.toolsRunningStatus
+        return return_value
