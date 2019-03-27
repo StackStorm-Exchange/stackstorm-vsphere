@@ -14,51 +14,44 @@
 
 import mock
 
-from tags_attach_to_object import TagsAttachToObject
+from tags_attach_by_id import TagsAttachByID
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
 
 __all__ = [
-    'TagsAttachToObject'
+    'TagsAttachByID'
 ]
 
 
 class TagsAttachToObjectTestCase(VsphereBaseActionTestCase):
     __test__ = True
-    action_cls = TagsAttachToObject
+    action_cls = TagsAttachByID
 
-    @mock.patch("vmwarelib.actions.BaseAction._rest_api_call")
-    def test_run(self, mock_api_call):
+    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
+    def test_run(self, mock_connect):
         action = self.get_action_instance(self.new_config)
+
+        # mock
+        expected_result = "result"
+        action.tagging = mock.Mock()
+        action.tagging.tag_association_attach_multiple.return_value = expected_result
 
         # define test variables
         object_id = "123"
         object_type = "VM"
         vsphere = "default"
-        test_tag_ids = ["tag_id_1", "tag_id_2"]
+        tag_ids = ["tag_id_1", "tag_id_2"]
         test_kwargs = {
             "object_id": object_id,
             "object_type": object_type,
             "vsphere": vsphere,
-            "tag_ids": test_tag_ids
-        }
-
-        test_post_params = {
-            "object_id": {
-                "id": object_id,
-                "type": object_type
-            },
-            "tag_ids": test_tag_ids
-        }
-
-        test_endpoint = "/rest/com/vmware/cis/tagging/tag-association?~action=" \
-                        "attach-multiple-tags-to-object"
-
-        mock_api_call.return_value = {
-            "value": "test"
+            "tag_ids": tag_ids
         }
 
         # invoke action with valid parameters
         result = action.run(**test_kwargs)
 
-        self.assertEqual(result, "test")
-        mock_api_call.assert_called_with(vsphere, test_endpoint, "post", test_post_params)
+        self.assertEqual(result, expected_result)
+        action.tagging.tag_association_attach_multiple.assert_called_with(tag_ids,
+                                                                          object_type,
+                                                                          object_id)
+        mock_connect.assert_called_with(vsphere)

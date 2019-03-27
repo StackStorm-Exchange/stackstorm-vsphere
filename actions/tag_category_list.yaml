@@ -1,0 +1,12 @@
+---
+    name: tag_category_list
+    runner_type: python-script
+    description: List all tag categories from vsphere
+    enabled: true
+    entry_point: tag_category_list.py
+    parameters:
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

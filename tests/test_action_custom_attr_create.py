@@ -14,38 +14,35 @@
 
 import mock
 
-from get_objects_with_tag import GetObjectsWithTag
+from custom_attr_create import CustomAttrCreate
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
 
 __all__ = [
-    'GetObjectsWithTagTestCase'
+    'CustomAttrCreateTestCase'
 ]
 
 
-class GetObjectsWithTagTestCase(VsphereBaseActionTestCase):
+class CustomAttrCreateTestCase(VsphereBaseActionTestCase):
     __test__ = True
-    action_cls = GetObjectsWithTag
+    action_cls = CustomAttrCreate
 
-    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
+    @mock.patch("vmwarelib.actions.BaseAction.establish_connection")
     def test_run(self, mock_connect):
         action = self.get_action_instance(self.new_config)
 
         # mock
         expected_result = "result"
-        action.tagging = mock.Mock()
-        action.tagging.tag_association_list_attached_objects.return_value = expected_result
+        action.si_content = mock.Mock()
+        action.si_content.customFieldsManager.AddCustomFieldDef.return_value = expected_result
 
         # define test variables
-        tag_id = "123"
+        custom_attr_name = "name"
         vsphere = "default"
-        test_kwargs = {
-            "tag_id": tag_id,
-            "vsphere": vsphere
-        }
 
         # invoke action with valid parameters
-        result = action.run(**test_kwargs)
+        result = action.run(custom_attr_name, vsphere)
 
         self.assertEqual(result, expected_result)
-        action.tagging.tag_association_list_attached_objects.assert_called_with(tag_id)
+        action.si_content.customFieldsManager.AddCustomFieldDef.assert_called_with(
+            name=custom_attr_name)
         mock_connect.assert_called_with(vsphere)

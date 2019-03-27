@@ -1,0 +1,16 @@
+---
+    name: tag_list
+    runner_type: python-script
+    description: List all tags from a given category or all tags if no category is given
+    enabled: true
+    entry_point: tag_list.py
+    parameters:
+        category_name:
+            type: 'string'
+            description: Category to list tags from
+            required: false
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

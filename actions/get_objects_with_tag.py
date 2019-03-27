@@ -29,9 +29,6 @@ class GetObjectsWithTag(BaseAction):
         Returns:
         - list: List of objects that are tagged with a given value
         """
-        api_endpoint = "/rest/com/vmware/cis/tagging/tag-association/id:%s?~action=" \
-                       "list-attached-objects" % (kwargs["tag_id"])
+        self.connect_rest(kwargs.get("vsphere"))
 
-        object_list = self._rest_api_call(kwargs["vsphere"], api_endpoint, "post")
-
-        return object_list['value']
+        return self.tagging.tag_association_list_attached_objects(kwargs.get("tag_id"))

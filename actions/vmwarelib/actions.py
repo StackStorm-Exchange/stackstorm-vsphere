@@ -23,6 +23,8 @@ from pyVmomi import vim  # pylint: disable-msg=E0611
 
 from st2common.runners.base_action import Action
 
+from vmwarelib.tagging import VmwareTagActions
+
 CONNECTION_ITEMS = ['host', 'port', 'user', 'passwd']
 
 
@@ -92,14 +94,24 @@ class BaseAction(Action):
         atexit.register(connect.Disconnect, si)
         return si
 
-    def _connect_rest(self, vsphere):
+    def connect_rest(self, vsphere):
         connection = self._get_connection_info(vsphere)
 
         session = requests.Session()
         session.verify = self.config['ssl_verify']
         session.auth = (connection['user'], connection['passwd'])
 
-        login_url = "https://%s/rest/com/vmware/cis/session" % connection['host']
+        if connection['port'] == 80:
+            transport = "http"
+        elif connection['port'] == 443:
+            transport = "https"
+        else:
+            raise ValueError("Port %s is invalid" % connection['port'])
+
+        url_base = "%s://%s" % (transport, connection['host'])
+        self.tagging = VmwareTagActions(session=session, url_base=url_base)
+
+        login_url = url_base + "/rest/com/vmware/cis/session"
 
         session.post(login_url)
 
@@ -109,7 +121,7 @@ class BaseAction(Action):
         # The connection info is needed to add the hostname to the API endpoint
         connection = self._get_connection_info(vsphere)
 
-        session = self._connect_rest(vsphere)
+        session = self.connect_rest(vsphere)
 
         api_endpoint = "https://%s%s" % (connection['host'], api_endpoint)
 

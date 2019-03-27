@@ -1,0 +1,95 @@
+---
+    name: tag_attach_or_create
+    runner_type: python-script
+    description: Attach a tag to a given object and create the tag and category if they don't exist
+    enabled: true
+    entry_point: tag_attach_or_create.py
+    parameters:
+        category_cardinality:
+            type: 'string'
+            description: Cardinality of the tag category, only used if category needs to be created
+            required: false
+            default: 'SINGLE'
+            enum:
+              - 'SINGLE'
+              - 'MULTIPLE'
+        category_description:
+            type: 'string'
+            description: Description of the tag category, only used if category needs to be created
+            required: false
+        category_name:
+            type: 'string'
+            description: Category name of the tag to attach
+            required: true
+        category_types:
+            type: 'array'
+            description: Associable types for the tag category, only used if category needs to be created (Empty array means all types)
+            required: false
+            default: []
+        object_id:
+            type: 'string'
+            description: ID of the object to attach tag to
+            required: true
+        object_type:
+            type: 'string'
+            description: Type of object to attach tag to (e.g. VirtualMachine)
+            required: true
+            enum:
+              - AuthorizationManager
+              - ClusterComputeResource
+              - ComputeResource
+              - CustomFieldsManager
+              - Datacenter
+              - Datastore
+              - DiagnosticManager
+              - DistributedVirtualSwitch
+              - DrsStatsManager/InjectorWorkload
+              - Extension
+              - ExtensionManager
+              - HbrManager
+              - HostSystem
+              - HttpNfcLease
+              - IpPoolManager
+              - LatencySensitivity
+              - LicenseAssignmentManager
+              - LicenseManager
+              - LocalizationManager
+              - ManagedEntity
+              - Network
+              - OpaqueNetwork
+              - OvfConsumer
+              - OvfManager
+              - PerformanceManager
+              - ResourcePlanningManager
+              - ResourcePool
+              - ServiceInstance
+              - ServiceManager
+              - SessionManager
+              - SharesInfo
+              - SimpleCommand
+              - StoragePod
+              - StorageResourceManager
+              - TaskFilterSpec
+              - TaskInfo
+              - UpdateVirtualMachineFilesResult
+              - VirtualApp
+              - VirtualDiskManager
+              - VirtualMachine
+        replace:
+            type: 'boolean'
+            description: Remove all tags with the given category before assigning the new one
+            required: false
+            default: true
+        tag_description:
+            type: 'string'
+            description: Description of the tag, only used if tag needs to be created
+            required: false
+        tag_name:
+            type: 'string'
+            description: Name of the tag to attach
+            required: true
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

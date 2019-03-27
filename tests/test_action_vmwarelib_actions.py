@@ -91,13 +91,13 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         mock_session.return_value = expected_result
 
         # invoke action with valid parameters
-        result = action._connect_rest(test_vsphere)
+        result = action.connect_rest(test_vsphere)
 
         self.assertEqual(result, expected_result)
         expected_result.post.assert_called_with(test_endpoint)
 
     @mock.patch("vmwarelib.actions.requests.Request")
-    @mock.patch("vmwarelib.actions.BaseAction._connect_rest")
+    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
     def test_rest_api_call(self, mock_connect, mock_request):
         action = self.get_action_instance(self._new_config)
 
