@@ -1,5 +1,28 @@
 # Change Log
 
+## v0.8.5
+
+Added new tagging.py actions file to vmwarelib.
+
+Added new actions:
+* `vsphere.tag_attach_or_create` - Attach a tag to a given object and create the tag and category if they don't exist
+* `vsphere.tag_category_create` - Create a vsphere tag category
+* `vsphere.tag_category_delete` - Delete a tag category from vSphere
+* `vsphere.tag_category_list` - List all tag categories from vSphere
+* `vsphere.tag_create` - Create a vSphere tag with the given category
+* `vsphere.tag_delete` - Delete a tag from vSphere
+* `vsphere.tag_list` - List all tags from a given category or all tags if no category is given
+* `vsphere.custom_attr_assign` - Create a custom attribute in vSphere
+
+Updated actions to use vmwarelib/tagging functions:
+* `vsphere.get_objects_with_tag`
+* `vsphere.get_tags_on_object`
+
+Renamed action:
+* `vsphere.tags_attach_to_object` -> `vsphere.tags_attach_by_id`
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## V0.8.4
 
 Added new action:
