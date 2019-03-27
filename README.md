@@ -205,7 +205,7 @@ The version specification is to ensure compatibility with Python 2.7.6 (standard
 PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due to elements of the SSL module being used.
 
 ## Actions
-
+* `vsphere.custom_attr_assign` - Assign a custom attribute to a given object
 * `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
 * `vsphere.get_objects_with_tag` - Returns a list of objects with a given vmware tag.
 * `vsphere.get_tags_on_object` - Returns a list of vmware tags on a given object.
@@ -224,6 +224,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.host_get` - Retrieves the Summary information for an ESX host.
 * `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
 * `vsphere.set_vm` - Changes configuration of a Virtual Machine.
+* `vsphere.tags_attach_to_object` - Attach a list of tags to a given object
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
 * `vsphere.vm_create_from_template` - Create a new VM from existing template.
 * `vsphere.vm_env_items_get` - Retrieve list of Objects from VSphere

@@ -27,6 +27,8 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.vm.Summary.ConfigSummary,
     vim.vm.Summary.StorageSummary,
     vim.vm.Summary.GuestSummary,
+    vim.vm.ToolsConfigInfo,
+    vim.vm.ToolsConfigInfo.ToolsLastInstallInfo,
     vim.Datastore,
     vim.vm.RuntimeInfo,
     vim.vm.DeviceRuntimeInfo
