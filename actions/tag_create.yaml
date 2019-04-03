@@ -1,0 +1,24 @@
+---
+    name: tag_create
+    runner_type: python-script
+    description: Create a vsphere tag with the given category
+    enabled: true
+    entry_point: tag_create.py
+    parameters:
+        category_name:
+            type: 'string'
+            description: Category of the tag to create
+            required: true
+        tag_description:
+            type: 'string'
+            description: Description of the tag to create
+            required: false
+        tag_name:
+            type: 'string'
+            description: Name of the tag to create
+            required: true
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

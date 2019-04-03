@@ -15,15 +15,16 @@
 from vmwarelib.actions import BaseAction
 
 
-class GetTagsOnObject(BaseAction):
+class TagsAttachByID(BaseAction):
     def run(self, **kwargs):
         """
-        Connect to the REST API and retrieve a list of tags on a given object
+        Connect to the REST API and assign a list of tags to a given object
 
         Args:
         - kwargs: inputs to the aciton
           - object_id: VMWare Object ID to get tags from (vm-1234)
           - object_type: Object type that corresponds to the ID (VirtualMachine)
+          - tag_ids: List of tag IDs to assign to the given object
           - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
@@ -31,5 +32,6 @@ class GetTagsOnObject(BaseAction):
         """
         self.connect_rest(kwargs.get("vsphere"))
 
-        return self.tagging.tag_association_list_attached_tags(kwargs.get("object_type"),
-                                                               kwargs.get("object_id"))
+        return self.tagging.tag_association_attach_multiple(kwargs.get("tag_ids"),
+                                                            kwargs.get("object_type"),
+                                                            kwargs.get("object_id"))

@@ -91,13 +91,13 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         mock_session.return_value = expected_result
 
         # invoke action with valid parameters
-        result = action._connect_rest(test_vsphere)
+        result = action.connect_rest(test_vsphere)
 
         self.assertEqual(result, expected_result)
         expected_result.post.assert_called_with(test_endpoint)
 
     @mock.patch("vmwarelib.actions.requests.Request")
-    @mock.patch("vmwarelib.actions.BaseAction._connect_rest")
+    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
     def test_rest_api_call(self, mock_connect, mock_request):
         action = self.get_action_instance(self._new_config)
 
@@ -117,3 +117,30 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         self.assertEqual(result, expected_result)
         mock_request.assert_called_with(test_verb, test_url, json=None)
         mock_connect.assert_called_with(test_vsphere)
+
+    @mock.patch("vmwarelib.actions.vim")
+    def test_get_vim_type(self, mock_vim):
+        action = self.get_action_instance(self._new_config)
+
+        # define test variables
+        test_object_type = "ObjectType"
+
+        expected_result = mock.MagicMock()
+        expected_result.return_value = "result"
+
+        mock_vim.ObjectType = expected_result
+
+        # invoke action with invalid object_type which is not registered in pyVmomi
+        result = action.get_vim_type(test_object_type)
+
+        self.assertEqual(result, expected_result)
+
+    def test_get_vim_type_invalid(self):
+        action = self.get_action_instance(self._new_config)
+
+        # define test variables
+        test_object_type = "InvalidObjectType"
+
+        # invoke action with an invalid config
+        with self.assertRaises(AttributeError):
+            action.get_vim_type(test_object_type)

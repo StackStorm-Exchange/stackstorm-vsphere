@@ -15,32 +15,24 @@
 from vmwarelib.actions import BaseAction
 
 
-class TagsAttachToObject(BaseAction):
+class CategoryDelete(BaseAction):
     def run(self, **kwargs):
         """
-        Connect to the REST API and assign a list of tags to a given object
+        Delete a tag category from vsphere
 
         Args:
-          - kwargs: inputs to the aciton
-          - object_id: VMWare Object ID to get tags from (vm-1234)
-          - object_type: Object type that corresponds to the ID (VirtualMachine)
-          - tag_ids: List of tag IDs to assign to the given object
+        - kwargs: inputs to the aciton
+          - category_name: Category name to delete
           - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
-        - list: List of tags that are on a given object
+        - string: Response from the category delete DELETE request
         """
+        self.connect_rest(kwargs.get("vsphere"))
 
-        api_endpoint = "/rest/com/vmware/cis/tagging/tag-association?~action=" \
-                       "attach-multiple-tags-to-object"
-        data = {
-            "object_id": {
-                "id": kwargs.get("object_id"),
-                "type": kwargs.get("object_type")
-            },
-            "tag_ids": kwargs.get("tag_ids")
-        }
+        category = self.tagging.category_find_by_name(kwargs.get("category_name"))
 
-        response = self._rest_api_call(kwargs["vsphere"], api_endpoint, "post", data)
-
-        return response['value']
+        if category:
+            return self.tagging.category_delete(category["id"])
+        else:
+            return(False, "Category: '{}' not found!".format(kwargs.get("category_name")))

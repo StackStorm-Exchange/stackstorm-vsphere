@@ -15,21 +15,30 @@
 from vmwarelib.actions import BaseAction
 
 
-class GetTagsOnObject(BaseAction):
+class TagDelete(BaseAction):
     def run(self, **kwargs):
         """
-        Connect to the REST API and retrieve a list of tags on a given object
+        Connect to the REST API and delete a tag from vSphere
 
         Args:
         - kwargs: inputs to the aciton
-          - object_id: VMWare Object ID to get tags from (vm-1234)
-          - object_type: Object type that corresponds to the ID (VirtualMachine)
+          - tag_category: Category of the tag to attach
+          - tag_name: Name of the tag to attach
           - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
-        - list: List of tags that are on a given object
+        - string: Response from the tag delete DELETE request
         """
         self.connect_rest(kwargs.get("vsphere"))
 
-        return self.tagging.tag_association_list_attached_tags(kwargs.get("object_type"),
-                                                               kwargs.get("object_id"))
+        category = self.tagging.category_find_by_name(kwargs.get("category_name"))
+
+        if category:
+            tag = self.tagging.tag_find_by_name(kwargs.get("tag_name"), category["id"])
+            if tag:
+                return self.tagging.tag_delete(tag["id"])
+            else:
+                return(False, "Tag: '{}' not found for category: "
+                       "'{}'!".format(kwargs.get("tag_name"), kwargs.get("category_name")))
+        else:
+            return(False, "Category: '{}' not found!".format(kwargs.get("category_name")))

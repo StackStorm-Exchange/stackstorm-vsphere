@@ -26,9 +26,14 @@ class GetTagsOnObjectTestCase(VsphereBaseActionTestCase):
     __test__ = True
     action_cls = GetTagsOnObject
 
-    @mock.patch("vmwarelib.actions.BaseAction._rest_api_call")
-    def test_run(self, mock_api_call):
+    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
+    def test_run(self, mock_connect):
         action = self.get_action_instance(self.new_config)
+
+        # mock
+        expected_result = "result"
+        action.tagging = mock.Mock()
+        action.tagging.tag_association_list_attached_tags.return_value = expected_result
 
         # define test variables
         object_id = "123"
@@ -40,21 +45,10 @@ class GetTagsOnObjectTestCase(VsphereBaseActionTestCase):
             "vsphere": vsphere
         }
 
-        test_post_params = {
-            "object_id": {
-                "id": object_id,
-                "type": object_type
-            }
-        }
-
-        test_endpoint = "/rest/com/vmware/cis/tagging/tag-association?~action=list-attached-tags"
-
-        mock_api_call.return_value = {
-            "value": "test"
-        }
-
         # invoke action with valid parameters
         result = action.run(**test_kwargs)
 
-        self.assertEqual(result, "test")
-        mock_api_call.assert_called_with(vsphere, test_endpoint, "post", test_post_params)
+        self.assertEqual(result, expected_result)
+        action.tagging.tag_association_list_attached_tags.assert_called_with(object_type,
+                                                                             object_id)
+        mock_connect.assert_called_with(vsphere)

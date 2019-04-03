@@ -1,9 +1,9 @@
 ---
-    name: tags_attach_to_object
+    name: tags_attach_by_id
     runner_type: python-script
-    description: Attach a list of tags to a given object
+    description: Attach a list of tag IDs to a given object
     enabled: true
-    entry_point: tags_attach_to_object.py
+    entry_point: tags_attach_by_id.py
     parameters:
         object_id:
             type: 'string'

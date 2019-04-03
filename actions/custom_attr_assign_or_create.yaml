@@ -1,0 +1,71 @@
+---
+name: custom_attr_assign_or_create
+runner_type: python-script
+description: Create a custom attribute if it doesn't exist and asssign it to a given object
+enabled: true
+entry_point: custom_attr_assign_or_create.py
+parameters:
+    custom_attr_name:
+        type: string
+        description: Name of custom attribute to assign
+        required: true
+    custom_attr_value:
+        type: string
+        description: Value of custom attribute to assign
+        required: true
+    object_id:
+        type: string
+        description: MOID of an object to assign a custom attribute to
+        required: true
+    object_type:
+        type: string
+        description: The type of object to get
+        required: true
+        enum:
+          - AuthorizationManager
+          - ClusterComputeResource
+          - ComputeResource
+          - CustomFieldsManager
+          - Datacenter
+          - Datastore
+          - DiagnosticManager
+          - DistributedVirtualSwitch
+          - DrsStatsManager/InjectorWorkload
+          - Extension
+          - ExtensionManager
+          - HbrManager
+          - HostSystem
+          - HttpNfcLease
+          - IpPoolManager
+          - LatencySensitivity
+          - LicenseAssignmentManager
+          - LicenseManager
+          - LocalizationManager
+          - ManagedEntity
+          - Network
+          - OpaqueNetwork
+          - OvfConsumer
+          - OvfManager
+          - PerformanceManager
+          - ResourcePlanningManager
+          - ResourcePool
+          - ServiceInstance
+          - ServiceManager
+          - SessionManager
+          - SharesInfo
+          - SimpleCommand
+          - StoragePod
+          - StorageResourceManager
+          - TaskFilterSpec
+          - TaskInfo
+          - UpdateVirtualMachineFilesResult
+          - VirtualApp
+          - VirtualDiskManager
+          - VirtualMachine
+          - VirtualMachine2
+    vsphere:
+        type: string
+        description: Pre-Configured vsphere connection details
+        required: false
+        position: 1
+        default: ~

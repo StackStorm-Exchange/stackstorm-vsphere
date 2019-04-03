@@ -1,0 +1,16 @@
+---
+    name: tag_category_delete
+    runner_type: python-script
+    description: Delete a tag category from vSphere
+    enabled: true
+    entry_point: tag_category_delete.py
+    parameters:
+        category_name:
+            type: 'string'
+            description: Category name to delete
+            required: true
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

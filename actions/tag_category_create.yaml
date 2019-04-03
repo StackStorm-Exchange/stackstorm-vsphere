@@ -1,0 +1,33 @@
+---
+    name: tag_category_create
+    runner_type: python-script
+    description: Create a vsphere tag category
+    enabled: true
+    entry_point: tag_category_create.py
+    parameters:
+        category_cardinality:
+            type: 'string'
+            description: Cardinality of the tag category
+            required: true
+            default: 'SINGLE'
+            enum:
+              - 'SINGLE'
+              - 'MULTIPLE'
+        category_description:
+            type: 'string'
+            description: Description of the tag category
+            required: false
+        category_name:
+            type: 'string'
+            description: Name of the category to create
+            required: true
+        category_types:
+            type: 'array'
+            description: Associable types for the tag category (Empty array means all types)
+            required: true
+            default: []
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

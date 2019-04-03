@@ -14,17 +14,17 @@
 
 import mock
 
-from get_objects_with_tag import GetObjectsWithTag
+from tag_category_list import CategoryList
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
 
 __all__ = [
-    'GetObjectsWithTagTestCase'
+    'CategoryListTestCase'
 ]
 
 
-class GetObjectsWithTagTestCase(VsphereBaseActionTestCase):
+class CategoryListTestCase(VsphereBaseActionTestCase):
     __test__ = True
-    action_cls = GetObjectsWithTag
+    action_cls = CategoryList
 
     @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
     def test_run(self, mock_connect):
@@ -33,13 +33,11 @@ class GetObjectsWithTagTestCase(VsphereBaseActionTestCase):
         # mock
         expected_result = "result"
         action.tagging = mock.Mock()
-        action.tagging.tag_association_list_attached_objects.return_value = expected_result
+        action.tagging.category_list.return_value = expected_result
 
         # define test variables
-        tag_id = "123"
         vsphere = "default"
         test_kwargs = {
-            "tag_id": tag_id,
             "vsphere": vsphere
         }
 
@@ -47,5 +45,5 @@ class GetObjectsWithTagTestCase(VsphereBaseActionTestCase):
         result = action.run(**test_kwargs)
 
         self.assertEqual(result, expected_result)
-        action.tagging.tag_association_list_attached_objects.assert_called_with(tag_id)
+        action.tagging.category_list.assert_called()
         mock_connect.assert_called_with(vsphere)
