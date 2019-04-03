@@ -12,7 +12,10 @@ Added new actions:
 * `vsphere.tag_create` - Create a vSphere tag with the given category
 * `vsphere.tag_delete` - Delete a tag from vSphere
 * `vsphere.tag_list` - List all tags from a given category or all tags if no category is given
-* `vsphere.custom_attr_assign` - Create a custom attribute in vSphere
+* `vsphere.custom_attr_assign` - Assign a custom attribute in vSphere
+* `vsphere.custom_attr_assign_or_create` - Assign a custom attribute in vSphere and create one if it doesn't exist
+
+Added get_vim_type function to vmwarelib/actions.py
 
 Updated actions to use vmwarelib/tagging functions:
 * `vsphere.get_objects_with_tag`

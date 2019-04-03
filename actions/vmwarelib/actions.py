@@ -138,3 +138,9 @@ class BaseAction(Action):
                task.info.state == vim.TaskInfo.State.running):
             eventlet.sleep(1)
         return task.info.state == vim.TaskInfo.State.success
+
+    def get_vim_type(self, object_type):
+        try:
+            return getattr(vim, object_type)
+        except AttributeError:
+            raise AttributeError("specified object_type ('%s') is not supported" % object_type)
