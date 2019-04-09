@@ -35,7 +35,8 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
         self._action.establish_connection = mock.Mock()
         self._action.si_content = mock.Mock()
 
-    def test_with_valid_name_and_type(self):
+    @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
+    def test_with_valid_name_and_type(self, mock_vim_type):
         # object types thats are assumed to be specified
         object_types = [
             'VirtualMachine',
@@ -44,6 +45,8 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
             'Datacenter',
             'HostSystem',
         ]
+
+        mock_vim_type.return_value = "vimType"
 
         # invoke action with valid parameters
         mock_entity = "''vim.VirtualMachine:vm-1234''"
@@ -55,15 +58,12 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
                 self.assertTrue(result[0])
                 self.assertTrue(len(result[1]) > 0)
                 self.assertEqual(result[1].get('hoge'), 'vm-1234')
+                mock_vim_type.assert_called_with(object_type)
 
-    def test_with_invalid_type(self):
-        # invoke action with invalid object_type which is not registered in pyVmomi
-        result = self._action.run(object_names=['hoge'], object_type='InvalidObjectType')
+    @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
+    def test_with_invalid_names(self, mock_vim_type):
+        mock_vim_type.return_value = "vimType"
 
-        self.assertFalse(result[0])
-        self.assertEqual(result[1], {})
-
-    def test_with_invalid_names(self):
         def side_effect(*args, **kwargs):
             # because vmwarelib.inventory.get_managed_entity raises an exeption when
             # no matched object is found
@@ -75,3 +75,4 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
 
         self.assertTrue(result[0])
         self.assertEqual(result[1], {})
+        mock_vim_type.assert_called_with('VirtualMachine')

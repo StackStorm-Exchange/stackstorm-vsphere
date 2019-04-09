@@ -1,0 +1,20 @@
+---
+    name: tag_delete
+    runner_type: python-script
+    description: Delete a tag from vSphere
+    enabled: true
+    entry_point: tag_delete.py
+    parameters:
+        category_name:
+            type: 'string'
+            description: Category of the tag to attach
+            required: true
+        tag_name:
+            type: 'string'
+            description: Name of the tag to attach
+            required: true
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~

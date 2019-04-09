@@ -15,21 +15,26 @@
 from vmwarelib.actions import BaseAction
 
 
-class GetTagsOnObject(BaseAction):
+class CategoryCreate(BaseAction):
     def run(self, **kwargs):
         """
-        Connect to the REST API and retrieve a list of tags on a given object
+        Connect to the REST API and assign a list of tags to a given object
 
         Args:
         - kwargs: inputs to the aciton
-          - object_id: VMWare Object ID to get tags from (vm-1234)
-          - object_type: Object type that corresponds to the ID (VirtualMachine)
+          - category_cardinality: Cardinality of the tag category
+          - category_description: Description of the tag category
+          - category_name: Name of the tag category
+          - category_types: Associable types for the tag category
           - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
-        - list: List of tags that are on a given object
+        - string: Response from the category create POST request
         """
         self.connect_rest(kwargs.get("vsphere"))
 
-        return self.tagging.tag_association_list_attached_tags(kwargs.get("object_type"),
-                                                               kwargs.get("object_id"))
+        # create the category
+        return self.tagging.category_create(kwargs.get("category_name"),
+                                            kwargs.get("category_description"),
+                                            kwargs.get("category_cardinality"),
+                                            kwargs.get("category_types"))

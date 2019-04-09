@@ -16,10 +16,10 @@ from vmwarelib import inventory
 from vmwarelib.actions import BaseAction
 
 
-class CustomAttrAssign(BaseAction):
+class CustomAttrAssignOrCreate(BaseAction):
     def run(self, custom_attr_name, custom_attr_value, object_id, object_type, vsphere=None):
         """
-        Assign a given custom attribute to an object
+        Create a custom attribute if it doesn't exist and asssign it to a given object
 
         Args:
         - custom_attr_name: name of custom attribute to assign
@@ -40,12 +40,13 @@ class CustomAttrAssign(BaseAction):
 
         cfm = self.si_content.customFieldsManager
 
-        # Loop through the list of vcenter fields and set the one that matches custom_attr_name
-        for field in cfm.field:
-            if field.name == custom_attr_name:
-                cfm.SetField(entity=entity, key=field.key, value=custom_attr_value)
-                return (True, "Attribute: '%s' set on object: '%s' with value: '%s'" %
-                        (custom_attr_name, object_id, custom_attr_value))
+        # Get the custom attribute object with the given name or 'None' if it isn't found
+        field = next((field for field in cfm.field if field.name == custom_attr_name), None)
 
-        return (False, "Attribute: '%s' not found for object type: %s!" % (custom_attr_name,
-                                                                           object_type))
+        if field is None:
+            field = cfm.AddCustomFieldDef(name=custom_attr_name)
+
+        cfm.SetField(entity=entity, key=field.key, value=custom_attr_value)
+
+        return (True, "Attribute: '%s' set on object: '%s' with value: '%s'" %
+                (custom_attr_name, object_id, custom_attr_value))

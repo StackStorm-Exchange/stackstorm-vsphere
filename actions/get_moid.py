@@ -12,9 +12,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from pyVmomi import vim  # pylint: disable-msg=E0611
-
 from vmwarelib import inventory
 from vmwarelib.actions import BaseAction
 
@@ -31,12 +28,7 @@ class GetMoid(BaseAction):
         Returns:
         - dict: key value pair of object_name and moid.
         """
-
-        try:
-            vimtype = getattr(vim, object_type)
-        except AttributeError:
-            self.logger.warning("specified object_type ('%s') is not supported" % object_type)
-            return (False, {})
+        vimtype = self.get_vim_type(object_type)
 
         self.establish_connection(vsphere)
 

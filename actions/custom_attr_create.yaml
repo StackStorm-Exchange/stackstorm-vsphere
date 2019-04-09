@@ -1,0 +1,17 @@
+---
+name: custom_attr_create
+runner_type: python-script
+description: Assign a custom attribute to a given object
+enabled: true
+entry_point: custom_attr_create.py
+parameters:
+    custom_attr_name:
+        type: string
+        description: Name of custom attribute to assign
+        required: true
+    vsphere:
+        type: string
+        description: Pre-Configured vsphere connection details
+        required: false
+        position: 1
+        default: ~
