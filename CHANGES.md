@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.8.6
+
+Added new actions:
+* `vsphere.get_tag_value_from_object` - Return the value of a tag with a given object ID and category
+* `vsphere.vm_resource_pool_get` - Return the MOID of a given VM's containing resource pool
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.5
 
 Added new tagging.py actions file to vmwarelib.
