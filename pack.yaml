@@ -3,7 +3,7 @@ ref: vsphere
 name: vsphere
 description: VMware vSphere
 stackstorm_version: ">=2.9.0"
-version: 0.8.5
+version: 0.8.6
 author: Paul Mulvihill
 email: paul.mulvihill@pulsant.com
 contributors:
@@ -12,3 +12,4 @@ contributors:
   - Nick Maludy <nmaludy@gmail.com>
   - Bradley Bishop <bishopbm1@gmail.com>
   - James E. King III <jking@apache.org>
+  - John Schoewe <jschoewe@gmail.com>

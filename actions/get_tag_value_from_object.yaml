@@ -1,0 +1,24 @@
+---
+    name: get_tag_value_from_object
+    runner_type: python-script
+    description: Get the value of a tag with a given category and object
+    enabled: true
+    entry_point: get_tag_value_from_object.py
+    parameters:
+        category_name:
+            type: 'string'
+            description: Name of the tag category in vmware
+            required: true
+        object_id:
+            type: 'string'
+            description: ID of the object to return tags from
+            required: true
+        object_type:
+            type: 'string'
+            description: Type of he object to return tags from (e.g. VirtualMachine)
+            required: true
+        vsphere:
+            type: "string"
+            description: Pre-Configured vsphere connection details
+            required: false
+            default: ~
