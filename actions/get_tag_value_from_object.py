@@ -45,7 +45,7 @@ class GetTagValueFromObject(BaseAction):
             if tags:
                 return [tag['name'] for tag in tags]
             else:
-                return(False, "No tags found on object: '{}' with category: '{}'!".format(
-                    kwargs.get("object_id"), kwargs.get("category_name")))
+                return (False, "No tags found on object: '{}' with category: '{}'!".format(
+                        kwargs.get("object_id"), kwargs.get("category_name")))
         else:
-            return(False, "Category: '{}' not found!".format(kwargs.get("category_name")))
+            return (False, "Category: '{}' not found!".format(kwargs.get("category_name")))
