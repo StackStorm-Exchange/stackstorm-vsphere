@@ -43,4 +43,8 @@ class GetMoid(BaseAction):
             except Exception as e:
                 self.logger.warning(str(e))
 
+        # Raise an error if no MOIDs were found for the VMs
+        if not results:
+            raise Exception("Could not find objects with names: {}".format(", ".join(object_names)))
+
         return (True, results)

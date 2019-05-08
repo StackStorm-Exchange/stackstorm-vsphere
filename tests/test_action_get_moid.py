@@ -71,8 +71,7 @@ class GetMoidTestCase(VsphereBaseActionTestCase):
 
         # invoke action with invalid names which don't match any objects
         with mock.patch.object(inventory, 'get_managed_entity', side_effect=side_effect):
-            result = self._action.run(object_names=['hoge'], object_type='VirtualMachine')
+            with self.assertRaises(Exception):
+                self._action.run(object_names=['hoge'], object_type='VirtualMachine')
 
-        self.assertTrue(result[0])
-        self.assertEqual(result[1], {})
         mock_vim_type.assert_called_with('VirtualMachine')
