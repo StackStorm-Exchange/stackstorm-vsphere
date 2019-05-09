@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.8.8
+
+Added new action:
+* `vsphere.vm_snapshots_delete` - Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given rexex patterns
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.7
 
 Updated actions:
