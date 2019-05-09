@@ -1,7 +1,7 @@
 ---
 name: get_moid
 runner_type: python-script
-description: Returns the MOID of vSphere managed entity corresponding to the specified parameters
+description: Returns the MOID of vSphere managed entity corresponding to the specified parameters. If the corresponding entities are not found then the action will fail.
 enabled: true
 entry_point: get_moid.py
 parameters:
