@@ -19,7 +19,8 @@ from vmwarelib.actions import BaseAction
 class GetMoid(BaseAction):
     def run(self, object_names, object_type, vsphere=None):
         """
-        Transform object_name and object_type to MOID (Managed Object Reference ID).
+        Transform object_name and object_type to MOID (Managed Object Reference ID). If the objects
+        are not found then this action will fail.
 
         Args:
         - object_name: name of object that is labeled to the target
@@ -42,5 +43,9 @@ class GetMoid(BaseAction):
                 results[name] = str(managed_entity).split(':')[-1].replace("'", "")
             except Exception as e:
                 self.logger.warning(str(e))
+
+        # Raise an error if no MOIDs were found for the VMs
+        if not results:
+            return (False, {})
 
         return (True, results)

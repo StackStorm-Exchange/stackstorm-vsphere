@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.8.7
+
+Updated actions:
+* `vsphere.get_moid` - Returns an error if objects aren't found in vSphere
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.6
 
 Added new actions:
