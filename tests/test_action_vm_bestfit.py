@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 
 import mock
-from bestfit import BestFit
+from vm_bestfit import BestFit
 from st2common.runners.base_action import Action
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
 
@@ -158,7 +158,7 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         self.assertEqual(expected_result, result)
         mock_entity.assert_called_with(self._action.si_content, test_vim_type, name="test-ds-1")
 
-    @mock.patch('bestfit.BestFit.filter_datastores')
+    @mock.patch('vm_bestfit.BestFit.filter_datastores')
     @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
     def test_get_storage_no_disk(self, mock_vim_type, mock_filter):
         test_vim_type = "vimType"
@@ -197,8 +197,8 @@ class BestFitTestCase(VsphereBaseActionTestCase):
                                       mock.call("test-ds-2", test_datastore_filter),
                                       mock.call("test-ds-filter", test_datastore_filter)])
 
-    @mock.patch('bestfit.BestFit.get_storage')
-    @mock.patch('bestfit.BestFit.get_host')
+    @mock.patch('vm_bestfit.BestFit.get_storage')
+    @mock.patch('vm_bestfit.BestFit.get_host')
     def test_run(self, mock_get_host, mock_get_storage):
         # Define test variables
         test_ds_filter = ["filter"]
