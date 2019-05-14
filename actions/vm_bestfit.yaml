@@ -1,0 +1,38 @@
+---
+name: vm_bestfit
+runner_type: python-script
+description: >
+    This action is used to determine the best host and datastore to provision a new VM to on a given cluster. The result host will be the one with the least amount of VMs and the result datastore will be the one with the most free space.
+enabled: true
+entry_point: vm_bestfit.py
+parameters:
+    cluster_name:
+        type: string
+        description: Name of the cluster in vSphere
+        required: true
+    datastore_filter_regex:
+        type: array
+        items:
+          type: string
+        description: >
+          'Regular expression to filter the list of available datastores
+          ["string1", "string2"]'
+        required: false
+    disks:
+        type: array
+        description: >
+          'List of disks to attach to a new VM
+           [{
+              "size_gb": "string",
+              "uuid": "string",
+              "datastore": "string",
+              "controller_bus": "string",
+              "scsi_bus": "string"
+           }]'
+        required: false
+    vsphere:
+        type: string
+        description: Pre-Configured vsphere connection details
+        required: false
+        position: 1
+        default: ~
