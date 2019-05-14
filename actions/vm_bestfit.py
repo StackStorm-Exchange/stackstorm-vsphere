@@ -77,6 +77,8 @@ class BestFit(BaseAction):
         if disks is not None:
             first_disk = disks[0]
             datastore_name = first_disk['datastore']
+            # If the disks variable is given and it's datastore key is not "automatic" then
+            # the datastore from the disks variable will be returned
             if datastore_name != "automatic":
                 vimtype = self.get_vim_type("Datastore")
                 datastore = inventory.get_managed_entity(self.si_content, vimtype,
