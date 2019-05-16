@@ -10,7 +10,7 @@ parameters:
         type: string
         description: Name of the cluster in vSphere
         required: true
-    datastore_filter_regex:
+    datastore_filter_regex_list:
         type: array
         items:
           type: string

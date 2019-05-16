@@ -99,24 +99,24 @@ class BestFit(BaseAction):
 
         return datastore
 
-    def filter_datastores(self, datastore_name, datastore_filter_regex):
+    def filter_datastores(self, datastore_name, datastore_filter_regex_list):
         """Check if a datastore should be filtered from the list or not.
         If no regex filters are given then all datastores can be used
         :param datastore_name: Name of the datastore to check filters for
         :param datastore_filter: Array containing list of filters to exclude certain datastores
         :returns boolean: True if the datastore name does NOT match any of the regex expressions
         """
-        if datastore_filter_regex is None:
+        if datastore_filter_regex_list is None:
             return True
 
         # Filter out the datastores by name
         # Include if the datastore name does NOT match any of the regex expressions
-        for regex in datastore_filter_regex:
+        for regex in datastore_filter_regex_list:
             if re.search(regex.strip(), datastore_name):
                 return False
         return True
 
-    def run(self, cluster_name, datastore_filter_regex, disks, vsphere=None):
+    def run(self, cluster_name, datastore_filter_regex_list, disks, vsphere=None):
         """
         Returns a host and datastore name and MOID from the given cluster and filters.
         The result host will be the one with the least amount of VMs and the result
@@ -124,7 +124,7 @@ class BestFit(BaseAction):
 
         Args:
         - cluster_name: Name of the cluster in vSphere to get a host from
-        - datastore_filter_regex: Regular expression to filter the list of available datastores
+        - datastore_filter_regex_list: List of regular expressions to filter the list of datastores
         - disks: List of disks to attach to a new VM
         - vsphere: Pre-Configured vsphere connection details
 
@@ -138,7 +138,7 @@ class BestFit(BaseAction):
 
         # Return a datastore on the host that is either specified in the disks variable or
         # has the most free space and a name that doesn't match any filters
-        datastore = self.get_storage(host, datastore_filter_regex, disks)
+        datastore = self.get_storage(host, datastore_filter_regex_list, disks)
 
         return {'clusterName': host.parent.name,
                 'hostName': host.name,
