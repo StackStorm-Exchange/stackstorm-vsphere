@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.8.8
+
+Added new actions:
+* `vsphere.vm_snapshots_delete` - Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given rexex patterns
+* `vsphere.vm_bestfit` - Determines the best host and datastore to provision a new VM to on a given cluster
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.7
 
 Updated actions:
