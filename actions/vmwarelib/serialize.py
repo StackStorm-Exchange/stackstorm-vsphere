@@ -23,6 +23,8 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.net.IpRouteConfigInfo,
     vim.net.IpRouteConfigInfo.Gateway,
     vim.net.IpRouteConfigInfo.IpRoute,
+    vim.option.OptionValue,
+    vim.vm.ConfigInfo,
     vim.vm.Summary,
     vim.vm.Summary.ConfigSummary,
     vim.vm.Summary.StorageSummary,
@@ -31,7 +33,8 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.vm.ToolsConfigInfo.ToolsLastInstallInfo,
     vim.Datastore,
     vim.vm.RuntimeInfo,
-    vim.vm.DeviceRuntimeInfo
+    vim.vm.DeviceRuntimeInfo,
+    vim.vm.VirtualHardware
 ]
 
 PHYSICAL_NIC_NON_JSON_SERILIZABLE_TYPES = [
