@@ -1,5 +1,10 @@
 # Change Log
 
+Added new action:
+* `vsphere.vm_config_info_get` - Retrieve Config Info for given Virtual Machines
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.8
 
 Added new actions:
