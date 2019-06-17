@@ -64,9 +64,9 @@ class VMAddSCSIController(BaseAction):
         if scsi_sharing == 'None':
             scsictrl.device.sharedBus = 'noSharing'
         elif scsi_sharing == 'Physical':
-                        scsictrl.device.sharedBus = 'physicalSharing'
+            scsictrl.device.sharedBus = 'physicalSharing'
         elif scsi_sharing == 'Virtual':
-                        scsictrl.device.sharedBus = 'virtualSharing'
+            scsictrl.device.sharedBus = 'virtualSharing'
 
         # Create Task to add to VM
         configspec.deviceChange = [scsictrl]

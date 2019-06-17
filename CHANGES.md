@@ -1,5 +1,9 @@
 # Change Log
 
+## v0.8.11
+
+* Minor linting fixes triggered by updated flake8 versions in CI
+
 ## v0.8.10
 
 Added new action:

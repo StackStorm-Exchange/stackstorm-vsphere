@@ -36,8 +36,8 @@ class AffinityRuleDelete(BaseAction):
 
         # Find the groups from the affinity rule since it just returns the name
         vm_group, host_group = self.find_affinity_groups(cluster,
-                                                        affinity_rule.vmGroupName,
-                                                        affinity_rule.affineHostGroupName)
+                                                         affinity_rule.vmGroupName,
+                                                         affinity_rule.affineHostGroupName)
 
         # Create cluster change config to be passed to vmware
         config_spec = self.build_cluster_removal_spec(affinity_rule, vm_group, host_group)
@@ -68,7 +68,7 @@ class AffinityRuleDelete(BaseAction):
 
         if not host_group:
             raise ValueError(("Could not find Host Group with the name: {0}"
-                            "".format(host_group_name)))
+                              "".format(host_group_name)))
 
         return (vm_group, host_group)
 
@@ -92,16 +92,16 @@ class AffinityRuleDelete(BaseAction):
         """
         # For remove operation a removeKey is required
         vm_group_spec = vim.cluster.GroupSpec(info=vm_group,
-                                             operation='remove',
-                                             removeKey=vm_group.name)
+                                              operation='remove',
+                                              removeKey=vm_group.name)
         host_group_spec = vim.cluster.GroupSpec(info=host_group,
-                                               operation='remove',
-                                               removeKey=host_group.name)
+                                                operation='remove',
+                                                removeKey=host_group.name)
         affinity_rule_spec = vim.cluster.RuleSpec(info=affinity_rule,
-                                                 operation='remove',
-                                                 removeKey=affinity_rule.key)
+                                                  operation='remove',
+                                                  removeKey=affinity_rule.key)
 
         config_spec = vim.cluster.ConfigSpecEx(groupSpec=[vm_group_spec, host_group_spec],
-                                              rulesSpec=[affinity_rule_spec])
+                                               rulesSpec=[affinity_rule_spec])
 
         return config_spec
