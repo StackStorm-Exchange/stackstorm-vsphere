@@ -12,23 +12,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 
-# import yaml
-# from mock import Mock, MagicMock
-
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
-from vm_guest_info_get import GetVMGuestInfo
+from vm_config_info_get import GetVMConfigInfo
 from vmwarelib.serialize import MyJSONEncoder
 import mock
 
 
 __all__ = [
-    'GetVMGuestInfoTestCase'
+    'GetVMConfigInfoTestCase'
 ]
 
 
-class GetVMGuestInfoTestCase(VsphereBaseActionTestCase):
+class GetVMConfigInfoTestCase(VsphereBaseActionTestCase):
     __test__ = True
-    action_cls = GetVMGuestInfo
+    action_cls = GetVMConfigInfo
 
     def test_run_blank_input(self):
         action = self.get_action_instance(self.new_config)
@@ -36,7 +33,7 @@ class GetVMGuestInfoTestCase(VsphereBaseActionTestCase):
         self.assertRaises(ValueError, action.run, vm_ids=None,
                           vm_names=None, vsphere="default")
 
-    @mock.patch('vm_guest_info_get.json')
+    @mock.patch('vm_config_info_get.json')
     @mock.patch('vmwarelib.inventory.get_virtualmachine')
     def test_run_vm_ids(self, mock_inventory, mock_json):
         action = self.get_action_instance(self.new_config)
@@ -48,11 +45,11 @@ class GetVMGuestInfoTestCase(VsphereBaseActionTestCase):
         # Mock VM objects returned from inventory
         mock_vm1 = mock.MagicMock()
         type(mock_vm1).name = mock.PropertyMock(return_value="mock-vm1-name")
-        mock_vm1.guest = 'guest1'
+        mock_vm1.config = 'guest1'
 
         mock_vm2 = mock.MagicMock()
         type(mock_vm2).name = mock.PropertyMock(return_value="mock-vm2-name")
-        mock_vm2.guest = 'guest2'
+        mock_vm2.config = 'guest2'
 
         # Give return values to json functions
         mock_json.dumps.side_effect = ['dumps1', 'dumps2']
@@ -80,7 +77,7 @@ class GetVMGuestInfoTestCase(VsphereBaseActionTestCase):
         mock_json.loads.assert_has_calls([mock.call('dumps1'),
                                           mock.call('dumps2')])
 
-    @mock.patch('vm_guest_info_get.json')
+    @mock.patch('vm_config_info_get.json')
     @mock.patch('vmwarelib.inventory.get_virtualmachine')
     def test_run_vm_names(self, mock_inventory, mock_json):
         action = self.get_action_instance(self.new_config)
@@ -92,11 +89,11 @@ class GetVMGuestInfoTestCase(VsphereBaseActionTestCase):
         # Mock VM objects returned from inventory
         mock_vm1 = mock.MagicMock()
         type(mock_vm1).name = mock.PropertyMock(return_value="mock-vm1-name")
-        mock_vm1.guest = 'guest1'
+        mock_vm1.config = 'guest1'
 
         mock_vm2 = mock.MagicMock()
         type(mock_vm2).name = mock.PropertyMock(return_value="mock-vm2-name")
-        mock_vm2.guest = 'guest2'
+        mock_vm2.config = 'guest2'
 
         # Give return values to json functions
         mock_json.dumps.side_effect = ['dumps1', 'dumps2']
