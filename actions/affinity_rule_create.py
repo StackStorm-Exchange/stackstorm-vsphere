@@ -56,7 +56,7 @@ class AffinityRuleCreate(BaseAction):
 
         # Create cluster change config to be passed to vmware
         config_spec = vim.cluster.ConfigSpecEx(groupSpec=[vm_group_spec, host_group_spec],
-                                              rulesSpec=[affinity_rule_spec])
+                                               rulesSpec=[affinity_rule_spec])
 
         # Run Reconfigure task
         task_return = self._wait_for_task(cluster.ReconfigureEx(config_spec, modify=True))
@@ -77,7 +77,7 @@ class AffinityRuleCreate(BaseAction):
             group_object = vim.cluster.HostGroup(name=group_name, host=object_array)
         else:
             raise ValueError(("Must choose either vm or host as the group type."
-                            "Type supplied: {0}".format(group_type)))
+                              "Type supplied: {0}".format(group_type)))
 
         group_spec = vim.cluster.GroupSpec(info=group_object, operation='add')
 
@@ -88,10 +88,10 @@ class AffinityRuleCreate(BaseAction):
         Cluster reconfigure spec for vmware.
         """
         rule_obj = vim.cluster.VmHostRuleInfo(vmGroupName=vm_group,
-                                             affineHostGroupName=host_group,
-                                             name=rule_name,
-                                             enabled=True,
-                                             mandatory=True)
+                                              affineHostGroupName=host_group,
+                                              name=rule_name,
+                                              enabled=True,
+                                              mandatory=True)
         rule_spec = vim.cluster.RuleSpec(info=rule_obj, operation='add')
 
         return rule_spec
