@@ -1,5 +1,18 @@
 # Change Log
 
+## v0.8.11
+
+* Minor linting fixes triggered by updated flake8 versions in CI
+
+## v0.8.10
+
+Added new action:
+* `vsphere.vm_networks_get` - Retrieve a list of network names that the given VM is on
+
+Contributed by John Schoewe (Encore Technologies).
+
+## v0.8.9
+
 Added new action:
 * `vsphere.vm_config_info_get` - Retrieve Config Info for given Virtual Machines
 

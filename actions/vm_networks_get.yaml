@@ -1,0 +1,19 @@
+---
+  name: vm_networks_get
+  runner_type: python-script
+  description: Retrieve a list of network names that the given VM is on
+  entry_point: vm_networks_get.py
+  parameters:
+    vm_id:
+      type: string
+      description: VM ID to get the containing resource pool for
+      required: false
+    vm_name:
+      type: string
+      description: VM Name to get the containing resource pool for
+      required: false
+    vsphere:
+      type: string
+      description: Pre-configured vsphere endpoint
+      required: false
+      default: ~
