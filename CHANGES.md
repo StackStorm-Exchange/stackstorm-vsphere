@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.8.12
+
+Modified action:
+* `vsphere.get_vms` - Added VM operating systems to the result
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.11
 
 * Minor linting fixes triggered by updated flake8 versions in CI

@@ -36,7 +36,7 @@ class GetVMs(BaseAction):
 
         self.establish_connection(vsphere)
 
-        props = ['name', 'runtime.powerState']
+        props = ['config.guestFullName', 'name', 'runtime.powerState']
         moid_to_vm = {}
 
         # getting vms by their ids
@@ -150,8 +150,9 @@ class GetVMs(BaseAction):
             if vm.obj._GetMoId() not in moid_to_vm:
                 moid_to_vm[vm.obj._GetMoId()] = {
                     "moid": vm.obj._GetMoId(),
-                    "name": vm.propSet[0].val,
-                    "runtime.powerState": vm.propSet[1].val
+                    "name": vm.propSet[1].val,
+                    "os": vm.propSet[0].val,
+                    "runtime.powerState": vm.propSet[2].val
                 }
 
         return moid_to_vm.values()
@@ -163,5 +164,6 @@ class GetVMs(BaseAction):
                 vm_map[vm._GetMoId()] = {
                     "moid": vm._GetMoId(),
                     "name": vm.name,
+                    "os": vm.config.guestFullName,
                     "runtime.powerState": vm.runtime.powerState
                 }
