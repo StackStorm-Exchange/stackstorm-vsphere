@@ -27,7 +27,7 @@ class GetObjectsWithTagTestCase(VsphereBaseActionTestCase):
     action_cls = GetObjectsWithTag
 
     @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
-    def test_run(self, mock_connect):
+    def test_run_id(self, mock_connect):
         action = self.get_action_instance(self.new_config)
 
         # mock
@@ -49,3 +49,53 @@ class GetObjectsWithTagTestCase(VsphereBaseActionTestCase):
         self.assertEqual(result, expected_result)
         action.tagging.tag_association_list_attached_objects.assert_called_with(tag_id)
         mock_connect.assert_called_with(vsphere)
+
+    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
+    def test_run_name(self, mock_connect):
+        action = self.get_action_instance(self.new_config)
+
+        # mock
+        action.tagging = mock.Mock()
+
+        test_cat_id = "123"
+        test_category = {"id": test_cat_id}
+        action.tagging.category_find_by_name.return_value = test_category
+
+        test_tag_id = "789"
+        test_tag = {"id": test_tag_id}
+        action.tagging.tag_find_by_name.return_value = test_tag
+
+        expected_result = "result"
+        action.tagging.tag_association_list_attached_objects.return_value = expected_result
+
+        # define test variables
+        category_name = "cat"
+        tag_name = "tag"
+        vsphere = "default"
+        test_kwargs = {
+            "category_name": category_name,
+            "tag_name": tag_name,
+            "vsphere": vsphere
+        }
+
+        # invoke action with valid parameters
+        result = action.run(**test_kwargs)
+
+        self.assertEqual(result, expected_result)
+        action.tagging.category_find_by_name.assert_called_with(category_name)
+        action.tagging.tag_find_by_name.assert_called_with(tag_name, test_cat_id)
+        action.tagging.tag_association_list_attached_objects.assert_called_with(test_tag_id)
+        mock_connect.assert_called_with(vsphere)
+
+    @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
+    def test_run_fail(self, mock_connect):
+        action = self.get_action_instance(self.new_config)
+
+        # Test with no tag ID or name
+        test_kwargs = {
+            "vsphere": "test"
+        }
+
+        # invoke action with invalid parameters
+        with self.assertRaises(ValueError):
+            action.run(**test_kwargs)
