@@ -1,5 +1,15 @@
 # Change Log
 
+## v0.8.13
+
+Added new action:
+* `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name
+
+Modified action:
+* `vsphere.get_objects_with_tag` - Added ability to get objects with category and tag names
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.8.12
 
 Modified action:
