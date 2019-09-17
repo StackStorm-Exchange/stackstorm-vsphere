@@ -1,6 +1,13 @@
 # Change Log
 
-## v0.8.13
+## v0.9.1
+
+Added new action:
+* `vsphere.custom_attr_get` - Return the value of the given Custom Attribute on an object
+
+Contributed by John Schoewe (Encore Technologies).
+
+## v0.9.0
 
 Added new action:
 * `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name
