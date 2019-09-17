@@ -42,9 +42,6 @@ class CustomAttrGet(BaseAction):
         # Find the ID of the custom attribute from the given name
         attr_id = next((field.key for field in cfm.field if field.name == custom_attr_name), None)
 
-        print(attr_id)
-        print(entity.summary.customValue)
-
         if not attr_id:
             return(False, "Attribute: '%s' has no value on object: '%s'" %
                    (custom_attr_name, object_id))
