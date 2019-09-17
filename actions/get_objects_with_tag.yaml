@@ -1,14 +1,22 @@
 ---
     name: get_objects_with_tag
     runner_type: python-script
-    description: Retrieves list of objects on a vCenter Server system that have the specified tag
+    description: Retrieves list of objects on a vCenter Server system that have the specified tag id OR name (not both)
     enabled: true
     entry_point: get_objects_with_tag.py
     parameters:
+        category_name:
+            type: 'string'
+            description: Name of the tag category, only needed if tag name is given
+            required: false
         tag_id:
             type: 'string'
             description: Tag that objects will be seacrhed for (e.g. urn:vmomi:InventoryServiceTag:ce9509a3-34aa-4f82-966a-36f4fc37081c:GLOBAL)
-            required: true
+            required: false
+        tag_name:
+            type: 'string'
+            description: name of the tag, not needed if tag id is given
+            required: false
         vsphere:
             type: "string"
             description: Pre-Configured vsphere connection details

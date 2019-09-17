@@ -207,7 +207,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 ## Actions
 * `vsphere.custom_attr_assign` - Assign a custom attribute to a given object
 * `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
-* `vsphere.get_objects_with_tag` - Returns a list of objects with a given vmware tag.
+* `vsphere.get_objects_with_tag` - Returns a list of objects with a given vmware tag id or name.
 * `vsphere.get_tags_on_object` - Returns a list of vmware tags on a given object.
 * `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
 * `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
@@ -224,6 +224,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.host_get` - Retrieves the Summary information for an ESX host.
 * `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
 * `vsphere.set_vm` - Changes configuration of a Virtual Machine.
+* `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name.
 * `vsphere.tags_attach_to_object` - Attach a list of tags to a given object
 * `vsphere.vm_bestfit` - Determines the best host and datastore to provision a new VM to on a given cluster
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
