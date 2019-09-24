@@ -170,15 +170,18 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         # Mock datastore objects
         mock_ds1 = mock.MagicMock()
         type(mock_ds1).name = mock.PropertyMock(return_value="test-ds-1")
+        mock_ds1.summary.maintenanceMode = 'normal'
         mock_ds1.info.freeSpace = 10
 
         mock_ds2 = mock.MagicMock()
         type(mock_ds2).name = mock.PropertyMock(return_value="test-ds-2")
+        mock_ds2.summary.maintenanceMode = 'normal'
         mock_ds2.info.freeSpace = 20
 
         # This datastre should get filtered out from test_datastore_filter
         mock_ds3 = mock.MagicMock()
         type(mock_ds3).name = mock.PropertyMock(return_value="test-ds-filter")
+        mock_ds3.summary.maintenanceMode = 'normal'
         mock_ds3.info.freeSpace = 100
 
         # This is the result from filter_datastores function that filters out mock_ds3
@@ -196,6 +199,50 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         mock_filter.assert_has_calls([mock.call("test-ds-1", test_datastore_filter),
                                       mock.call("test-ds-2", test_datastore_filter),
                                       mock.call("test-ds-filter", test_datastore_filter)])
+
+    @mock.patch('vm_bestfit.BestFit.filter_datastores')
+    @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
+    def test_get_storage_skip_maintenance_mode(self, mock_vim_type, mock_filter):
+        test_vim_type = "vimType"
+        mock_vim_type.return_value = test_vim_type
+
+        test_datastore_filter = []
+        test_disks = None
+
+        # Mock datastore objects
+        mock_ds1 = mock.MagicMock()
+        mock_ds1.name = "test-ds-1"
+        mock_ds1.summary.maintenanceMode = 'enteringMaintenance'
+        mock_ds1.info.freeSpace = 10
+
+        mock_ds2 = mock.MagicMock()
+        mock_ds2.name = "test-ds-2"
+        mock_ds2.summary.maintenanceMode = 'inMaintenance'
+        mock_ds2.info.freeSpace = 20
+
+        # This datastre should get filtered out from test_datastore_filter
+        mock_ds3 = mock.MagicMock()
+        mock_ds3.name = "test-ds-3"
+        mock_ds3.summary.maintenanceMode = 'normal'
+        mock_ds3.info.freeSpace = 100
+
+        # Don't filter anything by name
+        mock_filter.side_effect = [True, True, True]
+
+        # Mock a list of 2 hosts that are unavailable
+        test_ds_list = [mock_ds1, mock_ds2, mock_ds3]
+
+        # Mock host input
+        mock_host = mock.MagicMock(datastore=test_ds_list)
+
+        result = self._action.get_storage(mock_host, test_datastore_filter, test_disks)
+
+        # mock_ds3 is the only one where maintenanceMode == 'normal'
+        self.assertEqual(result, mock_ds3)
+
+        # we should have only called filter on one datastore, the maintenance mode
+        # check should have kicked out before testing the other datastores
+        mock_filter.assert_has_calls([mock.call("test-ds-3", test_datastore_filter)])
 
     @mock.patch('vm_bestfit.BestFit.get_storage')
     @mock.patch('vm_bestfit.BestFit.get_host')
