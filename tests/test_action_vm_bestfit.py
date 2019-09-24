@@ -220,7 +220,7 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         mock_ds2.summary.maintenanceMode = 'inMaintenance'
         mock_ds2.info.freeSpace = 20
 
-        # This datastre should get filtered out from test_datastore_filter
+        # This datastore should get filtered out from test_datastore_filter
         mock_ds3 = mock.MagicMock()
         mock_ds3.name = "test-ds-3"
         mock_ds3.summary.maintenanceMode = 'normal'
