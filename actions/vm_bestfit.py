@@ -73,7 +73,7 @@ class BestFit(BaseAction):
         """
         datastore = None
 
-        # First check the disks variable for a datastotre to use
+        # First check the disks variable for a datastore to use
         if disks is not None:
             first_disk = disks[0]
             datastore_name = first_disk['datastore']
@@ -90,6 +90,18 @@ class BestFit(BaseAction):
             storages = host.datastore
             most_space = 0
             for ds in storages:
+                # only allow placing onto a datastore in "normal" mode
+                # this prevents from being placed onto a datastore in "maintenance" mode
+                # Valid values are:
+                #  - enteringMaintenance
+                #  - inMaintenance
+                #  - normal
+                #
+                # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.Datastore.Summary.html
+                # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/6b586ed2-655c-49d9-9029-bc416323cb22/fa0b429a-a695-4c11-b7d2-2cbc284049dc/doc/vim.Datastore.Summary.MaintenanceModeState.html
+                if ds.summary.maintenanceMode != 'normal':
+                    continue
+
                 # The following function returns False if the name of the datastore
                 # matches any of the regex filters
                 if self.filter_datastores(ds.name, datastore_filter):
