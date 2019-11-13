@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.9.2
+
+Fixed bug in action `vsphere.custom_attr_get`. It now ignores datastores that are in 
+"maintenance mode" if the datastore name is set to "automatic".
+
+Contributed by Nick Maludy (Encore Technologies).
+
 ## v0.9.1
 
 Added new action:
