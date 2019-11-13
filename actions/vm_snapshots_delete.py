@@ -36,13 +36,17 @@ class VMSnapshotsDelete(BaseAction):
             # an item from name_ignore_patterns
             remove_date = snap.createTime + datetime.timedelta(days=max_age_days)
 
+            # we need to encode snap shot names because
+            # VM Snapshot 11/13/2019, 9:59:56 AM -> VM Snapshot 11%252f13%252f2019, 9:59:56 AM
+            snap_name = snap.name.encode('utf-8')
+
             # ignore if the snapshot name matches one of the regexes
-            if self.matches_pattern_list(snap.name, name_ignore_patterns):
-                ignored_snapshots.append("{0}: {1}".format(snap.vm.name, snap.name))
+            if self.matches_pattern_list(snap_name, name_ignore_patterns):
+                ignored_snapshots.append("{0}: {1}".format(snap.vm.name, snap_name))
 
             # Snapshots older than the max age will be deleted
             elif remove_date < date_now:
-                deleted_snapshots.append("{0}: {1}".format(snap.vm.name, snap.name))
+                deleted_snapshots.append("{0}: {1}".format(snap.vm.name, snap_name))
                 snap.snapshot.RemoveSnapshot_Task(removeChildren=False, consolidate=True)
 
             # Re-run this function with the child snapshot list of any children are found
