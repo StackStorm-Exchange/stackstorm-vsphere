@@ -1,8 +1,15 @@
 # Change Log
 
+## v0.9.3
+
+Fixed bug in action `vsphere.vm_snapshots_delete`. Where if there were special charaters
+in the snapshot name vmware automatically encodes them which was causing the action to fail.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.9.2
 
-Fixed bug in action `vsphere.custom_attr_get`. It now ignores datastores that are in 
+Fixed bug in action `vsphere.custom_attr_get`. It now ignores datastores that are in
 "maintenance mode" if the datastore name is set to "automatic".
 
 Contributed by Nick Maludy (Encore Technologies).
