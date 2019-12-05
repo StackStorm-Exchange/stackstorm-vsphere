@@ -44,7 +44,6 @@ class VMRenameTestCase(VsphereBaseActionTestCase):
         type(mock_vm1).name = mock.PropertyMock(return_value="mock-vm1-name")
         mock_vm1.Rename().return_value = 'task'
 
-        mock_inventory = mock_vm1
         mock_wait_for_task.return_value = True
 
         result = action.run(vm_id=test_vm_ids, new_name='test', vsphere="vsphere")
