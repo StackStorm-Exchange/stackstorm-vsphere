@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.9.4
+
+Added action and tests to rename a VM
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.9.3
 
 Fixed bug in action `vsphere.vm_snapshots_delete`. Where if there were special charaters
