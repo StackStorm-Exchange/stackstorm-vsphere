@@ -230,7 +230,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
 * `vsphere.set_vm` - Changes configuration of a Virtual Machine.
 * `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name.
-* `vsphere.tags_attach_to_object` - Attach a list of tags to a given object
+* `vsphere.tags_attach_by_id` - Attach a list of tags to a given object
 * `vsphere.vm_bestfit` - Determines the best host and datastore to provision a new VM to on a given cluster
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
 * `vsphere.vm_config_info_get` - Retrieve config details of a VM object
