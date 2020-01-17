@@ -22,7 +22,7 @@ import json
 
 class GetHost(BaseAction):
 
-    def run(self, host_ids, host_names, vsphere=None):
+    def run(self, host_ids, host_names, get_all_hosts, vsphere=None):
         """
         Retrieve summary information for given Hosts (ESXi)
 
@@ -35,10 +35,13 @@ class GetHost(BaseAction):
         Returns:
         - dict: Host network hints details.
         """
+        if not get_all_hosts and not host_ids and not host_names:
+            raise ValueError("No IDs nor Names provided.")
+
         self.establish_connection(vsphere)
 
         results = None
-        if not host_ids and not host_names:
+        if get_all_hosts:
             results = self.get_all_hosts()
         else:
             results = self.get_select_hosts(host_ids, host_names)
