@@ -16,11 +16,13 @@
 from vmwarelib import inventory
 from vmwarelib.serialize import HostGetJSONEncoder
 from vmwarelib.actions import BaseAction
+from pyVmomi import vim  # pylint: disable-msg=E0611
 import json
 
 
 class GetHost(BaseAction):
-    def run(self, host_ids, host_names, vsphere=None):
+
+    def run(self, host_ids, host_names, get_all_hosts, vsphere=None):
         """
         Retrieve summary information for given Hosts (ESXi)
 
@@ -33,14 +35,21 @@ class GetHost(BaseAction):
         Returns:
         - dict: Host network hints details.
         """
-
-        # TODO review using propertspec for retrieving all Hosts's at onces.
-        results = {}
-        if not host_ids and not host_names:
+        if not get_all_hosts and not host_ids and not host_names:
             raise ValueError("No IDs nor Names provided.")
 
         self.establish_connection(vsphere)
 
+        results = None
+        if get_all_hosts:
+            results = self.get_all_hosts()
+        else:
+            results = self.get_select_hosts(host_ids, host_names)
+
+        return results
+
+    def get_select_hosts(self, host_ids, host_names):
+        results = {}
         if host_ids:
             for hid in host_ids:
                 host = inventory.get_hostsystem(self.si_content, moid=hid)
@@ -53,7 +62,16 @@ class GetHost(BaseAction):
                 host = inventory.get_hostsystem(self.si_content, name=host)
                 if host:
                     if host.name not in results:
-                        print host.name
                         results[host.name] = json.loads(json.dumps(host.summary,
                                                                    cls=HostGetJSONEncoder))
+
+        return results
+
+    def get_all_hosts(self):
+        results = {}
+        container = inventory.get_managed_entities(self.si_content, vim.HostSystem)
+        for host in container.view:
+            results[host.name] = json.loads(json.dumps(host.summary,
+                                                       cls=HostGetJSONEncoder))
+
         return results

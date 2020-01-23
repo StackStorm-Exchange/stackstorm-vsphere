@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.9.5
+
+Updated host_get action to get all hosts if not are given. Added tests for action.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.9.4
 
 Added action and tests to rename a VM

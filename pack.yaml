@@ -3,7 +3,7 @@ ref: vsphere
 name: vsphere
 description: VMware vSphere
 stackstorm_version: ">=2.9.0"
-version: 0.9.4
+version: 0.9.5
 author: Paul Mulvihill
 email: paul.mulvihill@pulsant.com
 contributors:
