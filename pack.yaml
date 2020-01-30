@@ -13,3 +13,6 @@ contributors:
   - Bradley Bishop <bishopbm1@gmail.com>
   - James E. King III <jking@apache.org>
   - John Schoewe <jschoewe@gmail.com>
+python_versions:
+  - "2"
+  - "3"
