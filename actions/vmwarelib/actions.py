@@ -18,7 +18,7 @@ import atexit
 
 import eventlet
 import requests
-from pyVim import connect
+from pyVim import connect  # pylint: disable=no-name-in-module
 from pyVmomi import vim  # pylint: disable-msg=E0611
 
 from st2common.runners.base_action import Action
