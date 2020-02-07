@@ -1,5 +1,11 @@
 # Change Log
 
+## v0.12.0
+
+Update pyvmomi dependency from version 5.5.0 to 6.7.3
+Python 3 fixups
+Add explicit support for Python 2 and 3
+
 ## v0.11.0
 
 Added new actions:
