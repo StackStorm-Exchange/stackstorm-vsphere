@@ -2,7 +2,7 @@ import ssl
 import atexit
 import requests
 
-from pyVim import connect
+from pyVim import connect  # noqa pylint: disable=no-name-in-module
 from st2reactor.sensor.base import PollingSensor
 
 

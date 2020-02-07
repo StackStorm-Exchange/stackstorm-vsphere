@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from actions import BaseAction
-from pyVmomi import vim  # pylint: disable-msg=E0611
-import inventory
 import os
+
+from pyVmomi import vim  # pylint: disable-msg=E0611
+
+from .actions import BaseAction
+from .inventory import get_virtualmachine
 
 
 class GuestAction(BaseAction):
@@ -43,7 +45,7 @@ class GuestAction(BaseAction):
         self.establish_connection(vsphere)
         self._creds = self._auth_username_password(username=username,
                                                    password=password)
-        self._vm = inventory.get_virtualmachine(self.content, moid=vm_id)
+        self._vm = get_virtualmachine(self.content, moid=vm_id)
 
     @property
     def guest_credentials(self):
