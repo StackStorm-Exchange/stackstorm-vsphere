@@ -19,17 +19,18 @@ import re
 
 
 class VMSnapshotsGet(BaseAction):
-    def run(self, vm_id, vm_name, vsphere=None):
+    def run(self, vm_id, vm_name, flat, vsphere=None):
         """
         Display snapshots
 
         Args:
         - vm_id: Moid of Virtual Machine to retrieve
         - vm_name: Name of Virtual Machine to retrieve
+        - flat: When True, returns a flattened list of snapshots. When False, returns the snapshots tree
         - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
-        - dict: Total snapshots size
+        - dict: Total snapshots size in GB
         - dict: Lists of snapshots found
         """
         self.establish_connection(vsphere)
@@ -44,31 +45,34 @@ class VMSnapshotsGet(BaseAction):
             except:
                 return "No snapshots found for VM: {}".format(vm.name)
 
-            retval = {}
-            retval["size_gb"] = self.get_snapshot_size(vm)
-            retval["snapshots"] = []
+            return {'size_gb': self.get_snapshots_size_gb(vm),
+                    'snapshots': self.get_snapshots_details(snapshots, flat)}
 
-            while snapshots:
-                for s in snapshots:
-                    snap = {}
-                    snap["name"] = s.name.encode('utf-8')
-                    snap["description"] = s.description.encode('utf-8')
-                    snap["id"] = s.id
-                    snap["created"] = str(s.createTime)
-                    snap["vm"] = str(s.vm).encode('utf-8').split(':')[-1]
-                    snap["snapshot"] = str(s.snapshot).encode('utf-8').split(':')[-1]
-                    snap["state"] = s.state.encode('utf-8')
+    def get_snapshots_details(self, snapshots, flat):
+        """returns detailed information about snapshot"""
+        retval = []
 
-                    retval["snapshots"].append(snap)
+        for s in snapshots:
+            snap = {}
+            snap["name"] = s.name.encode('utf-8')
+            snap["description"] = s.description.encode('utf-8')
+            snap["id"] = s.id
+            snap["created"] = str(s.createTime)
+            snap["vm_moid"] = str(s.vm).encode('utf-8').split(':')[-1]
+            snap["snapshot_moid"] = str(s.snapshot).encode('utf-8').split(':')[-1]
+            snap["state"] = s.state.encode('utf-8')
 
-                    if s.childSnapshotList:
-                        snapshots = s.childSnapshotList
-                    else:
-                        snapshots = []
+            retval.append(snap)
+            if s.childSnapshotList:
+                if flat:
+                    for child in self.get_snapshots_details(s.childSnapshotList, flat):
+                        retval.append(child)
+                else:
+                    snap["child_snapshots"] = self.get_snapshots_details(s.childSnapshotList, flat)
 
-            return retval
+        return retval
 
-    def get_snapshot_size(self, vsphere_vm):
+    def get_snapshots_size_gb(self, vsphere_vm):
         """returns snapshot size, in GB for a VM"""
         disk_list = vsphere_vm.layoutEx.file
         size = 0
