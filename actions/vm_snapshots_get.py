@@ -75,7 +75,7 @@ class VMSnapshotsGet(BaseAction):
         for disk in disk_list:
             if disk.type == 'snapshotData':
                 size += disk.size
-            ss_disk = re.search('0000\d\d',disk.name)
+            ss_disk = re.search('0000[0-9][0-9]', disk.name)
             if ss_disk:
                 size += disk.size
 
