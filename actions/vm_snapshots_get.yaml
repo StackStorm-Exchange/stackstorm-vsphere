@@ -8,16 +8,21 @@
       type: string
       description: VM ID to get the containing folder for
       required: false
-      position: 2
+      position: 0
     vm_name:
       type: string
       description: VM Name to get the containing folder for
       required: false
-      position: 3
+      position: 1
       default: ~
+    flat:
+      type: boolean
+      description: When checked, returns a flattened list of snapshots. When unchecked, returns the snapshots tree
+      required: true
+      position: 2
+      default: true
     vsphere:
       type: string
       description: Pre-configured vsphere endpoint
       required: false
-      position: 4
-
+      position: 3
