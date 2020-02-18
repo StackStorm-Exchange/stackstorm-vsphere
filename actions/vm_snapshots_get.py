@@ -16,8 +16,6 @@
 from vmwarelib.actions import BaseAction
 from vmwarelib import inventory
 import re
-import datetime
-import pytz
 
 
 class VMSnapshotsGet(BaseAction):
@@ -45,11 +43,11 @@ class VMSnapshotsGet(BaseAction):
                 snapshots = vm.snapshot.rootSnapshotList
             except:
                 return "No snapshots found for VM: {}".format(vm.name)
-            
+
             retval = {}
             retval["size_gb"] = self.get_snapshot_size(vm)
             retval["snapshots"] = []
-            
+
             while snapshots:
                 for s in snapshots:
                     snap = {}
@@ -62,15 +60,13 @@ class VMSnapshotsGet(BaseAction):
                     snap["state"] = s.state.encode('utf-8')
 
                     retval["snapshots"].append(snap)
-                    
+
                     if s.childSnapshotList:
                         snapshots = s.childSnapshotList
                     else:
                         snapshots = []
-                
 
             return retval
-
 
     def get_snapshot_size(self, vsphere_vm):
         """returns snapshot size, in GB for a VM"""
@@ -79,7 +75,7 @@ class VMSnapshotsGet(BaseAction):
         for disk in disk_list:
             if disk.type == 'snapshotData':
                 size += disk.size
-            ss_disk = re.search('0000\d\d', disk.name)
+            ss_disk = re.search('0000\d\d',disk.name)
             if ss_disk:
                 size += disk.size
 
