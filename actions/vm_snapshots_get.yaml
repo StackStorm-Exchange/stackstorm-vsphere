@@ -1,0 +1,23 @@
+---
+  name: vm_snapshots_get
+  runner_type: python-script
+  description: Return the list of snapshots
+  entry_point: vm_snapshots_get.py
+  parameters:
+    vm_id:
+      type: string
+      description: VM ID to get the containing folder for
+      required: false
+      position: 2
+    vm_name:
+      type: string
+      description: VM Name to get the containing folder for
+      required: false
+      position: 3
+      default: ~
+    vsphere:
+      type: string
+      description: Pre-configured vsphere endpoint
+      required: false
+      position: 4
+
