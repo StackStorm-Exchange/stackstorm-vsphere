@@ -26,7 +26,8 @@ class VMSnapshotsGet(BaseAction):
         Args:
         - vm_id: Moid of Virtual Machine to retrieve
         - vm_name: Name of Virtual Machine to retrieve
-        - flat: When True, returns a flattened list of snapshots. When False, returns the snapshots tree
+        - flat: When True, returns a flattened list of snapshots.
+                When False, returns the snapshots tree
         - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
