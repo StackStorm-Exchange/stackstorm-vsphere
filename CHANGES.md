@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.9.6
+
+Added new actions:
+* `vsphere.vm_hw_hdds_get` - Retrieve a list of HDD information from the given VM
+* `vsphere.vm_hw_scsi_controllers_get` - Retrieve a list of SCSI controllers on the given VM
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.9.5
 
 Updated host_get action to get all hosts if not are given. Added tests for action.

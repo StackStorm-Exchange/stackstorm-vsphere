@@ -1,0 +1,23 @@
+---
+    name: "vm_hw_hdds_get"
+    runner_type: "python-script"
+    description: "Retrieve a list of HDD information from the given VM. You must Provide Either VM_ID or Name."
+    enabled: true
+    entry_point: "vm_hw_hdds_get.py"
+    parameters:
+      vm_id:
+        type: "string"
+        description: "Virtual Machine ID (vm-1234)"
+        required: false
+        position: 0
+      vm_name:
+        type: "string"
+        description: "Virtual Machine Name"
+        required: false
+        position: 1
+      vsphere:
+        type: "string"
+        description: "Pre-Configured Vsphere to connect to"
+        required: false
+        position: 2
+        default: ~

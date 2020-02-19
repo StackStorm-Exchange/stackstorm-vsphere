@@ -242,6 +242,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.vm_hw_cpu_mem_edit` - Adjust the CPU and RAM values assigned to a Virtual Machine
 * `vsphere.vm_hw_detail_get` - Retrieve Vsphere Data about a virtual machine
 * `vsphere.vm_hw_hdd_add` - Add a HardDrive Object to a Virtual Machine
+* `vsphere.vm_hw_hdds_get` - Retrieve a list of HDD information from the given VM
 * `vsphere.vm_hw_moid_get` - Retrieve VM MOID
 * `vsphere.vm_hw_nic_add` - Add a Network Device to VM and attach to designated network.
 * `vsphere.vm_hw_nic_edit` - Edit Network Device on Virtual machine (V0.2 only allows to switch network)
@@ -249,6 +250,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.vm_hw_power_on` - Power on Virtual Machine
 * `vsphere.vm_hw_remove` - Removes the Virtual Machine.
 * `vsphere.vm_hw_scsi_controller_add` - Add SCSI HDD Controller device to VM
+* `vsphere.vm_hw_scsi_controllers_get` - Retrieve a list of SCSI controllers on the given VM
 * `vsphere.vm_hw_uuid_get` - Retrieve VM UUID
 * `vsphere.vm_runtime_info_get` - Retrieves the Runtime information for a VM.
 * `vsphere.vm_snapshots_delete`	- Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given rexex patterns

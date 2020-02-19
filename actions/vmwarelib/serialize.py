@@ -6,6 +6,7 @@ from pyVmomi import vim, vmodl  # pylint: disable-msg=E0611
 NON_JSON_SERILIZABLE_TYPES = [
     vim.Network.Summary,
     vim.Datastore.Summary,
+    vim.Description,
     vim.ClusterComputeResource.Summary,
     vim.host.Summary,
     vim.host.Summary.HardwareSummary,
@@ -24,6 +25,8 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.net.IpRouteConfigInfo.Gateway,
     vim.net.IpRouteConfigInfo.IpRoute,
     vim.option.OptionValue,
+    vim.SharesInfo,
+    vim.StorageResourceManager.IOAllocationInfo,
     vim.vm.ConfigInfo,
     vim.vm.Summary,
     vim.vm.Summary.ConfigSummary,
@@ -34,7 +37,13 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.Datastore,
     vim.vm.RuntimeInfo,
     vim.vm.DeviceRuntimeInfo,
-    vim.vm.VirtualHardware
+    vim.vm.device.ParaVirtualSCSIController,
+    vim.vm.device.VirtualDevice.PciBusSlotInfo,
+    vim.vm.device.VirtualDisk,
+    vim.vm.device.VirtualDisk.FlatVer2BackingInfo,
+    vim.vm.device.VirtualLsiLogicSASController,
+    vim.vm.VirtualHardware,
+    vmodl.DynamicProperty
 ]
 
 PHYSICAL_NIC_NON_JSON_SERILIZABLE_TYPES = [
