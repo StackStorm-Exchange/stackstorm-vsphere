@@ -205,7 +205,12 @@ The version specification is to ensure compatibility with Python 2.7.6 (standard
 PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due to elements of the SSL module being used.
 
 ## Actions
+* `vsphere.affinity_rule_create` - Creates an affinity rule for vms to hosts
+* `vsphere.affinity_rule_delete` - Deletes an affinity rule and the groups associated with it
 * `vsphere.custom_attr_assign` - Assign a custom attribute to a given object
+* `vsphere.custom_attr_assign_or_create` - Create a custom attribute if it doesn't exist and asssign it to a given object
+* `vsphere.custom_attr_create` - Create a custom attribute with the given name
+* `vsphere.custom_attr_get` - Return the value of the given Custom Attribute on an object
 * `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
 * `vsphere.get_objects_with_tag` - Returns a list of objects with a given vmware tag id or name.
 * `vsphere.get_tags_on_object` - Returns a list of vmware tags on a given object.
@@ -225,7 +230,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
 * `vsphere.set_vm` - Changes configuration of a Virtual Machine.
 * `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name.
-* `vsphere.tags_attach_to_object` - Attach a list of tags to a given object
+* `vsphere.tags_attach_by_id` - Attach a list of tags to a given object
 * `vsphere.vm_bestfit` - Determines the best host and datastore to provision a new VM to on a given cluster
 * `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
 * `vsphere.vm_config_info_get` - Retrieve config details of a VM object

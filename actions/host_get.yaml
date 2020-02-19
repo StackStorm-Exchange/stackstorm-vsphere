@@ -16,8 +16,14 @@
       required: false
       position: 1
       default: ~
+    get_all_hosts:
+      type: boolean
+      description: Gets all hosts from the environment
+      required: false
+      default: false
+      position: 2
     vsphere:
       type: string
       description: Pre-configured vsphere endpoint
       required: false
-      position: 2
+      position: 3

@@ -105,6 +105,54 @@ class VMSnapshotsDeleteTestCase(VsphereBaseActionTestCase):
         mock_snap2.snapshot.RemoveSnapshot_Task.assert_called_with(removeChildren=False,
                                                                    consolidate=True)
 
+    @mock.patch('vm_snapshots_delete.datetime')
+    @mock.patch('vmwarelib.inventory.get_virtualmachines')
+    def test_delete_old_snapshots_encoding(self, mock_inventory, mock_datetime):
+        # Define test variables
+        test_max_age_days = 2
+        test_name_ignore_regexes = [re.compile("^.*IGNORE$")]
+
+        # Mock 3 snapshot objects and make one of them a child
+        mock_snap1 = mock.MagicMock(createTime=1)
+        type(mock_snap1).name = mock.PropertyMock(return_value="VM Snapshot 11%252f13%252f2019")
+        mock_snap1.vm.name = "vm1"
+        mock_snap1.snapshot.RemoveSnapshot_Task.return_value = "test"
+
+        mock_snap2 = mock.MagicMock(createTime=1)
+        type(mock_snap2).name = mock.PropertyMock(return_value="snap2")
+        mock_snap2.vm.name = "vm2"
+        mock_snap2.snapshot.RemoveSnapshot_Task.return_value = "test"
+
+        mock_child_snap = mock.MagicMock(createTime=1)
+        child_snap_name = "VM Snapshot 11%252f1325%252f2019 IGNORE"
+        type(mock_child_snap).name = mock.PropertyMock(return_value=child_snap_name)
+        mock_child_snap.vm.name = "vm3"
+        mock_child_snap.snapshot.RemoveSnapshot_Task.return_value = "test"
+
+        mock_snap2.childSnapshotList = [mock_child_snap]
+
+        mock_datetime.datetime.utcnow().replace.return_value = 3
+        mock_datetime.timedelta.return_value = 1
+
+        # Mock a list of 3 "snapshots"
+        test_snap_list = [mock_snap1, mock_snap2]
+
+        expected_result = {'deleted_snapshots': ["vm1: VM Snapshot 11%252f13%252f2019",
+                                                 "vm2: snap2"],
+                           'ignored_snapshots': ["vm3: VM Snapshot 11%252f1325%252f2019 IGNORE"]}
+
+        # Run function and verify results
+        result = self._action.delete_old_snapshots(test_snap_list,
+                                                   test_max_age_days,
+                                                   test_name_ignore_regexes)
+
+        self.assertEqual(result, expected_result)
+        mock_datetime.timedelta.assert_called_with(days=test_max_age_days)
+        mock_snap1.snapshot.RemoveSnapshot_Task.assert_called_with(removeChildren=False,
+                                                                   consolidate=True)
+        mock_snap2.snapshot.RemoveSnapshot_Task.assert_called_with(removeChildren=False,
+                                                                   consolidate=True)
+
     @mock.patch('vm_snapshots_delete.VMSnapshotsDelete.delete_old_snapshots')
     @mock.patch('vmwarelib.inventory.get_virtualmachines')
     def test_delete_all_old_snapshots(self, mock_inventory, mock_delete):

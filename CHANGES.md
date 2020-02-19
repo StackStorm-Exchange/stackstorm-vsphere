@@ -1,6 +1,39 @@
 # Change Log
 
-## v0.8.13
+## v0.9.5
+
+Updated host_get action to get all hosts if not are given. Added tests for action.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.9.4
+
+Added action and tests to rename a VM
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.9.3
+
+Fixed bug in action `vsphere.vm_snapshots_delete`. Where if there were special charaters
+in the snapshot name vmware automatically encodes them which was causing the action to fail.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.9.2
+
+Fixed bug in action `vsphere.custom_attr_get`. It now ignores datastores that are in
+"maintenance mode" if the datastore name is set to "automatic".
+
+Contributed by Nick Maludy (Encore Technologies).
+
+## v0.9.1
+
+Added new action:
+* `vsphere.custom_attr_get` - Return the value of the given Custom Attribute on an object
+
+Contributed by John Schoewe (Encore Technologies).
+
+## v0.9.0
 
 Added new action:
 * `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name

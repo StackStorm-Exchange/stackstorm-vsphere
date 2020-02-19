@@ -1,0 +1,20 @@
+---
+  name: vm_rename
+  runner_type: python-script
+  description: Renames the Virtual Machine.
+  enabled: true
+  entry_point: vm_rename.py
+  parameters:
+    new_name:
+      type: 'string'
+      description: new name of the Virtual Machine.
+      required: true
+    vm_id:
+      type: 'string'
+      description: moId of a Virtual Machines. e.g. "vm-1".
+      required: true
+    vsphere:
+      type: "string"
+      description: "Pre-Configured vsphere connection details"
+      required: false
+      default: ~
