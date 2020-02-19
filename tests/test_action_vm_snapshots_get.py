@@ -87,19 +87,19 @@ class VMSnapshotsGetTestCase(VsphereBaseActionTestCase):
 
         result = self._action.get_snapshots_details(mock_snap, True)
 
-        expected_result = [{"name": "snap_name", \
-                            "created": "january", \
-                            "snapshot_moid": "snapshot-1000", \
-                            "state": "poweredOn", \
-                            "vm_moid": "vm-10", \
-                            "id": 100, \
-                            "description": "snap_description"}, \
-                           {"name": "snap_name2", \
-                            "created": "february", \
-                            "snapshot_moid": "snapshot-1001", \
-                            "state": "poweredOff", \
-                            "vm_moid": "vm-11", \
-                            "id": 101, \
+        expected_result = [{"name": "snap_name",
+                            "created": "january",
+                            "snapshot_moid": "snapshot-1000",
+                            "state": "poweredOn",
+                            "vm_moid": "vm-10",
+                            "id": 100,
+                            "description": "snap_description"},
+                           {"name": "snap_name2",
+                            "created": "february",
+                            "snapshot_moid": "snapshot-1001",
+                            "state": "poweredOff",
+                            "vm_moid": "vm-11",
+                            "id": 101,
                             "description": "snap_description2"}]
         self.assertEqual(result, expected_result)
 
@@ -112,18 +112,18 @@ class VMSnapshotsGetTestCase(VsphereBaseActionTestCase):
 
         result = self._action.get_snapshots_details(mock_snap, False)
 
-        expected_result = [{"name": "snap_name", \
-                            "created": "january", \
-                            "snapshot_moid": "snapshot-1000", \
-                            "state": "poweredOn", \
-                            "vm_moid": "vm-10", \
-                            "id": 100, \
-                            "description": "snap_description", \
-                            "child_snapshots": [{"name": "snap_name2", \
-                                                 "created": "february", \
-                                                 "snapshot_moid": "snapshot-1001", \
-                                                 "state": "poweredOff", \
-                                                 "vm_moid": "vm-11", \
-                                                 "id": 101, \
+        expected_result = [{"name": "snap_name",
+                            "created": "january",
+                            "snapshot_moid": "snapshot-1000",
+                            "state": "poweredOn",
+                            "vm_moid": "vm-10",
+                            "id": 100,
+                            "description": "snap_description",
+                            "child_snapshots": [{"name": "snap_name2",
+                                                 "created": "february",
+                                                 "snapshot_moid": "snapshot-1001",
+                                                 "state": "poweredOff",
+                                                 "vm_moid": "vm-11",
+                                                 "id": 101,
                                                  "description": "snap_description2"}]}]
         self.assertEqual(result, expected_result)
