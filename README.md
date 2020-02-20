@@ -4,7 +4,7 @@ This pack integrates with vsphere and allows for the creation and management of 
 
 ## Connection Configuration
 
-You will need to specify the details of the vcenter instance you will be connecting to within 
+You will need to specify the details of the vcenter instance you will be connecting to within
 the `/opt/stackstorm/config/vsphere.yaml` file.
 
 Copy the example configuration in [vsphere.yaml.example](./vsphere.yaml.example)
@@ -14,7 +14,7 @@ You can specify multiple environments using nested values:
 
 ```yaml
 ---
-ssl_verify: 
+ssl_verify:
 vsphere:
   dev:
     host:
@@ -200,7 +200,7 @@ Changing the script_arguments to another number results in the action failing.
 
 ## Requirements
 
-This pack requires the python module PYVMOMI. At present the `requirements.txt` specifies version 5.5.0. 
+This pack requires the python module PYVMOMI. At present the `requirements.txt` specifies version 5.5.0.
 The version specification is to ensure compatibility with Python 2.7.6 (standard version with Ubuntu 14.04).
 PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due to elements of the SSL module being used.
 
@@ -253,7 +253,8 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 * `vsphere.vm_hw_scsi_controllers_get` - Retrieve a list of SCSI controllers on the given VM
 * `vsphere.vm_hw_uuid_get` - Retrieve VM UUID
 * `vsphere.vm_runtime_info_get` - Retrieves the Runtime information for a VM.
-* `vsphere.vm_snapshots_delete`	- Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given rexex patterns
+* `vsphere.vm_snapshots_delete`	- Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given regex patterns
+* `vsphere.vm_snapshots_get` - Returns detailed information about the snapshots.
 * `vsphere.wait_task` - Wait for a Task to complete and returns its result.
 
 ## Known Bugs
