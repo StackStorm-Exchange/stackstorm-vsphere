@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.10.0
+
+Added new action:
+* `vsphere.vm_snapshots_get` - Returns detailed information about the snapshots.
+
+Contributed by Lionel Seydoux (SPIE ICS).
+
 ## v0.9.5
 
 Updated host_get action to get all hosts if not are given. Added tests for action.
@@ -263,4 +270,3 @@ Clean up of duplicate actions. Addition of moid retrieval function.
 ## V0.2
 
 Addition of vm_hw atomic actions to create basic Virtual Machine.
-
