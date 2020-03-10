@@ -41,6 +41,7 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.vm.device.VirtualDevice.PciBusSlotInfo,
     vim.vm.device.VirtualDisk,
     vim.vm.device.VirtualDisk.FlatVer2BackingInfo,
+    vim.vm.device.VirtualLsiLogicController,
     vim.vm.device.VirtualLsiLogicSASController,
     vim.vm.VirtualHardware,
     vmodl.DynamicProperty
