@@ -1,5 +1,12 @@
 # Change Log
 
+## v0.11.1
+
+Added vim.vm.device.VirtualLsiLogicController object to vmwarelib/serialize.py which was
+needed to get the full result from vsphere.vm_hw_scsi_controllers_get
+
+Contributed by John Schoewe (Encore Technologies).
+
 ## v0.11.0
 
 Added new actions:
