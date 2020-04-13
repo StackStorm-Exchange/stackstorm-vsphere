@@ -138,12 +138,13 @@ class GetVMs(BaseAction):
             retOptions = vim.PropertyCollector.RetrieveOptions()
             retProps = self.si_content.propertyCollector.RetrievePropertiesEx(
                 specSet=[pfSpec], options=retOptions)
-            vms_from_containers += retProps.objects
-            while retProps.token:
-                retProps = self.si_content.propertyCollector.\
-                    ContinueRetrievePropertiesEx(
-                        token=retProps.token)
+            if retProps is not None:
                 vms_from_containers += retProps.objects
+                while retProps.token:
+                    retProps = self.si_content.propertyCollector.\
+                        ContinueRetrievePropertiesEx(
+                            token=retProps.token)
+                    vms_from_containers += retProps.objects
             objView.Destroy()
 
         for vm in vms_from_containers:
