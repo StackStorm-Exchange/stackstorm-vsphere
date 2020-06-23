@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.12.0
+
+Added new actions:
+* `vsphere.datastore_get` - Retrieve a list of datastores with summary information from vCenter
+* `vsphere.get_tag_value_from_objects` - Retrieve tag value on a list of object_ids
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.11.1
 
 Added vim.vm.device.VirtualLsiLogicController object to vmwarelib/serialize.py which was
