@@ -22,9 +22,10 @@ class GetTagValueFromObjects(BaseAction):
         tags = [self.tagging.tag_get(tag_id) for tag_id in cat_tags if tag_id in obj_tags]
 
         if not tags:
-            raise ValueError("No tags found on object: '{}' with category: '{}'!"
-                             "".format(object_id, category['name']))
+            # if no tags found return empty array
+            return []
 
+        # Return array of values
         return [tag['name'] for tag in tags]
 
     def run(self, category_name, object_ids, object_type, vsphere=None):

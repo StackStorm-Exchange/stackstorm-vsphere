@@ -21,44 +21,34 @@ import json
 
 
 class DatastoreGet(BaseAction):
+    def get_datastore_dict(self, datastore):
+        return_dict = {
+            'name': datastore.name,
+            'summary': json.loads(json.dumps(datastore.summary, cls=DatastoreGetJSONEncoder))
+        }
+
+        return return_dict
+
     def get_all(self):
         results = []
         datastores = inventory.get_managed_entities(self.si_content, vim.Datastore)
         for datastore in datastores.view:
-            result_dict = {
-                'name': datastore.name,
-                'summary': json.loads(json.dumps(datastore.summary, cls=DatastoreGetJSONEncoder))
-            }
-            results.append(result_dict)
+            results.append(self.get_datastore_dict(datastore))
 
         return results
 
-    def get_by_id_or_name(self, datastore_ids, datastore_names):
+    def get_by_id_or_name(self, datastore_ids=[], datastore_names=[]):
         results = []
 
-        if datastore_ids:
-            for did in datastore_ids:
-                datastore = inventory.get_datastore(self.si_content, moid=did)
-                if datastore:
-                    if datastore.name not in results:
-                        result_dict = {
-                            'name': datastore.name,
-                            'summary': json.loads(json.dumps(datastore.summary,
-                                                  cls=DatastoreGetJSONEncoder))
-                        }
-                        results.append(result_dict)
+        for did in datastore_ids:
+            datastore = inventory.get_datastore(self.si_content, moid=did)
+            if datastore and datastore.name not in results:
+                results.append(self.get_datastore_dict(datastore))
 
-        if datastore_names:
-            for datastore in datastore_names:
-                datastore = inventory.get_datastore(self.si_content, name=datastore)
-                if datastore:
-                    if datastore.name not in results:
-                        result_dict = {
-                            'name': datastore.name,
-                            'summary': json.loads(json.dumps(datastore.summary,
-                                                  cls=DatastoreGetJSONEncoder))
-                        }
-                        results.append(result_dict)
+        for datastore in datastore_names:
+            datastore = inventory.get_datastore(self.si_content, name=datastore)
+            if datastore and datastore.name not in results:
+                results.append(self.get_datastore_dict(datastore))
 
         return results
 

@@ -75,8 +75,8 @@ class GetTagValueFromObjectsTestCase(VsphereBaseActionTestCase):
 
         action.tagging.tag_get.return_value = []
 
-        with self.assertRaises(ValueError):
-            action.get_tags(category, object_id, object_type)
+        result = action.get_tags(category, object_id, object_type)
+        self.assertEqual(result, [])
 
         action.tagging.tag_association_list_attached_tags.assert_called_with(
             object_type, object_id)

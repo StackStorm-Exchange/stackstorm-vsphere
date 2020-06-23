@@ -1,6 +1,6 @@
 # Change Log
 
-## v0.11.2
+## v0.12.0
 
 Added new actions:
 * `vsphere.datastore_get` - Retrieve a list of datastores with summary information from vCenter

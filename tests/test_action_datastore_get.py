@@ -36,6 +36,21 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         self._action.establish_connection = mock.Mock()
         self._action.si_content = mock.Mock()
 
+    def test_get_datastore_dict(self):
+        datastore_1 = mock.Mock()
+        datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
+        type(datastore_1).name = datastore_1_name_property
+        datastore_1.summary = 'expected_summary'
+        datastore_1._moId = 1
+
+        expected_result = {
+            'name': 'test_datastore',
+            'summary': 'expected_summary'
+        }
+
+        result = self._action.get_datastore_dict(datastore_1)
+        self.assertEqual(result, expected_result)
+
     def test_get_by_id_or_name(self):
         datastore_1 = mock.Mock()
         datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
