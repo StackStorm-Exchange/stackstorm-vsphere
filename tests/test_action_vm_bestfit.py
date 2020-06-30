@@ -39,32 +39,60 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         self.assertIsInstance(action, BestFit)
         self.assertIsInstance(action, Action)
 
-    def test_filter_datastores_regex_match(self):
+    def test_filter_datastores_regex_match_exclude_matches(self):
         test_filters = ["(?i)(iso)"]
         test_name = "dev_isos"
         expected_result = False
-        result = self._action.filter_datastores(test_name, test_filters)
+        result = self._action.filter_datastores(test_name, 'exclude_matches', test_filters)
         self.assertEqual(expected_result, result)
 
-    def test_filter_datastores_regex_no_match(self):
+    def test_filter_datastores_regex_match_include_matches(self):
+        test_filters = ["(?i)(iso)"]
+        test_name = "dev_isos"
+        expected_result = True
+        result = self._action.filter_datastores(test_name, 'include_matches', test_filters)
+        self.assertEqual(expected_result, result)
+
+    def test_filter_datastores_regex_no_match_exclude_matches(self):
         test_filters = ["(?i)(iso)"]
         test_name = "testdatastore"
         expected_result = True
-        result = self._action.filter_datastores(test_name, test_filters)
+        result = self._action.filter_datastores(test_name, 'exclude_matches', test_filters)
         self.assertEqual(expected_result, result)
 
-    def test_filter_datastores_name_match(self):
+    def test_filter_datastores_regex_no_match_include_matches(self):
+        test_filters = ["(?i)(iso)"]
+        test_name = "testdatastore"
+        expected_result = False
+        result = self._action.filter_datastores(test_name, 'include_matches', test_filters)
+        self.assertEqual(expected_result, result)
+
+    def test_filter_datastores_name_match_exclude_matches(self):
         test_filters = ["dev_isos"]
         test_name = "dev_isos"
         expected_result = False
-        result = self._action.filter_datastores(test_name, test_filters)
+        result = self._action.filter_datastores(test_name, 'exclude_matches', test_filters)
         self.assertEqual(expected_result, result)
 
-    def test_filter_datastores_name_no_match(self):
+    def test_filter_datastores_name_match_include_matches(self):
+        test_filters = ["dev_isos"]
+        test_name = "dev_isos"
+        expected_result = True
+        result = self._action.filter_datastores(test_name, 'include_matches', test_filters)
+        self.assertEqual(expected_result, result)
+
+    def test_filter_datastores_name_no_match_exclude_matches(self):
         test_filters = ["dev_isos"]
         test_name = "testdatastore"
         expected_result = True
-        result = self._action.filter_datastores(test_name, test_filters)
+        result = self._action.filter_datastores(test_name, 'exclude_matches', test_filters)
+        self.assertEqual(expected_result, result)
+
+    def test_filter_datastores_name_no_match_include_matches(self):
+        test_filters = ["dev_isos"]
+        test_name = "testdatastore"
+        expected_result = False
+        result = self._action.filter_datastores(test_name, 'include_matches', test_filters)
         self.assertEqual(expected_result, result)
 
     @mock.patch('vmwarelib.inventory.get_managed_entities')
@@ -136,7 +164,10 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         # invoke action with invalid names which don't match any objects
         mock_entity.side_effect = Exception("Inventory Error: Unable to Find Object in a test")
         with self.assertRaises(Exception):
-            self._action.get_storage(test_host, test_datastore_filter, test_disks)
+            self._action.get_storage(test_host,
+                                     'exclude_matches',
+                                     test_datastore_filter,
+                                     test_disks)
 
     @mock.patch('vmwarelib.inventory.get_managed_entity')
     @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
@@ -153,7 +184,10 @@ class BestFitTestCase(VsphereBaseActionTestCase):
 
         mock_entity.return_value = expected_result
 
-        result = self._action.get_storage(mock_host, test_datastore_filter, test_disks)
+        result = self._action.get_storage(mock_host,
+                                          'exclude_matches',
+                                          test_datastore_filter,
+                                          test_disks)
 
         self.assertEqual(expected_result, result)
         mock_entity.assert_called_with(self._action.si_content, test_vim_type, name="test-ds-1")
@@ -193,12 +227,21 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         # Mock host input
         mock_host = mock.MagicMock(datastore=test_ds_list)
 
-        result = self._action.get_storage(mock_host, test_datastore_filter, test_disks)
+        result = self._action.get_storage(mock_host,
+                                          'exclude_matches',
+                                          test_datastore_filter,
+                                          test_disks)
 
         self.assertEqual(result, mock_ds2)
-        mock_filter.assert_has_calls([mock.call("test-ds-1", test_datastore_filter),
-                                      mock.call("test-ds-2", test_datastore_filter),
-                                      mock.call("test-ds-filter", test_datastore_filter)])
+        mock_filter.assert_has_calls([mock.call("test-ds-1",
+                                                'exclude_matches',
+                                                test_datastore_filter),
+                                      mock.call("test-ds-2",
+                                                'exclude_matches',
+                                                test_datastore_filter),
+                                      mock.call("test-ds-filter",
+                                                'exclude_matches',
+                                                test_datastore_filter)])
 
     @mock.patch('vm_bestfit.BestFit.filter_datastores')
     @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
@@ -235,14 +278,19 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         # Mock host input
         mock_host = mock.MagicMock(datastore=test_ds_list)
 
-        result = self._action.get_storage(mock_host, test_datastore_filter, test_disks)
+        result = self._action.get_storage(mock_host,
+                                          'exclude_matches',
+                                          test_datastore_filter,
+                                          test_disks)
 
         # mock_ds3 is the only one where maintenanceMode == 'normal'
         self.assertEqual(result, mock_ds3)
 
         # we should have only called filter on one datastore, the maintenance mode
         # check should have kicked out before testing the other datastores
-        mock_filter.assert_has_calls([mock.call("test-ds-3", test_datastore_filter)])
+        mock_filter.assert_has_calls([mock.call("test-ds-3",
+                                                'exclude_matches',
+                                                test_datastore_filter)])
 
     @mock.patch('vm_bestfit.BestFit.get_storage')
     @mock.patch('vm_bestfit.BestFit.get_host')
@@ -280,9 +328,16 @@ class BestFitTestCase(VsphereBaseActionTestCase):
                            'datastoreName': test_ds_name,
                            'datastoreID': test_ds_id}
 
-        result = self._action.run(test_cluster_name, test_ds_filter, test_disks, test_vsphere)
+        result = self._action.run(test_cluster_name,
+                                  'exclude_matches',
+                                  test_ds_filter,
+                                  test_disks,
+                                  test_vsphere)
 
         self.assertEqual(result, expected_result)
         self._action.establish_connection.assert_called_with(test_vsphere)
         mock_get_host.assert_called_with(test_cluster_name)
-        mock_get_storage.assert_called_with(mock_host, test_ds_filter, test_disks)
+        mock_get_storage.assert_called_with(mock_host,
+                                            'exclude_matches',
+                                            test_ds_filter,
+                                            test_disks)
