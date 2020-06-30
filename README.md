@@ -281,8 +281,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 |  tag_id_get  |  Retrieves the ID of a tag with the given category and name  |
 |  tag_list  |  List all tags from a given category or all tags if no category is given  |
 |  tags_attach_by_id  |  Attach a list of tag IDs to a given object  |
-|  vm_bestfit  |  This action is used to determine the best host and datastore to provision a new VM to on a given cluster
-  |
+|  vm_bestfit  |  This action is used to determine the best host and datastore to provision a new VM to on a given cluster  |
 |  vm_check_tools  |  Wait for a Task to complete and returns its result.  |
 |  vm_config_info_get  |  Retrieve config details of a VM object  |
 |  vm_create_from_template  |  Create a new VM from existing template.  |
