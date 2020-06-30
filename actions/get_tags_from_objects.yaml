@@ -1,0 +1,23 @@
+---
+name: get_tags_from_objects
+runner_type: python-script
+description: Get all tags from objects
+enabled: true
+entry_point: get_tags_from_objects.py
+parameters:
+  object_ids:
+    type: array
+    description: ID of the objects to return tags from
+    required: true
+    position: 0
+  object_type:
+    type: string
+    description: Type of he object to return tags from (e.g. VirtualMachine)
+    required: true
+    position: 1
+  vsphere:
+    type: string
+    description: Pre-Configured vsphere connection details
+    required: false
+    default: ~
+    position: 2

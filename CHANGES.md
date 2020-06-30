@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.13.0
+
+Added new action:
+* `vsphere.get_tags_from_objects` - Retrieves all the tags from an object tags are returned in a dictionary of `category_name: tag_name`
+
+Changed action:
+* `vsphere.vm_bestfit` - Added `datastore_filter_strategy` input that is defaulted to `exclude_matches` which is the current behavior. This gives
+                         the user more flexibility as to how they want to filter the returned datastores.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.12.0
 
 Added new actions:
