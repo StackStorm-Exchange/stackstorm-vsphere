@@ -12,8 +12,8 @@ parameters:
         required: true
     datastore_filter_strategy:
         type: string
-        description:
-        required: "exclude_matches"
+        description: Filter strategy for if you want to exclude or include the datastore matches found.
+        default: "exclude_matches"
         enum:
           - 'exclude_matches'
           - 'include_matches'
