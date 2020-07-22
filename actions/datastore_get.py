@@ -22,9 +22,11 @@ import json
 
 class DatastoreGet(BaseAction):
     def get_datastore_dict(self, datastore):
+        summary = json.loads(json.dumps(datastore.summary, cls=DatastoreGetJSONEncoder))
         return_dict = {
             'name': datastore.name,
-            'summary': json.loads(json.dumps(datastore.summary, cls=DatastoreGetJSONEncoder))
+            'id': summary['datastore']['_moId'],
+            'summary': summary
         }
 
         return return_dict

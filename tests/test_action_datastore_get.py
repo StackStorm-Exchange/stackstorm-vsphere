@@ -40,12 +40,18 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         datastore_1 = mock.Mock()
         datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
         type(datastore_1).name = datastore_1_name_property
-        datastore_1.summary = 'expected_summary'
+        expected_sumary = {
+            'datastore': {
+                '_moId': 1
+            }
+        }
+        datastore_1.summary = expected_sumary
         datastore_1._moId = 1
 
         expected_result = {
             'name': 'test_datastore',
-            'summary': 'expected_summary'
+            'id': 1,
+            'summary': expected_sumary
         }
 
         result = self._action.get_datastore_dict(datastore_1)
@@ -55,31 +61,56 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         datastore_1 = mock.Mock()
         datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
         type(datastore_1).name = datastore_1_name_property
-        datastore_1.summary = 'expected_summary'
+        expected_sumary_1 = {
+            'datastore': {
+                '_moId': 1
+            }
+        }
+        datastore_1.summary = expected_sumary_1
         datastore_1._moId = 1
 
         datastore_2 = mock.Mock()
         datastore_2_name_property = mock.PropertyMock(return_value='test_datastore_2')
         type(datastore_2).name = datastore_2_name_property
-        datastore_2.summary = 'expected_summary_2'
+        expected_sumary_2 = {
+            'datastore': {
+                '_moId': 2
+            }
+        }
+        datastore_2.summary = expected_sumary_2
         datastore_2._moId = 2
 
         datastore_3 = mock.Mock()
         datastore_3_name_property = mock.PropertyMock(return_value='test_datastore_3')
         type(datastore_3).name = datastore_3_name_property
-        datastore_3.summary = 'expected_summary_3'
+        expected_sumary_3 = {
+            'datastore': {
+                '_moId': 3
+            }
+        }
+        datastore_3.summary = expected_sumary_3
         datastore_3._moId = 3
 
         datastore_4 = mock.Mock()
         datastore_4_name_property = mock.PropertyMock(return_value='test_datastore_4')
         type(datastore_4).name = datastore_4_name_property
-        datastore_4.summary = 'expected_summary_4'
+        expected_sumary_4 = {
+            'datastore': {
+                '_moId': 4
+            }
+        }
+        datastore_4.summary = expected_sumary_4
         datastore_4._moId = 4
 
         datastore_5 = mock.Mock()
         datastore_5_name_property = mock.PropertyMock(return_value='test_datastore_5')
         type(datastore_5).name = datastore_5_name_property
-        datastore_5.summary = 'expected_summary_5'
+        expected_sumary_5 = {
+            'datastore': {
+                '_moId': 5
+            }
+        }
+        datastore_5.summary = expected_sumary_5
         datastore_5._moId = 5
 
         mock_view = mock.Mock(view=[datastore_1,
@@ -94,13 +125,16 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         expected_result = [
             {
                 'name': 'test_datastore_4',
-                'summary': 'expected_summary_4'
+                'id': 4,
+                'summary': expected_sumary_4
             }, {
                 'name': 'test_datastore_2',
-                'summary': 'expected_summary_2'
+                'id': 2,
+                'summary': expected_sumary_2
             }, {
                 'name': 'test_datastore_5',
-                'summary': 'expected_summary_5'
+                'id': 5,
+                'summary': expected_sumary_5
             }
         ]
 
@@ -111,12 +145,24 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         datastore_1 = mock.Mock()
         datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
         type(datastore_1).name = datastore_1_name_property
-        datastore_1.summary = 'expected_summary'
+        expected_sumary_1 = {
+            'datastore': {
+                '_moId': 1
+            }
+        }
+        datastore_1.summary = expected_sumary_1
+        datastore_1._moId = 1
 
         datastore_2 = mock.Mock()
         datastore_2_name_property = mock.PropertyMock(return_value='test_datastore_2')
         type(datastore_2).name = datastore_2_name_property
-        datastore_2.summary = 'expected_summary_2'
+        expected_sumary_2 = {
+            'datastore': {
+                '_moId': 2
+            }
+        }
+        datastore_2.summary = expected_sumary_2
+        datastore_2._moId = 2
 
         mock_view = mock.Mock(view=[datastore_1, datastore_2])
         mock_vmware = mock.Mock(rootFolder="folder")
@@ -126,10 +172,12 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         expected_result = [
             {
                 'name': 'test_datastore',
-                'summary': 'expected_summary'
+                'id': 1,
+                'summary': expected_sumary_1
             }, {
                 'name': 'test_datastore_2',
-                'summary': 'expected_summary_2'
+                'id': 2,
+                'summary': expected_sumary_2
             }
         ]
 
@@ -140,31 +188,56 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         datastore_1 = mock.Mock()
         datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
         type(datastore_1).name = datastore_1_name_property
-        datastore_1.summary = 'expected_summary'
+        expected_sumary_1 = {
+            'datastore': {
+                '_moId': 1
+            }
+        }
+        datastore_1.summary = expected_sumary_1
         datastore_1._moId = 1
 
         datastore_2 = mock.Mock()
         datastore_2_name_property = mock.PropertyMock(return_value='test_datastore_2')
         type(datastore_2).name = datastore_2_name_property
-        datastore_2.summary = 'expected_summary_2'
+        expected_sumary_2 = {
+            'datastore': {
+                '_moId': 2
+            }
+        }
+        datastore_2.summary = expected_sumary_2
         datastore_2._moId = 2
 
         datastore_3 = mock.Mock()
         datastore_3_name_property = mock.PropertyMock(return_value='test_datastore_3')
         type(datastore_3).name = datastore_3_name_property
-        datastore_3.summary = 'expected_summary_3'
+        expected_sumary_3 = {
+            'datastore': {
+                '_moId': 3
+            }
+        }
+        datastore_3.summary = expected_sumary_3
         datastore_3._moId = 3
 
         datastore_4 = mock.Mock()
         datastore_4_name_property = mock.PropertyMock(return_value='test_datastore_4')
         type(datastore_4).name = datastore_4_name_property
-        datastore_4.summary = 'expected_summary_4'
+        expected_sumary_4 = {
+            'datastore': {
+                '_moId': 4
+            }
+        }
+        datastore_4.summary = expected_sumary_4
         datastore_4._moId = 4
 
         datastore_5 = mock.Mock()
         datastore_5_name_property = mock.PropertyMock(return_value='test_datastore_5')
         type(datastore_5).name = datastore_5_name_property
-        datastore_5.summary = 'expected_summary_5'
+        expected_sumary_5 = {
+            'datastore': {
+                '_moId': 5
+            }
+        }
+        datastore_5.summary = expected_sumary_5
         datastore_5._moId = 5
 
         mock_view = mock.Mock(view=[datastore_1,
@@ -179,13 +252,16 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         expected_result = [
             {
                 'name': 'test_datastore_4',
-                'summary': 'expected_summary_4'
+                'id': 4,
+                'summary': expected_sumary_4
             }, {
                 'name': 'test_datastore_2',
-                'summary': 'expected_summary_2'
+                'id': 2,
+                'summary': expected_sumary_2
             }, {
                 'name': 'test_datastore_5',
-                'summary': 'expected_summary_5'
+                'id': 5,
+                'summary': expected_sumary_5
             }
         ]
 
@@ -196,31 +272,56 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         datastore_1 = mock.Mock()
         datastore_1_name_property = mock.PropertyMock(return_value='test_datastore')
         type(datastore_1).name = datastore_1_name_property
-        datastore_1.summary = 'expected_summary'
+        expected_sumary_1 = {
+            'datastore': {
+                '_moId': 1
+            }
+        }
+        datastore_1.summary = expected_sumary_1
         datastore_1._moId = 1
 
         datastore_2 = mock.Mock()
         datastore_2_name_property = mock.PropertyMock(return_value='test_datastore_2')
         type(datastore_2).name = datastore_2_name_property
-        datastore_2.summary = 'expected_summary_2'
+        expected_sumary_2 = {
+            'datastore': {
+                '_moId': 2
+            }
+        }
+        datastore_2.summary = expected_sumary_2
         datastore_2._moId = 2
 
         datastore_3 = mock.Mock()
         datastore_3_name_property = mock.PropertyMock(return_value='test_datastore_3')
         type(datastore_3).name = datastore_3_name_property
-        datastore_3.summary = 'expected_summary_3'
+        expected_sumary_3 = {
+            'datastore': {
+                '_moId': 3
+            }
+        }
+        datastore_3.summary = expected_sumary_3
         datastore_3._moId = 3
 
         datastore_4 = mock.Mock()
         datastore_4_name_property = mock.PropertyMock(return_value='test_datastore_4')
         type(datastore_4).name = datastore_4_name_property
-        datastore_4.summary = 'expected_summary_4'
+        expected_sumary_4 = {
+            'datastore': {
+                '_moId': 4
+            }
+        }
+        datastore_4.summary = expected_sumary_4
         datastore_4._moId = 4
 
         datastore_5 = mock.Mock()
         datastore_5_name_property = mock.PropertyMock(return_value='test_datastore_5')
         type(datastore_5).name = datastore_5_name_property
-        datastore_5.summary = 'expected_summary_5'
+        expected_sumary_5 = {
+            'datastore': {
+                '_moId': 5
+            }
+        }
+        datastore_5.summary = expected_sumary_5
         datastore_5._moId = 5
 
         mock_view = mock.Mock(view=[datastore_1,
@@ -235,19 +336,24 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
         expected_result = [
             {
                 'name': 'test_datastore',
-                'summary': 'expected_summary'
+                'id': 1,
+                'summary': expected_sumary_1
             }, {
                 'name': 'test_datastore_2',
-                'summary': 'expected_summary_2'
+                'id': 2,
+                'summary': expected_sumary_2
             }, {
                 'name': 'test_datastore_3',
-                'summary': 'expected_summary_3'
+                'id': 3,
+                'summary': expected_sumary_3
             }, {
                 'name': 'test_datastore_4',
-                'summary': 'expected_summary_4'
+                'id': 4,
+                'summary': expected_sumary_4
             }, {
                 'name': 'test_datastore_5',
-                'summary': 'expected_summary_5'
+                'id': 5,
+                'summary': expected_sumary_5
             }
         ]
 

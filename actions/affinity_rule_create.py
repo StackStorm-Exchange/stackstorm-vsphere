@@ -61,7 +61,11 @@ class AffinityRuleCreate(BaseAction):
         # Run Reconfigure task
         task_return = self._wait_for_task(cluster.ReconfigureEx(config_spec, modify=True))
 
-        return task_return
+        host_name_return = []
+        for host in hosts:
+            host_name_return.append(host.name)
+
+        return (task_return, {'host_names': host_name_return})
 
     def create_group(self, rule_name, object_array, group_type):
         """ Creates a group to be created in VMware. Returns the group
