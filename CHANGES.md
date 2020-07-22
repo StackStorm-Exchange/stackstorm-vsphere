@@ -1,5 +1,16 @@
 # Change Log
 
+## v0.14.0
+
+Added new action:
+* `vsphere.network_get` - Retrieve a list of networks with summary information and an ID from vCenter
+
+Changed action:
+* `vsphere.datastore_get` - Updated the action to include the ID of the datastore in the return.
+* `vsphere.affinity_rule_create` - Updated the action to return the name of the hosts that were included in the rule.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.13.1
 * Force release to get latest tags on repo
 
