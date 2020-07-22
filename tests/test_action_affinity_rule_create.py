@@ -146,11 +146,16 @@ class AffinityRuleCreateTestCase(VsphereBaseActionTestCase):
         mock_cluster.ReconfigureEx.return_value = "Cluster Reconfigure Return"
         cluster_name_property = mock.PropertyMock(return_value=test_dict['cluster_name'])
         type(mock_cluster).name = cluster_name_property
+
         mock_host = mock.Mock()
+        host_name_property = mock.PropertyMock(return_value="test_host")
+        type(mock_host).name = host_name_property
+
         mock_vm = mock.Mock()
-        mock_vm.runtime.host.return_value = mock_host
+        mock_vm.runtime.host = mock_host
         vm_name_property = mock.PropertyMock(return_value=test_dict['vm_names'][0])
         type(mock_vm).name = vm_name_property
+
         mock_view = mock.Mock(view=[mock_vm, mock_cluster])
         mock_vmware = mock.Mock(rootFolder="folder")
         mock_vmware.viewManager.CreateContainerView.return_value = mock_view
@@ -160,4 +165,4 @@ class AffinityRuleCreateTestCase(VsphereBaseActionTestCase):
         mock__wait_for_task.return_value = True
 
         result_value = self._action.run(**test_dict)
-        self.assertEqual(result_value, True)
+        self.assertEqual(result_value, (True, {'host_names': ["test_host"]}))

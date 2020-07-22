@@ -85,6 +85,12 @@ DATASTORE_GET_NON_JSON_SERILIZABLE_TYPES = [
     vim.Datastore.Summary
 ]
 
+NETWORK_GET_NON_JSON_SERILIZABLE_TYPES = [
+    vim.Network,
+    vim.Network.Summary,
+    vim.dvs.DistributedVirtualPortgroup
+]
+
 
 class MyJSONEncoder(json.JSONEncoder):
     def default(self, obj):  # pylint: disable=E0202
@@ -116,6 +122,18 @@ class DatastoreGetJSONEncoder(json.JSONEncoder):
             return super(DatastoreGetJSONEncoder, self).default(obj)
         except TypeError:
             if type(obj) in DATASTORE_GET_NON_JSON_SERILIZABLE_TYPES:
+                return obj.__dict__
+
+            # For anything else just return the class name
+            return "__{}__".format(obj.__class__.__name__)
+
+
+class NetworkGetJSONEncoder(json.JSONEncoder):
+    def default(self, obj):  # pylint: disable=E0202
+        try:
+            return super(NetworkGetJSONEncoder, self).default(obj)
+        except TypeError:
+            if type(obj) in NETWORK_GET_NON_JSON_SERILIZABLE_TYPES:
                 return obj.__dict__
 
             # For anything else just return the class name
