@@ -1,19 +1,19 @@
 ---
-name: datastore_get
+name: template_get
 pack: vsphere
 runner_type: python-script
-description: Retrieve summary information for given Datastores or All Datastores if none are given
-entry_point: datastore_get.py
+description: Retrieve summary information for given Templates or All Templates if none are given
+entry_point: template_get.py
 parameters:
-  datastore_ids:
+  template_ids:
     type: array
-    description: Comma seperated list of Datastore IDs
+    description: Comma seperated list of Template IDs
     required: false
     position: 0
     default: []
-  datastore_names:
+  template_names:
     type: array
-    description: Comma seperated list of Datastore Names
+    description: Comma seperated list of Template Names
     required: false
     position: 1
     default: []

@@ -65,9 +65,9 @@ class GetTagsFromObjectsTestCase(VsphereBaseActionTestCase):
         ]
 
         expected_result = {
-            'test_category_1': 'test_tag_1',
-            'test_category_2': 'test_tag_2',
-            'test_category_3': 'test_tag_3',
+            'test_category_1': ['test_tag_1'],
+            'test_category_2': ['test_tag_2'],
+            'test_category_3': ['test_tag_3'],
         }
 
         # invoke action with valid parameters
@@ -124,9 +124,9 @@ class GetTagsFromObjectsTestCase(VsphereBaseActionTestCase):
 
         expected_result = {
             'vm-123': {
-                'test_category_1': 'test_tag_1',
-                'test_category_2': 'test_tag_2',
-                'test_category_3': 'test_tag_3',
+                'test_category_1': ['test_tag_1'],
+                'test_category_2': ['test_tag_2'],
+                'test_category_3': ['test_tag_3'],
             }
         }
 
