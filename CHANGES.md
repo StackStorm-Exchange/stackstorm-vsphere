@@ -1,5 +1,19 @@
 # Change Log
 
+## v0.15.0
+
+Added new action:
+* `vsphere.cluster_get` - Retrieve a list of clusters with summary information and an ID from vCenter
+* `vsphere.datacenter_get` - Retrieve a list of datacenters with configuration information and an ID from vCenter
+* `vsphere.template_get` - Retrieve a list of templates with summary information and an ID from vCenter
+
+Changed action:
+* `vsphere.datastore_get` - Fixed action to allow passing ids or names and still work properly.
+* `vsphere.network_get` - Fixed action to allow passing ids or names and still work properly.
+* `vsphere.get_tags_from_objects` - Fixed action to handle tag categories that can have multiple values.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.14.0
 
 Added new action:
