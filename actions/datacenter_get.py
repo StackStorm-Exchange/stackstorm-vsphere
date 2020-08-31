@@ -34,27 +34,23 @@ class DatacenterGet(BaseAction):
         return return_dict
 
     def get_all(self):
-        results = []
         datacenters = inventory.get_managed_entities(self.si_content, vim.Datacenter)
-        for datacenter in datacenters.view:
-            results.append(self.get_datacenter_dict(datacenter))
-
-        return results
+        return [self.get_datacenter_dict(d) for d in datacenters.view]
 
     def get_by_id_or_name(self, datacenter_ids=[], datacenter_names=[]):
-        results = []
+        results = {}
 
         for did in datacenter_ids:
             datacenter = inventory.get_datacenter(self.si_content, moid=did)
             if datacenter and datacenter.name not in results:
-                results.append(self.get_datacenter_dict(datacenter))
+                results[datacenter.name] = self.get_datacenter_dict(datacenter)
 
         for datacenter in datacenter_names:
             datacenter = inventory.get_datacenter(self.si_content, name=datacenter)
             if datacenter and datacenter.name not in results:
-                results.append(self.get_datacenter_dict(datacenter))
+                results[datacenter.name] = self.get_datacenter_dict(datacenter)
 
-        return results
+        return list(results.values())
 
     def run(self, datacenter_ids, datacenter_names, vsphere=None):
         """

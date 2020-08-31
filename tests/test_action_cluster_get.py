@@ -110,17 +110,42 @@ class ClusterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'summary': expected_summary_4
             }, {
-                'name': 'test_cluster_2',
-                'id': '2',
-                'summary': expected_summary_2
-            }, {
                 'name': 'test_cluster_5',
                 'id': '5',
                 'summary': expected_summary_5
+            }, {
+                'name': 'test_cluster_2',
+                'id': '2',
+                'summary': expected_summary_2
             }
         ]
 
         result = self._action.get_by_id_or_name([4], ['test_cluster_2', 'test_cluster_5'])
+        self.assertEqual(result, expected_result)
+
+    def test_get_by_id_or_name_duplicate(self):
+        cluster_1 = mock.Mock()
+        cluster_1.__str__ = mock.Mock(return_value="''vim.Cluster:1''")
+        cluster_1_name_property = mock.PropertyMock(return_value='test_cluster')
+        type(cluster_1).name = cluster_1_name_property
+        expected_summary_1 = {'numHosts': '1'}
+        cluster_1.summary = expected_summary_1
+        cluster_1._moId = 1
+
+        mock_view = mock.Mock(view=[cluster_1])
+        mock_vmware = mock.Mock(rootFolder="folder")
+        mock_vmware.viewManager.CreateContainerView.return_value = mock_view
+        self._action.si_content = mock_vmware
+
+        expected_result = [
+            {
+                'name': 'test_cluster',
+                'id': '1',
+                'summary': expected_summary_1
+            }
+        ]
+
+        result = self._action.get_by_id_or_name([1], ['test_cluster'])
         self.assertEqual(result, expected_result)
 
     def test_get_all_clusters(self):
@@ -216,13 +241,13 @@ class ClusterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'summary': expected_summary_4
             }, {
-                'name': 'test_cluster_2',
-                'id': '2',
-                'summary': expected_summary_2
-            }, {
                 'name': 'test_cluster_5',
                 'id': '5',
                 'summary': expected_summary_5
+            }, {
+                'name': 'test_cluster_2',
+                'id': '2',
+                'summary': expected_summary_2
             }
         ]
 

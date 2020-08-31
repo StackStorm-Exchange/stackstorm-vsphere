@@ -110,17 +110,42 @@ class DatacenterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'configuration': expected_configuration_4
             }, {
-                'name': 'test_datacenter_2',
-                'id': '2',
-                'configuration': expected_configuration_2
-            }, {
                 'name': 'test_datacenter_5',
                 'id': '5',
                 'configuration': expected_configuration_5
+            }, {
+                'name': 'test_datacenter_2',
+                'id': '2',
+                'configuration': expected_configuration_2
             }
         ]
 
         result = self._action.get_by_id_or_name([4], ['test_datacenter_2', 'test_datacenter_5'])
+        self.assertEqual(result, expected_result)
+
+    def test_get_by_id_or_name_duplicate(self):
+        datacenter_1 = mock.Mock()
+        datacenter_1.__str__ = mock.Mock(return_value="''vim.Datacenter:1''")
+        datacenter_1_name_property = mock.PropertyMock(return_value='test_datacenter')
+        type(datacenter_1).name = datacenter_1_name_property
+        expected_configuration_1 = {'defaultHardwareVersionKey': 'test'}
+        datacenter_1.configuration = expected_configuration_1
+        datacenter_1._moId = 1
+
+        mock_view = mock.Mock(view=[datacenter_1])
+        mock_vmware = mock.Mock(rootFolder="folder")
+        mock_vmware.viewManager.CreateContainerView.return_value = mock_view
+        self._action.si_content = mock_vmware
+
+        expected_result = [
+            {
+                'name': 'test_datacenter',
+                'id': '1',
+                'configuration': expected_configuration_1
+            }
+        ]
+
+        result = self._action.get_by_id_or_name([1], ['test_datacenter'])
         self.assertEqual(result, expected_result)
 
     def test_get_all_datacenters(self):
@@ -216,13 +241,13 @@ class DatacenterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'configuration': expected_configuration_4
             }, {
-                'name': 'test_datacenter_2',
-                'id': '2',
-                'configuration': expected_configuration_2
-            }, {
                 'name': 'test_datacenter_5',
                 'id': '5',
                 'configuration': expected_configuration_5
+            }, {
+                'name': 'test_datacenter_2',
+                'id': '2',
+                'configuration': expected_configuration_2
             }
         ]
 

@@ -37,27 +37,23 @@ class NetworkGet(BaseAction):
         return return_dict
 
     def get_all(self):
-        results = []
         networks = inventory.get_managed_entities(self.si_content, vim.Network)
-        for network in networks.view:
-            results.append(self.get_network_dict(network))
-
-        return results
+        return [self.get_network_dict(n) for n in networks.view]
 
     def get_by_id_or_name(self, network_ids=[], network_names=[]):
-        results = []
+        results = {}
 
         for did in network_ids:
             network = inventory.get_network(self.si_content, moid=did)
             if network and network.name not in results:
-                results.append(self.get_network_dict(network))
+                results[network.name] = self.get_network_dict(network)
 
         for network in network_names:
             network = inventory.get_network(self.si_content, name=network)
             if network and network.name not in results:
-                results.append(self.get_network_dict(network))
+                results[network.name] = self.get_network_dict(network)
 
-        return results
+        return list(results.values())
 
     def run(self, network_ids, network_names, vsphere=None):
         """

@@ -33,27 +33,23 @@ class ClusterGet(BaseAction):
         return return_dict
 
     def get_all(self):
-        results = []
         clusters = inventory.get_managed_entities(self.si_content, vim.ClusterComputeResource)
-        for cluster in clusters.view:
-            results.append(self.get_cluster_dict(cluster))
-
-        return results
+        return [self.get_cluster_dict(c) for c in clusters.view]
 
     def get_by_id_or_name(self, cluster_ids=[], cluster_names=[]):
-        results = []
+        results = {}
 
         for cid in cluster_ids:
             cluster = inventory.get_cluster(self.si_content, moid=cid)
             if cluster and cluster.name not in results:
-                results.append(self.get_cluster_dict(cluster))
+                results[cluster.name] = self.get_cluster_dict(cluster)
 
         for cluster in cluster_names:
             cluster = inventory.get_cluster(self.si_content, name=cluster)
             if cluster and cluster.name not in results:
-                results.append(self.get_cluster_dict(cluster))
+                results[cluster.name] = self.get_cluster_dict(cluster)
 
-        return results
+        return list(results.values())
 
     def run(self, cluster_ids, cluster_names, vsphere=None):
         """

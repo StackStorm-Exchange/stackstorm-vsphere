@@ -131,19 +131,48 @@ class NetworkGetTestCase(VsphereBaseActionTestCase):
                 'is_dvs': False,
                 'summary': expected_sumary_4
             }, {
-                'name': 'test_network_2',
-                'id': 2,
-                'is_dvs': False,
-                'summary': expected_sumary_2
-            }, {
                 'name': 'test_network_5',
                 'id': 5,
                 'is_dvs': True,
                 'summary': expected_sumary_5
+            }, {
+                'name': 'test_network_2',
+                'id': 2,
+                'is_dvs': False,
+                'summary': expected_sumary_2
             }
         ]
 
         result = self._action.get_by_id_or_name([4], ['test_network_2', 'test_network_5'])
+        self.assertEqual(result, expected_result)
+
+    def test_get_by_id_or_name_duplicate(self):
+        network_1 = mock.Mock()
+        network_1_name_property = mock.PropertyMock(return_value='test_network')
+        type(network_1).name = network_1_name_property
+        expected_sumary_1 = {
+            'network': {
+                '_moId': 1
+            }
+        }
+        network_1.summary = expected_sumary_1
+        network_1._moId = 1
+
+        mock_view = mock.Mock(view=[network_1])
+        mock_vmware = mock.Mock(rootFolder="folder")
+        mock_vmware.viewManager.CreateContainerView.return_value = mock_view
+        self._action.si_content = mock_vmware
+
+        expected_result = [
+            {
+                'name': 'test_network',
+                'id': 1,
+                'is_dvs': False,
+                'summary': expected_sumary_1
+            }
+        ]
+
+        result = self._action.get_by_id_or_name([1], ['test_network'])
         self.assertEqual(result, expected_result)
 
     def test_get_all_networks(self):
@@ -236,7 +265,7 @@ class NetworkGetTestCase(VsphereBaseActionTestCase):
         network_4.summary = expected_sumary_4
         network_4._moId = 4
 
-        network_5 = mock.Mock()
+        network_5 = mock.Mock(spec=vim.dvs.DistributedVirtualPortgroup)
         network_5_name_property = mock.PropertyMock(return_value='test_network_5')
         type(network_5).name = network_5_name_property
         expected_sumary_5 = {
@@ -263,15 +292,15 @@ class NetworkGetTestCase(VsphereBaseActionTestCase):
                 'is_dvs': False,
                 'summary': expected_sumary_4
             }, {
+                'name': 'test_network_5',
+                'id': 5,
+                'is_dvs': True,
+                'summary': expected_sumary_5
+            }, {
                 'name': 'test_network_2',
                 'id': 2,
                 'is_dvs': False,
                 'summary': expected_sumary_2
-            }, {
-                'name': 'test_network_5',
-                'id': 5,
-                'is_dvs': False,
-                'summary': expected_sumary_5
             }
         ]
 

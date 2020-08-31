@@ -124,6 +124,10 @@ class TemplateGetTestCase(VsphereBaseActionTestCase):
 
         expected_result = [
             {
+                'name': 'test_template_5',
+                'id': 5,
+                'summary': expected_sumary_5
+            }, {
                 'name': 'test_template_4',
                 'id': 4,
                 'summary': expected_sumary_4
@@ -131,14 +135,38 @@ class TemplateGetTestCase(VsphereBaseActionTestCase):
                 'name': 'test_template_2',
                 'id': 2,
                 'summary': expected_sumary_2
-            }, {
-                'name': 'test_template_5',
-                'id': 5,
-                'summary': expected_sumary_5
             }
         ]
 
         result = self._action.get_by_id_or_name([4], ['test_template_2', 'test_template_5'])
+        self.assertEqual(result, expected_result)
+
+    def test_get_by_id_or_name_duplicate(self):
+        template_1 = mock.Mock()
+        template_1_name_property = mock.PropertyMock(return_value='test_template')
+        type(template_1).name = template_1_name_property
+        expected_sumary_1 = {
+            'vm': {
+                '_moId': 1
+            }
+        }
+        template_1.summary = expected_sumary_1
+        template_1._moId = 1
+
+        mock_view = mock.Mock(view=[template_1])
+        mock_vmware = mock.Mock(rootFolder="folder")
+        mock_vmware.viewManager.CreateContainerView.return_value = mock_view
+        self._action.si_content = mock_vmware
+
+        expected_result = [
+            {
+                'name': 'test_template',
+                'id': 1,
+                'summary': expected_sumary_1
+            }
+        ]
+
+        result = self._action.get_by_id_or_name([1], ['test_template'])
         self.assertEqual(result, expected_result)
 
     def test_get_all_templates(self):
@@ -251,6 +279,10 @@ class TemplateGetTestCase(VsphereBaseActionTestCase):
 
         expected_result = [
             {
+                'name': 'test_template_5',
+                'id': 5,
+                'summary': expected_sumary_5
+            }, {
                 'name': 'test_template_4',
                 'id': 4,
                 'summary': expected_sumary_4
@@ -258,10 +290,6 @@ class TemplateGetTestCase(VsphereBaseActionTestCase):
                 'name': 'test_template_2',
                 'id': 2,
                 'summary': expected_sumary_2
-            }, {
-                'name': 'test_template_5',
-                'id': 5,
-                'summary': expected_sumary_5
             }
         ]
 

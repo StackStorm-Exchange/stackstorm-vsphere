@@ -32,27 +32,23 @@ class DatastoreGet(BaseAction):
         return return_dict
 
     def get_all(self):
-        results = []
         datastores = inventory.get_managed_entities(self.si_content, vim.Datastore)
-        for datastore in datastores.view:
-            results.append(self.get_datastore_dict(datastore))
-
-        return results
+        return [self.get_datastore_dict(d) for d in datastores.view]
 
     def get_by_id_or_name(self, datastore_ids=[], datastore_names=[]):
-        results = []
+        results = {}
 
         for did in datastore_ids:
             datastore = inventory.get_datastore(self.si_content, moid=did)
             if datastore and datastore.name not in results:
-                results.append(self.get_datastore_dict(datastore))
+                results[datastore.name] = self.get_datastore_dict(datastore)
 
         for datastore in datastore_names:
             datastore = inventory.get_datastore(self.si_content, name=datastore)
             if datastore and datastore.name not in results:
-                results.append(self.get_datastore_dict(datastore))
+                results[datastore.name] = self.get_datastore_dict(datastore)
 
-        return results
+        return list(results.values())
 
     def run(self, datastore_ids, datastore_names, vsphere=None):
         """

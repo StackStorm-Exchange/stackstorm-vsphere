@@ -40,19 +40,19 @@ class TemplateGet(BaseAction):
         return results
 
     def get_by_id_or_name(self, template_ids=[], template_names=[]):
-        results = []
+        results = {}
 
         for tid in template_ids:
             template = inventory.get_virtualmachine(self.si_content, moid=tid)
             if template and template.config.template and template.name not in results:
-                results.append(self.get_template_dict(template))
+                results[template.name] = self.get_template_dict(template)
 
         for template in template_names:
             template = inventory.get_virtualmachine(self.si_content, name=template)
             if template and template.config.template and template.name not in results:
-                results.append(self.get_template_dict(template))
+                results[template.name] = self.get_template_dict(template)
 
-        return results
+        return list(results.values())
 
     def run(self, template_ids, template_names, vsphere=None):
         """
