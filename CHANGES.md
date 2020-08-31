@@ -8,9 +8,9 @@ Added new action:
 * `vsphere.template_get` - Retrieve a list of templates with summary information and an ID from vCenter
 
 Changed action:
-* `vsphere.datastore_get` - Fixed action to allow passing ids or names and still work properly.
-* `vsphere.network_get` - Fixed action to allow passing ids or names and still work properly.
-* `vsphere.get_tags_from_objects` - Fixed action to handle tag categories that can have multiple values.
+* `vsphere.datastore_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.network_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.get_tags_from_objects` - Fixed action to handle tag categories that can have multiple values. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
 
 Contributed by Bradley Bishop (Encore Technologies).
 
