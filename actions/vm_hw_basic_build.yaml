@@ -1,86 +1,85 @@
 ---
-name: "vm_hw_basic_build"
-runner_type: "mistral-v2"
-pack: "vsphere"
+name: vm_hw_basic_build
+runner_type: orquesta
+pack: vsphere
 enabled: true
-entry_point: 'workflows/vm_hw_basic_build.yaml'
+entry_point: workflows/vm_hw_basic_build.yaml
 description: WorkFlow to build a base VM hardware and optional power on (CPU, RAM, HDD, NIC)
-
 parameters:
   vsphere:
     type: string
     description: Pre-Configured Vsphere Connection
     default: ~
     position: 1
-  vm_name: 
+  vm_name:
     required: true
-    type: string 
-    position: 0
-  vm_hdd_dscluster: 
     type: string
-    description: Which Datastore Cluster should be used for this HDD. Blank = same as Base VM    
-  vm_resourcepool: 
+    position: 0
+  vm_hdd_dscluster:
+    type: string
+    description: Which Datastore Cluster should be used for this HDD. Blank = same as Base VM
+  vm_resourcepool:
     type: string
     position: 4
-  vm_version: 
+  vm_version:
     default: vmx-09
     type: string
     description: Virtual Machine Hardware Version
-  vm_cpu: 
+  vm_cpu:
     default: 1
     type: integer
     description: Number of CPU's to attach to this VM
     position: 5
-  vm_ram: 
+  vm_ram:
     default: 2
     type: integer
     description: RAM (GB) assigned to server)
     position: 6
-  vm_ctrl_type: 
+  vm_ctrl_type:
     default: ParaVirtual
     type: string
     description: Type of HDD SCSI Controller to be used on this machine
-  vm_hdd_size: 
+  vm_hdd_size:
     default: 40
     type: integer
     description: Size of HDD in GB
     position: 9
-  vm_nic_type: 
+  vm_nic_type:
     default: vmxnet3
     type: string
     description: Type of Network Adapter to attach
     position: 10
-  vm_nic_netname: 
+  vm_nic_netname:
     required: true
     type: string
     description: Which network do you want to attach to?
     position: 11
-  vm_dscluster: 
+  vm_dscluster:
     required: false
     type: string
     description: Datastore Cluster core VM Files will be store against (vmx files).
     position: 8
-  vm_datastore: 
+  vm_datastore:
     required: false
     type: string
     description: Datastore core VM Files will be store against (vmx files). Use unless datastoreCluster is provided.
     position: 7
-  vm_dc: 
+  vm_dc:
     required: false
     default: ~
     type: string
     description: DataCenter to Buid VM within
     position: 2
-  vm_dccluster: 
+  vm_dccluster:
     required: true
     type: string
     description: DataCenter Cluster to Buid VM within
     position: 3
-  vm_guestos: 
+  vm_guestos:
     default: rhel6_64guest
     type: string
     position: 12
-  vm_description: 
+  vm_description:
     description: Simple description about Virtual Machine
     type: string
     position: 13

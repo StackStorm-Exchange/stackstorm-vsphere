@@ -1,19 +1,19 @@
 ---
-name: datastore_get
+name: datacenter_get
 pack: vsphere
 runner_type: python-script
-description: Retrieve summary information for given Datastores or All Datastores if none are given
-entry_point: datastore_get.py
+description: Retrieve summary information for given Datacenters or All Datacenters if none are given
+entry_point: datacenter_get.py
 parameters:
-  datastore_ids:
+  datacenter_ids:
     type: array
-    description: Comma seperated list of Datastore IDs
+    description: Comma seperated list of Datacenter IDs
     required: false
     position: 0
     default: []
-  datastore_names:
+  datacenter_names:
     type: array
-    description: Comma seperated list of Datastore Names
+    description: Comma seperated list of Datacenter Names
     required: false
     position: 1
     default: []

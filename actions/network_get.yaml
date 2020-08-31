@@ -10,12 +10,13 @@ parameters:
     description: Comma seperated list of network IDs
     required: false
     position: 0
+    default: []
   network_names:
     type: array
     description: Comma seperated list of network Names
     required: false
     position: 1
-    default: ~
+    default: []
   vsphere:
     type: string
     description: Pre-configured vsphere endpoint

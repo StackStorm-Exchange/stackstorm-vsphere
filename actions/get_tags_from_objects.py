@@ -22,7 +22,11 @@ class GetTagsFromObjects(BaseAction):
         for obj in obj_tags:
             tag = self.tagging.tag_get(obj)
             category = self.tagging.category_get(tag['category_id'])
-            tags[category['name']] = tag['name']
+
+            # Categories can have multiple tags associated to them
+            if category['name'] not in tags:
+                tags[category['name']] = []
+            tags[category['name']].append(tag['name'])
 
         # dictionary of category name: tag name
         return tags

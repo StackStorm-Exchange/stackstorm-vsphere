@@ -14,49 +14,50 @@
 # limitations under the License.
 
 from vmwarelib import inventory
-from vmwarelib.serialize import DatastoreGetJSONEncoder
+from vmwarelib.serialize import ClusterGetJSONEncoder
 from vmwarelib.actions import BaseAction
 from pyVmomi import vim  # pylint: disable-msg=E0611
 import json
 
 
-class DatastoreGet(BaseAction):
-    def get_datastore_dict(self, datastore):
-        summary = json.loads(json.dumps(datastore.summary, cls=DatastoreGetJSONEncoder))
+class ClusterGet(BaseAction):
+    def get_cluster_dict(self, cluster):
+        summary = json.loads(json.dumps(cluster.summary, cls=ClusterGetJSONEncoder))
         return_dict = {
-            'name': datastore.name,
-            'id': summary['datastore']['_moId'],
+            'name': cluster.name,
+            # extract moid from vim.ManagedEntity object
+            'id': str(cluster).split(':')[-1].replace("'", ""),
             'summary': summary
         }
 
         return return_dict
 
     def get_all(self):
-        datastores = inventory.get_managed_entities(self.si_content, vim.Datastore)
-        return [self.get_datastore_dict(d) for d in datastores.view]
+        clusters = inventory.get_managed_entities(self.si_content, vim.ClusterComputeResource)
+        return [self.get_cluster_dict(c) for c in clusters.view]
 
-    def get_by_id_or_name(self, datastore_ids=[], datastore_names=[]):
+    def get_by_id_or_name(self, cluster_ids=[], cluster_names=[]):
         results = {}
 
-        for did in datastore_ids:
-            datastore = inventory.get_datastore(self.si_content, moid=did)
-            if datastore and datastore.name not in results:
-                results[datastore.name] = self.get_datastore_dict(datastore)
+        for cid in cluster_ids:
+            cluster = inventory.get_cluster(self.si_content, moid=cid)
+            if cluster and cluster.name not in results:
+                results[cluster.name] = self.get_cluster_dict(cluster)
 
-        for datastore in datastore_names:
-            datastore = inventory.get_datastore(self.si_content, name=datastore)
-            if datastore and datastore.name not in results:
-                results[datastore.name] = self.get_datastore_dict(datastore)
+        for cluster in cluster_names:
+            cluster = inventory.get_cluster(self.si_content, name=cluster)
+            if cluster and cluster.name not in results:
+                results[cluster.name] = self.get_cluster_dict(cluster)
 
         return list(results.values())
 
-    def run(self, datastore_ids, datastore_names, vsphere=None):
+    def run(self, cluster_ids, cluster_names, vsphere=None):
         """
-        Retrieve summary information for given datastores (ESXi)
+        Retrieve summary information for given clusters (ESXi)
 
         Args:
-        - datastore_ids: Moid of datastore to retrieve
-        - datastore_names: Name of datastore to retrieve
+        - cluster_ids: Moid of cluster to retrieve
+        - cluster_names: Name of cluster to retrieve
         - vsphere: Pre-configured vsphere connection details (config.yaml)
 
         Returns:
@@ -66,9 +67,9 @@ class DatastoreGet(BaseAction):
 
         self.establish_connection(vsphere)
 
-        if not datastore_ids and not datastore_names:
+        if not cluster_ids and not cluster_names:
             return_results = self.get_all()
         else:
-            return_results = self.get_by_id_or_name(datastore_ids, datastore_names)
+            return_results = self.get_by_id_or_name(cluster_ids, cluster_names)
 
         return return_results

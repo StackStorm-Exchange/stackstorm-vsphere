@@ -1,5 +1,20 @@
 # Change Log
 
+## v0.15.0
+
+Added new action:
+* `vsphere.cluster_get` - Retrieve a list of clusters with summary information and an ID from vCenter
+* `vsphere.datacenter_get` - Retrieve a list of datacenters with configuration information and an ID from vCenter
+* `vsphere.template_get` - Retrieve a list of templates with summary information and an ID from vCenter
+
+Changed action:
+* `vsphere.datastore_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.network_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.get_tags_from_objects` - Fixed action to handle tag categories that can have multiple values. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.vm_hw_basic_build` - Converted from Mistral workflow to Orquesta workflow
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.14.0
 
 Added new action:
