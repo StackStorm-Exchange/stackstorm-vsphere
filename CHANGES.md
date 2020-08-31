@@ -11,6 +11,7 @@ Changed action:
 * `vsphere.datastore_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
 * `vsphere.network_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
 * `vsphere.get_tags_from_objects` - Fixed action to handle tag categories that can have multiple values. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.vm_hw_basic_build` - Converted from Mistral workflow to Orquesta workflow
 
 Contributed by Bradley Bishop (Encore Technologies).
 
