@@ -1,86 +1,98 @@
 ---
-version: '2.0'
+version: '1.0'
 
-vsphere.vm_hw_basic_build:
-  description: "Create a Simple VM (CPU, Ram, HDD, NIC) and then Power it on"
-  input:
-    - vsphere
-    - vm_name
-    - vm_resourcepool
-    - vm_cpu
-    - vm_ram
-    - vm_dscluster
-    - vm_datastore
-    - vm_dccluster
-    - vm_dc
-    - vm_guestos
-    - vm_description
-    - vm_ctrl_type
-    - vm_hdd_size
-    - vm_hdd_dscluster
-    - vm_nic_type
-    - vm_nic_netname
-    - vm_version
-    - vm_poweron
-  tasks:
-    barebones_build:
-      # [189, 97]
-      action: vsphere.vm_hw_barebones_create
-      wait-after: 12
-      input:
-        vm_name: <% $.vm_name %>
-        ram_size: <% $.vm_ram %>
-        cpu_size: <% $.vm_cpu %>
-        cluster: <% $.vm_dccluster %>
-        datacenter: <% $.vm_dc %>
-        datastore_cluster: <% $.vm_dscluster %>
-        datastore: <% $.vm_datastore %>
-        resourcepool: <% $.vm_resourcepool %>
-        version: <% $.vm_version %>
-        guestos: <% $.vm_guestos %>
-        description: <% $.vm_description %>
-        vsphere: <% $.vsphere %>
-      publish:
-        vm_id: <% task(barebones_build).result.result.vm_id %>
-      on-success:
-        - add_controller
-    add_controller:
-      # [186, 198]
-      action: vsphere.vm_hw_scsi_controller_add
-      wait-after: 12
-      input:
-        vm_id: <% $.vm_id %>
-        controller_type: <% $.vm_ctrl_type %>
-        vsphere: <% $.vsphere %>
-      on-success:
-        - add_hdd
-    add_hdd:
-      # [188, 302]
-      action: vsphere.vm_hw_hdd_add
-      wait-after: 12
-      input: 
-        vm_id: <% $.vm_id %>
-        datastore_cluster: <% $.vm_hdd_dscluster %>
-        disk_size: <% $.vm_hdd_size %>
-        provision_type: "thin"
-        vsphere: <% $.vsphere %>
-      on-success:
-        - add_nic
-    add_nic:
-      # [189, 404]
-      action: vsphere.vm_hw_nic_add
-      wait-after: 12
-      input:
-        vm_id: <% $.vm_id %>
-        network_name: <% $.vm_nic_netname %>
-        nictype: <% $.vm_nic_type %>
-        vsphere: <% $.vsphere %>
-      on-success:
-        - power_on: <% $.vm_poweron = true %>
-    power_on:
-      # [190, 505]
-      action: vsphere.vm_hw_power_on
-      wait-after: 12
-      input:
-        vm_id: <% $.vm_id %>
-        vsphere: <% $.vsphere %>
+description: "Create a Simple VM (CPU, Ram, HDD, NIC) and then Power it on"
+
+input:
+  - vsphere
+  - vm_name
+  - vm_resourcepool
+  - vm_cpu
+  - vm_ram
+  - vm_dscluster
+  - vm_datastore
+  - vm_dccluster
+  - vm_dc
+  - vm_guestos
+  - vm_description
+  - vm_ctrl_type
+  - vm_hdd_size
+  - vm_hdd_dscluster
+  - vm_nic_type
+  - vm_nic_netname
+  - vm_version
+  - vm_poweron
+
+tasks:
+  barebones_build:
+    # [189, 97]
+    action: vsphere.vm_hw_barebones_create
+    input:
+      vm_name: "{{ ctx().vm_name }}"
+      ram_size: "{{ ctx().vm_ram }}"
+      cpu_size: "{{ ctx().vm_cpu }}"
+      cluster: "{{ ctx().vm_dccluster }}"
+      datacenter: "{{ ctx().vm_dc }}"
+      datastore_cluster: "{{ ctx().vm_dscluster }}"
+      datastore: "{{ ctx().vm_datastore }}"
+      resourcepool: "{{ ctx().vm_resourcepool }}"
+      version: "{{ ctx().vm_version }}"
+      guestos: "{{ ctx().vm_guestos }}"
+      description: "{{ ctx().vm_description }}"
+      vsphere: "{{ ctx().vsphere }}"
+    next:
+      - when: "{{ succeeded() }}"
+        publish:
+          - vm_id: "{{ result().result.vm_id }}"
+        do:
+          - add_controller
+
+  add_controller:
+    # [186, 198]
+    action: vsphere.vm_hw_scsi_controller_add
+    delay: 12
+    input:
+      vm_id: "{{ ctx().vm_id }}"
+      controller_type: "{{ ctx().vm_ctrl_type }}"
+      vsphere: "{{ ctx().vsphere }}"
+    next:
+      - when: "{{ succeeded() }}"
+        do:
+          - add_hdd
+
+  add_hdd:
+    # [188, 302]
+    action: vsphere.vm_hw_hdd_add
+    delay: 12
+    input:
+      vm_id: "{{ ctx().vm_id }}"
+      datastore_cluster: "{{ ctx().vm_hdd_dscluster }}"
+      disk_size: "{{ ctx().vm_hdd_size }}"
+      provision_type: "thin"
+      vsphere: "{{ ctx().vsphere }}"
+    next:
+      - when: "{{ succeeded() }}"
+        do:
+          - add_nic
+
+  add_nic:
+    # [189, 404]
+    action: vsphere.vm_hw_nic_add
+    delay: 12
+    input:
+      vm_id: "{{ ctx().vm_id }}"
+      network_name: "{{ ctx().vm_nic_netname }}"
+      nictype: "{{ ctx().vm_nic_type }}"
+      vsphere: "{{ ctx().vsphere }}"
+    next:
+      - when: "{{ succeeded() and ctx().vm_poweron }}"
+        do:
+          - power_on
+
+  power_on:
+    # [190, 505]
+    action: vsphere.vm_hw_power_on
+    delay: 12
+    input:
+      vm_id: "{{ ctx().vm_id }}"
+      vsphere: "{{ ctx().vsphere }}"
