@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.15.1
+
+Changed action:
+* `vsphere.tag_attach_or_create` - Added DistributedVirtualPortgroup as a possible object type to be used.
+* `vsphere.custom_attr_assign` - Added DistributedVirtualPortgroup as a possible object type to be used.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.15.0
 
 Added new action:
