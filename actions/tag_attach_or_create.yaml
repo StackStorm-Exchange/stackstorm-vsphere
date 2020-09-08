@@ -43,6 +43,7 @@
               - Datastore
               - DiagnosticManager
               - DistributedVirtualSwitch
+              - DistributedVirtualPortgroup
               - DrsStatsManager/InjectorWorkload
               - Extension
               - ExtensionManager
