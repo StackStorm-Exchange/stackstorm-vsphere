@@ -55,9 +55,9 @@ VMWARE_OBJECT_TYPE_UNSUPPORTED_ERROR = ("Sorry, VMware REST API doesn't support 
 VMWARE_QUERY_ERROR = "Unable to create a query based on a {} (not supported by VMware API)"
 
 ACTIONS = [
-    'add',
+    'attach',
     'replace',
-    'remove',
+    'detach',
 ]
 
 
@@ -162,7 +162,6 @@ class VmwareTagging(object):
 
     def category_create(self, name, description=None, cardinality=None,
                         associable_types=None):
-        print("Category create called")
         create_spec = self.category_create_spec()
         create_spec['name'] = name
         if description:
@@ -335,15 +334,18 @@ class VmwareTagging(object):
     def tag_association_action(self, category, tag, object_type, obj_id, action):
         # action == 'add' or 'replace', one of ACTIONS
         # tag the VM
-        if action == 'add':
+        self.logger.debug("tag association action... category_id={} tag_id={}"
+                          " object_type={} object_id={} action={}"
+                          .format(category['id'], tag['id'], object_type, obj_id, action))
+        if action == 'attach':
             return self.tag_association_attach(tag['id'], object_type, obj_id)
         elif action == 'replace':
             return self.tag_association_replace(tag['id'], object_type, obj_id)
-        else:
-            self.logger.debug("Detaching tag from object... category_id={} tag_id={}"
-                              " object_type={} object_id={}"
-                              .format(category['id'], tag['id'], object_type, obj_id))
+        elif action == 'detach':
             return self.tag_association_detach_category(category['id'], object_type, obj_id)
+        else:
+            raise ValueError("Unknown tag association action={} allowed actions are: {}"
+                             .format(action, ACTIONS))
 
     ############################################################################
 
@@ -366,21 +368,20 @@ class VmwareTagging(object):
                                                                         filter_value,
                                                                         object_list))
 
-    def object_list_extract_ids(self, object_list, object_type, params):
-        results = []
+    def object_extract_id(self, obj, object_type, params):
         id_key = self.object_type_id_key(object_type)
-        for obj in object_list:
-            if id_key not in obj:
-                filter_name, filter_value = self.filter_name_value(params)
-                raise ValueError("Couldn't find the expected ID key in the returned object: "
-                                 "object_type={} {}={} id_key={} object={}".format(object_type,
-                                                                                   filter_name,
-                                                                                   filter_value,
-                                                                                   id_key,
-                                                                                   obj))
-            results.append(obj[id_key])
+        if id_key not in obj:
+            filter_name, filter_value = self.filter_name_value(params)
+            raise ValueError("Couldn't find the expected ID key in the returned object: "
+                             "object_type={} {}={} id_key={} object={}".format(object_type,
+                                                                               filter_name,
+                                                                               filter_value,
+                                                                               id_key,
+                                                                               obj))
+        return obj[id_key]
 
-        return results
+    def object_list_extract_ids(self, object_list, object_type, params):
+        return [self.object_extract_id(obj, object_type, params) for obj in object_list]
 
     def object_find(self, object_type, params):
         if object_type not in VMWARE_OBJECT_TYPES:
@@ -577,15 +578,20 @@ class VmwareTagging(object):
         # make parameters look like: {'filter.cluster.1': 'domain-123'}
         params = {query_obj_type_filter + '.1': obj_id}
         object_list = self.object_find(bulk_object_type, params=params)
-        self.logger.debug(object_list)
-        ids_list = self.object_list_extract_ids(object_list, bulk_object_type, params)
-        self.logger.debug(ids_list)
 
         # add the tags for all of the objects in the list
         results = []
-        for obj_id in ids_list:
-            results.append(self.tag_association_action(category, tag,
-                                                       bulk_object_type, obj_id, action))
+        for obj in object_list:
+            # extract the ID property from the object
+            obj_id = self.object_extract_id(obj, bulk_object_type, params)
+            response = self.tag_association_action(category, tag,
+                                                   bulk_object_type, obj_id, action)
+            results.append({
+                "id": obj_id,
+                "name": obj['name'],
+                "type": bulk_object_type,
+                "response": response,
+            })
         return results
 
 
@@ -634,7 +640,7 @@ class Cli(object):
                                    choices=VMWARE_OBJECT_TYPES)
         single_parser.add_argument('-a', '--action',
                                    help='Action to perform on the tag',
-                                   default='add',
+                                   default='attach',
                                    choices=ACTIONS)
 
         ##########################
@@ -657,7 +663,7 @@ class Cli(object):
                                  choices=VMWARE_CARDINALITY)
         bulk_parser.add_argument('-a', '--action',
                                  help='Action to perform on the tag',
-                                 default='add',
+                                 default='attach',
                                  choices=ACTIONS)
         bulk_parser.add_argument('--query-object-name',
                                  help=('Name of the object in vSphere to query for'
@@ -688,7 +694,7 @@ class Cli(object):
             " --tag 'hello world'"
             " --object-name myvm.domain.tld"
             " --object-type VirtualMachine "
-            " --action add\n"
+            " --action attach\n"
             "\n"
             "  # Tag a Cluster with custom_thing = 'hello world'\n"
             "  ./vphere_tagging_cmdb_exclude.py single"
@@ -699,7 +705,7 @@ class Cli(object):
             " --tag 'hello world'"
             " --object-name mycluster"
             " --object-type ClusterComputeResource"
-            " --action add\n"
+            " --action attach\n"
             "\n"
         )
 
@@ -714,7 +720,7 @@ class Cli(object):
             " --query-object-name 'cls1.dev1'"
             " --query-object-type 'ClusterComputeResource'"
             " --bulk-object-type VirtualMachine"
-            " --action add\n"
+            " --action attach\n"
             "\n"
         )
 

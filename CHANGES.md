@@ -6,6 +6,8 @@ Additions:
 * Added lots of new back-end API functionality to the `vmwarelib.tagging.VmwareTagging` interface.
 * Added new `vsphere.tag_attach_bulk` action to attach a tag to a bulk set of resources.
   Primary usecase is tagging all VMs in a cluster dynamically.
+* Added new `vsphere.tag_detach_bulk` action to detach a tag from a bulk set of resources.
+  Primary usecase is remoave a tag from all VMs in a cluster dynamically.
 
 Contributed by Nick Maludy (@nmaludy Encore Technologies).
 

@@ -1,12 +1,12 @@
 ---
-name: tag_attach_bulk
+name: tag_detach_bulk
 runner_type: python-script
 description: >
-  Query a parent object and "bulk" tag all of the children under that parent.
-  This will create the category and tag if they do not exist.
+  Query a parent object and "bulk" remove tags for all of the children under that parent.
+  If the category and tag do not exist, this will simply return without doing any work.
 
   To bulk tag all of the VMs under a Cluster the invocation would look like:
-    st2 run vsphere.tag_attach_bulk \
+    st2 run vsphere.tag_detach_bulk \
         category_name="automation_friendly"\
         tag_name="true"\
         query_object_name="cluster.dev1"\
@@ -17,11 +17,11 @@ description: >
   all VMs (VirtualMachine) that are a member of that cluster. It would then tag
   all of these VMs with automation_friendly=true.
 enabled: true
-entry_point: tag_attach_bulk.py
+entry_point: tag_detach_bulk.py
 parameters:
     bulk_object_type:
         type: 'string'
-        description: Type of object to attach tag to (e.g. VirtualMachine)
+        description: Type of object to detach tags from (e.g. VirtualMachine)
         required: true
         enum:
           - AuthorizationManager
@@ -73,22 +73,13 @@ parameters:
         enum:
           - 'SINGLE'
           - 'MULTIPLE'
-    category_description:
-        type: 'string'
-        description: Description of the tag category, only used if category needs to be created
-        required: false
     category_name:
         type: 'string'
-        description: Category name of the tag to attach
+        description: Category name of the tag to detach
         required: true
-    category_types:
-        type: 'array'
-        description: Associable types for the tag category, only used if category needs to be created (Empty array means all types)
-        required: false
-        default: []
     query_object_name:
         type: 'string'
-        description: ID of the object to attach tag to
+        description: ID of the object to detach tags from
         required: true
     query_object_type:
         type: 'string'
@@ -136,18 +127,9 @@ parameters:
           - VirtualApp
           - VirtualDiskManager
           - VirtualMachine
-    replace:
-        type: 'boolean'
-        description: Remove all tags with the given category before assigning the new one
-        required: false
-        default: true
-    tag_description:
-        type: 'string'
-        description: Description of the tag, only used if tag needs to be created
-        required: false
     tag_name:
         type: 'string'
-        description: Name of the tag to attach
+        description: Name of the tag to detach
         required: true
     vsphere:
         type: "string"

@@ -88,7 +88,7 @@ class TagAttachBulkTestCase(VsphereBaseActionTestCase):
                                                    category=category_name,
                                                    tag=tag_name,
                                                    cardinality=category_cardinality,
-                                                   action='add')
+                                                   action='attach')
 
     @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
     def test_run_replace(self, mock_connect):

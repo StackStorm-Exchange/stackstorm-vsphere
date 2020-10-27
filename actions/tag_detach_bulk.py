@@ -15,29 +15,27 @@
 from vmwarelib.actions import BaseAction
 
 
-class TagAttachBulk(BaseAction):
+class TagDetachBulk(BaseAction):
     def run(self, bulk_object_type,
-            category_name, category_description, category_cardinality, category_types,
+            category_name, category_cardinality,
             query_object_type, query_object_name,
-            replace,
-            tag_name, tag_description,
+            tag_name,
             vsphere):
         self.connect_rest(vsphere)
 
         # create the category and tags
-        category = self.tagging.category_get_or_create(category_name,
-                                                       category_description,
-                                                       category_cardinality,
-                                                       category_types)
-        self.tagging.tag_get_or_create(tag_name, category["id"], tag_description)
+        category = self.tagging.category_find_by_name(category_name)
+        if not category:
+            return "Category doesn't exist: category={}".format(category_name)
 
-        # either add to the existing tags in the category or replace all tags
-        # of this category with the new tag
-        action = 'replace' if replace else 'attach'
+        tag = self.tagging.tag_find_by_name(tag_name, category['id'])
+        if not tag:
+            return "Tag doesn't exist: category={} tag={}".format(category_name, tag_name)
+
         return self.tagging.tag_bulk(query_object_type=query_object_type,
                                      query_object_name=query_object_name,
                                      bulk_object_type=bulk_object_type,
                                      category=category_name,
                                      tag=tag_name,
                                      cardinality=category_cardinality,
-                                     action=action)
+                                     action='detach')
