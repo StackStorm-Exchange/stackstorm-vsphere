@@ -56,6 +56,7 @@ VMWARE_QUERY_ERROR = "Unable to create a query based on a {} (not supported by V
 
 ACTIONS = [
     'add',
+    'replace',
     'remove',
 ]
 
@@ -335,12 +336,14 @@ class VmwareTagging(object):
         # action == 'add' or 'replace', one of ACTIONS
         # tag the VM
         if action == 'add':
-            self.tag_association_replace(tag['id'], object_type, obj_id)
+            return self.tag_association_attach(tag['id'], object_type, obj_id)
+        elif action == 'replace':
+            return self.tag_association_replace(tag['id'], object_type, obj_id)
         else:
             self.logger.debug("Detaching tag from object... category_id={} tag_id={}"
                               " object_type={} object_id={}"
                               .format(category['id'], tag['id'], object_type, obj_id))
-            self.tag_association_detach_category(category['id'], object_type, obj_id)
+            return self.tag_association_detach_category(category['id'], object_type, obj_id)
 
     ############################################################################
 
@@ -561,11 +564,10 @@ class VmwareTagging(object):
         # add the tag
         self.tag_association_action(category, tag, object_type, obj_id, action)
 
-    def tag_bulk(self, query_object_type, query_name,
-                 object_type, object_name,
+    def tag_bulk(self, query_object_type, query_object_name,
                  bulk_object_type,
                  category, tag, cardinality, action):
-        obj_id = self.object_find_by_name(query_object_type, query_name)
+        obj_id = self.object_find_by_name(query_object_type, query_object_name)
 
         # create the category and tag
         category, tag = self.category_tag_create(category, tag, cardinality)
@@ -580,8 +582,11 @@ class VmwareTagging(object):
         self.logger.debug(ids_list)
 
         # add the tags for all of the objects in the list
+        results = []
         for obj_id in ids_list:
-            self.tag_association_action(category, tag, bulk_object_type, obj_id, action)
+            results.append(self.tag_association_action(category, tag,
+                                                       bulk_object_type, obj_id, action))
+        return results
 
 
 ############################################################################
@@ -620,10 +625,10 @@ class Cli(object):
                                          ' object (one or many)'),
                                    default='SINGLE',
                                    choices=VMWARE_CARDINALITY)
-        single_parser.add_argument('-n', '--name',
+        single_parser.add_argument('--object-name',
                                    help=('Name of the object in vSphere (example: VM name,'
                                          ' cluster name, datastore name, etc)'))
-        single_parser.add_argument('-o', '--object-type',
+        single_parser.add_argument('--object-type',
                                    help='Type of object to tag',
                                    default='VirtualMachine',
                                    choices=VMWARE_OBJECT_TYPES)
@@ -654,7 +659,7 @@ class Cli(object):
                                  help='Action to perform on the tag',
                                  default='add',
                                  choices=ACTIONS)
-        bulk_parser.add_argument('--query-name',
+        bulk_parser.add_argument('--query-object-name',
                                  help=('Name of the object in vSphere to query for'
                                        ' bulk objects. (example: cluster name)'))
         bulk_parser.add_argument('--query-object-type',
@@ -679,9 +684,9 @@ class Cli(object):
             " -H vsphere.domain.tld"
             " -U username@domain.tld"
             " -P password123"
-            " --name myvm.domain.tld"
             " --category 'custom_thing'"
             " --tag 'hello world'"
+            " --object-name myvm.domain.tld"
             " --object-type VirtualMachine "
             " --action add\n"
             "\n"
@@ -690,9 +695,9 @@ class Cli(object):
             " -H vsphere.domain.tld"
             " -U username@domain.tld"
             " -P password123"
-            " --name mycluster"
             " --category 'custom_thing'"
             " --tag 'hello world'"
+            " --object-name mycluster"
             " --object-type ClusterComputeResource"
             " --action add\n"
             "\n"
@@ -706,7 +711,7 @@ class Cli(object):
             " -H vsphere.domain.tld"
             " -U username@domain.tld"
             " -P password123"
-            " --query-name 'cls1.dev1'"
+            " --query-object-name 'cls1.dev1'"
             " --query-object-type 'ClusterComputeResource'"
             " --bulk-object-type VirtualMachine"
             " --action add\n"
@@ -732,9 +737,7 @@ if __name__ == "__main__":
                           action=args.action)
     elif args.command == 'bulk':
         client.tag_bulk(query_object_type=args.query_object_type,
-                        query_name=args.query_name,
-                        object_type=args.object_type,
-                        object_name=args.name,
+                        query_object_name=args.query_object_name,
                         bulk_object_type=args.bulk_object_type,
                         category=args.category,
                         tag=args.tag,
