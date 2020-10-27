@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.16.0
+
+Additions:
+* Added lots of new back-end API functionality to the `vmwarelib.tagging.VmwareTagging` interface.
+
+
+Contributed by Nick Maludy (@nmaludy Encore Technologies).
+
 ## v0.15.1
 
 Changed action:

@@ -45,5 +45,5 @@ class CategoryListTestCase(VsphereBaseActionTestCase):
         result = action.run(**test_kwargs)
 
         self.assertEqual(result, expected_result)
-        action.tagging.category_list.assert_called()
+        action.tagging.category_list.assert_called_with()
         mock_connect.assert_called_with(vsphere)
