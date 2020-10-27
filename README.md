@@ -273,6 +273,7 @@ PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due 
 |  host_network_hits_get  |  Retrieve Network Hints for given Hosts (ESXi)  |
 |  set_vm  |  Changes configuration of a Virtual Machine.  |
 |  tag_attach_or_create  |  Attach a tag to a given object and create the tag and category if they don't exist  |
+|  tag_attach_bulk | Query a parent object and "bulk" tag all of the children under that parent. |
 |  tag_category_create  |  Create a vsphere tag category  |
 |  tag_category_delete  |  Delete a tag category from vSphere  |
 |  tag_category_list  |  List all tag categories from vsphere  |
