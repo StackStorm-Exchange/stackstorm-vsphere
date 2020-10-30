@@ -1,5 +1,13 @@
 # Change Log
 
+## v0.16.1
+
+Fixes:
+* Fixed bug in `vsphere.tag_*_bulk` where it was erroring if it found no bulk objects
+  under the query object (example if a Cluster had no VMs in it).
+
+Contributed by Nick Maludy (@nmaludy Encore Technologies).
+
 ## v0.16.0
 
 Additions:

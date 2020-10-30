@@ -360,6 +360,7 @@ class VmwareTagging(object):
         return obj_id
 
     def object_list_validate_single_element(self, object_list, object_type, params):
+        self.object_list_raise_if_empty(object_list, object_type, params)
         if len(object_list) > 1:
             filter_name, filter_value = self.filter_name_value(params)
             raise ValueError(("Sorry, we found >1 object matching this name in vCenter: "
@@ -367,6 +368,14 @@ class VmwareTagging(object):
                                                                         filter_name,
                                                                         filter_value,
                                                                         object_list))
+
+    def object_list_raise_if_empty(self, value, object_type, params):
+        if len(value) == 0:
+            filter_name, filter_value = self.filter_name_value(params)
+            raise ValueError(("Sorry we couldn't find the object you asked for in vCenter: "
+                              "object_type={} {}={}").format(object_type,
+                                                             filter_name,
+                                                             filter_value))
 
     def object_extract_id(self, obj, object_type, params):
         id_key = self.object_type_id_key(object_type)
@@ -436,13 +445,6 @@ class VmwareTagging(object):
                              " it is a type={} response={}"
                              .format(type(response['value']),
                                      response))
-
-        if len(value) == 0:
-            filter_name, filter_value = self.filter_name_value(params)
-            raise ValueError(("Sorry we couldn't find the object you asked for in vCenter: "
-                              "object_type={} {}={}").format(object_type,
-                                                             filter_name,
-                                                             filter_value))
         return value
 
     def cluster_find(self, params=None):
