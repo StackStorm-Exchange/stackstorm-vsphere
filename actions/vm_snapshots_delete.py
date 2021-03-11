@@ -74,11 +74,10 @@ class VMSnapshotsDelete(BaseAction):
             # Check if any snapshots exist on the VM
             try:
                 snapshots = vm.snapshot.rootSnapshotList
-            except Exception:
-                self.logger.exception(f'No snapshots found for VM.')
+            except:
+                continue
 
             result = self.delete_old_snapshots(snapshots, max_age_days, name_ignore_patterns)
-
             # Append the results from each VM
             deleted_snapshots += result['deleted_snapshots']
             ignored_snapshots += result['ignored_snapshots']
