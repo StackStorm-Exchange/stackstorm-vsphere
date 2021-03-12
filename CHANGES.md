@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.0.1
+
+Addition:
+*  `vm_snapshots_delete` - Replaced continue statement with exception handling which is necessary so that error will not be skipped when run in production (non-debug).
+
 ## v1.0.0
 
 * Drop Python 2.7 support
