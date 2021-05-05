@@ -80,6 +80,44 @@ HOST_GET_NON_JSON_SERILIZABLE_TYPES = [
     vim.host.SystemIdentificationInfo,
 ]
 
+DATASTORE_GET_NON_JSON_SERILIZABLE_TYPES = [
+    vim.Datastore,
+    vim.Datastore.Summary
+]
+
+DATACENTER_GET_NON_JSON_SERILIZABLE_TYPES = [
+    vim.Datacenter,
+    vim.Datacenter.ConfigInfo
+]
+
+TEMPLATE_GET_NON_JSON_SERILIZABLE_TYPES = [
+    vim.vm,
+    vim.VirtualMachine,
+    vim.vm.Summary,
+    vim.vm.RuntimeInfo,
+    vim.vm.DeviceRuntimeInfo,
+    vim.vm.DeviceRuntimeInfo.VirtualEthernetCardRuntimeState,
+    vim.vm.FeatureRequirement,
+    vim.vm.Summary.GuestSummary,
+    vim.vm.Summary.ConfigSummary,
+    vim.vm.Summary.StorageSummary,
+    vim.vm.Summary.QuickStats
+]
+
+CLUSTER_GET_NON_JSON_SERILIZABLE_TYPES = [
+    vim.ClusterComputeResource,
+    vim.ClusterComputeResource.Summary,
+    vim.cluster.DasDataSummary,
+    vim.cluster.FailoverLevelAdmissionControlInfo,
+    vim.cluster.FailoverResourcesAdmissionControlInfo
+]
+
+NETWORK_GET_NON_JSON_SERILIZABLE_TYPES = [
+    vim.Network,
+    vim.Network.Summary,
+    vim.dvs.DistributedVirtualPortgroup
+]
+
 
 class MyJSONEncoder(json.JSONEncoder):
     def default(self, obj):  # pylint: disable=E0202
@@ -99,6 +137,66 @@ class HostGetJSONEncoder(json.JSONEncoder):
             return super(HostGetJSONEncoder, self).default(obj)
         except TypeError:
             if type(obj) in HOST_GET_NON_JSON_SERILIZABLE_TYPES:
+                return obj.__dict__
+
+            # For anything else just return the class name
+            return "__{}__".format(obj.__class__.__name__)
+
+
+class DatastoreGetJSONEncoder(json.JSONEncoder):
+    def default(self, obj):  # pylint: disable=E0202
+        try:
+            return super(DatastoreGetJSONEncoder, self).default(obj)
+        except TypeError:
+            if type(obj) in DATASTORE_GET_NON_JSON_SERILIZABLE_TYPES:
+                return obj.__dict__
+
+            # For anything else just return the class name
+            return "__{}__".format(obj.__class__.__name__)
+
+
+class DatacenterGetJSONEncoder(json.JSONEncoder):
+    def default(self, obj):  # pylint: disable=E0202
+        try:
+            return super(DatacenterGetJSONEncoder, self).default(obj)
+        except TypeError:
+            if type(obj) in DATACENTER_GET_NON_JSON_SERILIZABLE_TYPES:
+                return obj.__dict__
+
+            # For anything else just return the class name
+            return "__{}__".format(obj.__class__.__name__)
+
+
+class ClusterGetJSONEncoder(json.JSONEncoder):
+    def default(self, obj):  # pylint: disable=E0202
+        try:
+            return super(ClusterGetJSONEncoder, self).default(obj)
+        except TypeError:
+            if type(obj) in CLUSTER_GET_NON_JSON_SERILIZABLE_TYPES:
+                return obj.__dict__
+
+            # For anything else just return the class name
+            return "__{}__".format(obj.__class__.__name__)
+
+
+class TemplateGetJSONEncoder(json.JSONEncoder):
+    def default(self, obj):  # pylint: disable=E0202
+        try:
+            return super(TemplateGetJSONEncoder, self).default(obj)
+        except TypeError:
+            if type(obj) in TEMPLATE_GET_NON_JSON_SERILIZABLE_TYPES:
+                return obj.__dict__
+
+            # For anything else just return the class name
+            return "__{}__".format(obj.__class__.__name__)
+
+
+class NetworkGetJSONEncoder(json.JSONEncoder):
+    def default(self, obj):  # pylint: disable=E0202
+        try:
+            return super(NetworkGetJSONEncoder, self).default(obj)
+        except TypeError:
+            if type(obj) in NETWORK_GET_NON_JSON_SERILIZABLE_TYPES:
                 return obj.__dict__
 
             # For anything else just return the class name

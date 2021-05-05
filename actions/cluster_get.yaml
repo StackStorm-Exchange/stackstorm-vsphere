@@ -1,0 +1,24 @@
+---
+name: cluster_get
+pack: vsphere
+runner_type: python-script
+description: Retrieve summary information for given Clusters or All Clusters if none are given
+entry_point: cluster_get.py
+parameters:
+  cluster_ids:
+    type: array
+    description: Comma seperated list of Cluster IDs
+    required: false
+    position: 0
+    default: []
+  cluster_names:
+    type: array
+    description: Comma seperated list of Cluster Names
+    required: false
+    position: 1
+    default: []
+  vsphere:
+    type: string
+    description: Pre-configured vsphere endpoint
+    required: false
+    position: 2

@@ -1,4 +1,5 @@
-from vmwarelib.tagging import VmwareTagActions
+from vmwarelib.tagging import VmwareTagging
+import logging
 import mock
 import unittest
 
@@ -7,12 +8,16 @@ class TaggingTestCase(unittest.TestCase):
 
     def create_class_object(self):
         mock_session = mock.MagicMock()
-        test_url_base = "https://vsphere.domain.tld"
-        return VmwareTagActions(mock_session, test_url_base)
+        tagging = VmwareTagging(server='vsphere.domain.tld',
+                                username='user',
+                                password='pass',
+                                logger=logging.getLogger(__name__))
+        tagging.session = mock_session
+        return tagging
 
     def test_init(self):
         action = self.create_class_object()
-        self.assertIsInstance(action, VmwareTagActions)
+        self.assertIsInstance(action, VmwareTagging)
 
     ############################################################################
 
@@ -43,7 +48,8 @@ class TaggingTestCase(unittest.TestCase):
         result = action.get("/fake/get/endpoint")
 
         # assert
-        action.session.get.assert_called_with("https://vsphere.domain.tld/fake/get/endpoint")
+        action.session.get.assert_called_with("https://vsphere.domain.tld/fake/get/endpoint",
+                                              params=None)
         mock_response.raise_for_status.assert_called_with()
         self.assertEqual(result, expected)
 
@@ -70,7 +76,36 @@ class TaggingTestCase(unittest.TestCase):
 
         # assert
         action.session.post.assert_called_with("https://vsphere.domain.tld/fake/post/endpoint",
-                                               json=payload)
+                                               json=payload,
+                                               params=None)
+        mock_response.raise_for_status.assert_called_with()
+        self.assertEqual(result, expected)
+
+    def test_post_with_params(self):
+        # setup
+        action = self.create_class_object()
+        payload = {"my": "payload"}
+        expected = {"fake": "data",
+                    "key": "123"}
+
+        # mock
+        mock_response = mock.MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.return_value = expected
+        mock_response.text = "abc"
+
+        mock_session = mock.MagicMock()
+        mock_session.post.return_value = mock_response
+
+        action.session = mock_session
+
+        # execute
+        result = action.post("/fake/post/endpoint", payload, params={'abc', '123'})
+
+        # assert
+        action.session.post.assert_called_with("https://vsphere.domain.tld/fake/post/endpoint",
+                                               json=payload,
+                                               params={'abc', '123'})
         mock_response.raise_for_status.assert_called_with()
         self.assertEqual(result, expected)
 
@@ -93,7 +128,8 @@ class TaggingTestCase(unittest.TestCase):
 
         # assert
         action.session.post.assert_called_with("https://vsphere.domain.tld/fake/post/endpoint",
-                                               json=None)
+                                               json=None,
+                                               params=None)
         mock_response.raise_for_status.assert_called_with()
         self.assertEqual(result, None)
 
@@ -120,7 +156,8 @@ class TaggingTestCase(unittest.TestCase):
 
         # assert
         action.session.delete.assert_called_with("https://vsphere.domain.tld/fake/delete/endpoint",
-                                                json=payload)
+                                                 json=payload,
+                                                 params=None)
         mock_response.raise_for_status.assert_called_with()
         self.assertEqual(result, expected)
 
@@ -143,7 +180,32 @@ class TaggingTestCase(unittest.TestCase):
 
         # assert
         action.session.delete.assert_called_with("https://vsphere.domain.tld/fake/delete/endpoint",
-                                                json=None)
+                                                 json=None,
+                                                 params=None)
+        mock_response.raise_for_status.assert_called_with()
+        self.assertEqual(result, None)
+
+    def test_delete_params(self):
+        # setup
+        action = self.create_class_object()
+
+        # mock
+        mock_response = mock.MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.text = ""
+
+        mock_session = mock.MagicMock()
+        mock_session.delete.return_value = mock_response
+
+        action.session = mock_session
+
+        # execute
+        result = action.delete("/fake/delete/endpoint", params={'abc': '123'})
+
+        # assert
+        action.session.delete.assert_called_with("https://vsphere.domain.tld/fake/delete/endpoint",
+                                                 json=None,
+                                                 params={'abc': '123'})
         mock_response.raise_for_status.assert_called_with()
         self.assertEqual(result, None)
 
@@ -151,7 +213,7 @@ class TaggingTestCase(unittest.TestCase):
 
     # Category Functions
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.get")
     def test_category_list(self, mock_get):
         # setup
         action = self.create_class_object()
@@ -165,7 +227,7 @@ class TaggingTestCase(unittest.TestCase):
         mock_get.assert_called_with("/rest/com/vmware/cis/tagging/category")
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.get")
     def test_category_get(self, mock_get):
         # setup
         action = self.create_class_object()
@@ -180,7 +242,7 @@ class TaggingTestCase(unittest.TestCase):
         mock_get.assert_called_with("/rest/com/vmware/cis/tagging/category/id:1234")
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.delete")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.delete")
     def test_category_delete(self, mock_delete):
         # setup
         action = self.create_class_object()
@@ -195,8 +257,8 @@ class TaggingTestCase(unittest.TestCase):
         mock_delete.assert_called_with("/rest/com/vmware/cis/tagging/category/id:1234")
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_list")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_list")
     def test_category_find_by_name(self, mock_category_list, mock_category_get):
         # setup
         action = self.create_class_object()
@@ -213,8 +275,8 @@ class TaggingTestCase(unittest.TestCase):
         # assert
         self.assertEquals(result, {"name": "b", "value": "xx"})
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_list")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_list")
     def test_category_find_by_name_not_found(self, mock_category_list, mock_category_get):
         # setup
         action = self.create_class_object()
@@ -237,26 +299,27 @@ class TaggingTestCase(unittest.TestCase):
         self.assertEquals(create_spec, {"name": "",
                                         "description": "",
                                         "cardinality": "SINGLE",
-                                        "associable_types": ["VirtualMachine"]})
+                                        "associable_types": []})
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_category_create_all_params(self, mock_post):
         # setup
         action = self.create_class_object()
         test_name = "category_name"
         test_description = "Category Description"
         test_cardinality = "MULTIPLE"
-        test_associable_types = []
+        test_associable_types = ['VirtualMachine']
 
         expected_create_spec = {"name": test_name,
                                 "description": test_description,
                                 "cardinality": test_cardinality,
-                                "associable_types": test_associable_types}
+                                "associable_types": ['VirtualMachine']}
 
         # mock
         mock_post.return_value = {"value": "expected result"}
 
         # execute
+        print("calling category create from test")
         result = action.category_create(test_name, test_description, test_cardinality,
                                         test_associable_types)
 
@@ -265,7 +328,7 @@ class TaggingTestCase(unittest.TestCase):
                                      payload={"create_spec": expected_create_spec})
         self.assertEquals(result, "expected result")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_category_create_no_params(self, mock_post):
         # setup
         action = self.create_class_object()
@@ -274,7 +337,7 @@ class TaggingTestCase(unittest.TestCase):
         expected_create_spec = {"name": test_name,
                                 "description": "",
                                 "cardinality": "SINGLE",
-                                "associable_types": ["VirtualMachine"]}
+                                "associable_types": []}
 
         # mock
         mock_post.return_value = {"value": "expected result"}
@@ -287,7 +350,7 @@ class TaggingTestCase(unittest.TestCase):
                                      payload={"create_spec": expected_create_spec})
         self.assertEquals(result, "expected result")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_find_by_name")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_find_by_name")
     def test_category_get_or_create_get(self, mock_category_find_by_name):
         # setup
         action = self.create_class_object()
@@ -302,9 +365,9 @@ class TaggingTestCase(unittest.TestCase):
         mock_category_find_by_name.assert_called_with("name")
         self.assertEquals(result, "fake category")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_create")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_find_by_name")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_create")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_find_by_name")
     def test_category_get_or_create_create_all_params(self, mock_category_find_by_name,
                                                       mock_category_create,
                                                       mock_category_get):
@@ -331,9 +394,9 @@ class TaggingTestCase(unittest.TestCase):
         mock_category_get.assert_called_with("123")
         self.assertEquals(result, "fake category")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_create")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.category_find_by_name")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_create")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.category_find_by_name")
     def test_category_get_or_create_create_no_params(self, mock_category_find_by_name,
                                                      mock_category_create,
                                                      mock_category_get):
@@ -359,7 +422,7 @@ class TaggingTestCase(unittest.TestCase):
 
     # Tag Functions
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_list_category(self, mock_post):
         # setup
         action = self.create_class_object()
@@ -371,11 +434,11 @@ class TaggingTestCase(unittest.TestCase):
         result = action.tag_list(test_category_id)
 
         # assert
-        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag/id:1234?~action="
-                                    "list-tags-for-category")
+        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag/id:1234",
+                                     params={"~action": "list-tags-for-category"})
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.get")
     def test_tag_list_no_category(self, mock_get):
         # setup
         action = self.create_class_object()
@@ -389,7 +452,7 @@ class TaggingTestCase(unittest.TestCase):
         mock_get.assert_called_with("/rest/com/vmware/cis/tagging/tag")
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.get")
     def test_tag_get(self, mock_get):
         # setup
         action = self.create_class_object()
@@ -404,7 +467,7 @@ class TaggingTestCase(unittest.TestCase):
         mock_get.assert_called_with("/rest/com/vmware/cis/tagging/tag/id:1234")
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.delete")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.delete")
     def test_tag_delete(self, mock_delete):
         # setup
         action = self.create_class_object()
@@ -419,8 +482,8 @@ class TaggingTestCase(unittest.TestCase):
         mock_delete.assert_called_with("/rest/com/vmware/cis/tagging/tag/id:1234")
         self.assertEquals(result, expected)
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_list")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_list")
     def test_tag_find_by_name(self, mock_tag_list, mock_tag_get):
         # setup
         action = self.create_class_object()
@@ -440,8 +503,8 @@ class TaggingTestCase(unittest.TestCase):
         mock_tag_list.assert_called_with(test_category_id)
         self.assertEquals(result, {"name": "b", "value": "xx"})
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_list")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_list")
     def test_tag_find_not_found(self, mock_tag_list, mock_tag_get):
         # setup
         action = self.create_class_object()
@@ -469,7 +532,7 @@ class TaggingTestCase(unittest.TestCase):
                                         "description": "",
                                         "category_id": ""})
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_create(self, mock_post):
         # setup
         action = self.create_class_object()
@@ -490,7 +553,7 @@ class TaggingTestCase(unittest.TestCase):
                                      payload={"create_spec": expected_create_spec})
         self.assertEquals(result, "expected result")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_find_by_name")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_find_by_name")
     def test_tag_get_or_create_get(self, mock_tag_find_by_name):
         # setup
         action = self.create_class_object()
@@ -507,9 +570,9 @@ class TaggingTestCase(unittest.TestCase):
         mock_tag_find_by_name.assert_called_with(test_tag_name, test_category_id)
         self.assertEquals(result, "fake tag")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_create")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_find_by_name")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_create")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_find_by_name")
     def test_tag_get_or_create_create(self, mock_tag_find_by_name,
                                       mock_tag_create,
                                       mock_tag_get):
@@ -534,79 +597,79 @@ class TaggingTestCase(unittest.TestCase):
 
     def test_tag_association_endpoint(self):
         action = self.create_class_object()
-        result = action.tag_association_endpoint("fake_action")
+        result = action.tag_association_endpoint()
         self.assertEquals(result,
-                          "/rest/com/vmware/cis/tagging/tag-association?~action=fake_action")
+                          "/rest/com/vmware/cis/tagging/tag-association")
 
     def test_tag_association_endpoint_tag_id(self):
         action = self.create_class_object()
-        result = action.tag_association_endpoint("fake_action", "123")
+        result = action.tag_association_endpoint("123")
         self.assertEquals(result,
-                          "/rest/com/vmware/cis/tagging/tag-association/id:123?~action=fake_action")
+                          "/rest/com/vmware/cis/tagging/tag-association/id:123")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_association_attach(self, mock_post):
         action = self.create_class_object()
         mock_post.return_value = "response"
         result = action.tag_association_attach("123", "vm", "vm-789")
 
-        mock_post.assert_called_with(("/rest/com/vmware/cis/tagging/tag-association"
-                                      "/id:123?~action=attach"),
+        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag-association/id:123",
+                                     params={'~action': "attach"},
                                      payload={"object_id": {"id": "vm-789",
                                                             "type": "vm"}})
         self.assertEquals(result, "response")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_association_attach_multiple(self, mock_post):
         action = self.create_class_object()
         test_tag_ids = ["123", "321"]
         mock_post.return_value = "response"
         result = action.tag_association_attach_multiple(test_tag_ids, "vm", "vm-789")
 
-        mock_post.assert_called_with(("/rest/com/vmware/cis/tagging/tag-association"
-                                      "?~action=attach-multiple-tags-to-object"),
+        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag-association",
+                                     params={'~action': 'attach-multiple-tags-to-object'},
                                      payload={"tag_ids": test_tag_ids,
                                               "object_id": {"id": "vm-789",
                                                             "type": "vm"}})
         self.assertEquals(result, "response")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_association_detach(self, mock_post):
         action = self.create_class_object()
         mock_post.return_value = "response"
         result = action.tag_association_detach("123", "vm", "vm-789")
 
-        mock_post.assert_called_with(("/rest/com/vmware/cis/tagging/tag-association"
-                                      "/id:123?~action=detach"),
+        mock_post.assert_called_with('/rest/com/vmware/cis/tagging/tag-association/id:123',
+                                     params={'~action': 'detach'},
                                      payload={"object_id": {"id": "vm-789",
                                                             "type": "vm"}})
         self.assertEquals(result, "response")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_association_list_attached_tags(self, mock_post):
         action = self.create_class_object()
         mock_post.return_value = {'value': "response"}
         result = action.tag_association_list_attached_tags("vm", "vm-789")
 
-        mock_post.assert_called_with(("/rest/com/vmware/cis/tagging/tag-association"
-                                      "?~action=list-attached-tags"),
+        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag-association",
+                                     params={'~action': 'list-attached-tags'},
                                      payload={"object_id": {"id": "vm-789",
                                                             "type": "vm"}})
         self.assertEquals(result, "response")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.post")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_association_list_attached_objects(self, mock_post):
         action = self.create_class_object()
         mock_post.return_value = {'value': "response"}
         result = action.tag_association_list_attached_objects("123")
 
-        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag-association"
-                                     "/id:123?~action=list-attached-objects")
+        mock_post.assert_called_with("/rest/com/vmware/cis/tagging/tag-association/id:123",
+                                     params={'~action': 'list-attached-objects'})
         self.assertEquals(result, "response")
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_association_detach")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_association_list_attached_tags")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_association_detach")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_association_list_attached_tags")
     def test_tag_association_detach_category(self, mock_tag_association_list_attached_tags,
                                              mock_tag_get,
                                              mock_tag_association_detach):
@@ -619,9 +682,9 @@ class TaggingTestCase(unittest.TestCase):
         results = action.tag_association_detach_category("c2", "vm", "vm-123")
         self.assertEquals(results, [{"name": "3", "category_id": "c2"}])
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_association_detach")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_get")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_association_list_attached_tags")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_association_detach")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_association_list_attached_tags")
     def test_tag_association_detach_category_no_match(self,
                                                       mock_tag_association_list_attached_tags,
                                                       mock_tag_get,
@@ -635,9 +698,9 @@ class TaggingTestCase(unittest.TestCase):
         results = action.tag_association_detach_category("xyz", "vm", "vm-123")
         self.assertEquals(results, [])
 
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_association_attach")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_association_detach_category")
-    @mock.patch("vmwarelib.tagging.VmwareTagActions.tag_get")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_association_attach")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_association_detach_category")
+    @mock.patch("vmwarelib.tagging.VmwareTagging.tag_get")
     def test_tag_association_replace(self, mock_tag_get,
                                      mock_tag_association_detach_category,
                                      mock_tag_association_attach):

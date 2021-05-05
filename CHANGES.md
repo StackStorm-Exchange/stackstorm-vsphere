@@ -1,5 +1,89 @@
 # Change Log
 
+## v1.0.1
+
+Addition:
+*  `vm_snapshots_delete` - Replaced continue statement with exception handling which is necessary so that error will not be skipped when run in production (non-debug).
+
+## v1.0.0
+
+* Drop Python 2.7 support
+
+## v0.16.1
+
+Fixes:
+* Fixed bug in `vsphere.tag_*_bulk` where it was erroring if it found no bulk objects
+  under the query object (example if a Cluster had no VMs in it).
+
+Contributed by Nick Maludy (@nmaludy Encore Technologies).
+
+## v0.16.0
+
+Additions:
+* Added lots of new back-end API functionality to the `vmwarelib.tagging.VmwareTagging` interface.
+* Added new `vsphere.tag_attach_bulk` action to attach a tag to a bulk set of resources.
+  Primary usecase is tagging all VMs in a cluster dynamically.
+* Added new `vsphere.tag_detach_bulk` action to detach a tag from a bulk set of resources.
+  Primary usecase is remoave a tag from all VMs in a cluster dynamically.
+
+Contributed by Nick Maludy (@nmaludy Encore Technologies).
+
+## v0.15.1
+
+Changed action:
+* `vsphere.tag_attach_or_create` - Added DistributedVirtualPortgroup as a possible object type to be used.
+* `vsphere.custom_attr_assign` - Added DistributedVirtualPortgroup as a possible object type to be used.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.15.0
+
+Added new action:
+* `vsphere.cluster_get` - Retrieve a list of clusters with summary information and an ID from vCenter
+* `vsphere.datacenter_get` - Retrieve a list of datacenters with configuration information and an ID from vCenter
+* `vsphere.template_get` - Retrieve a list of templates with summary information and an ID from vCenter
+
+Changed action:
+* `vsphere.datastore_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.network_get` - Fixed action to allow passing ids or names and still work properly. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.get_tags_from_objects` - Fixed action to handle tag categories that can have multiple values. Fixed duplicate check so its working now and the same item is not added twice to the list when specifing name or id.
+* `vsphere.vm_hw_basic_build` - Converted from Mistral workflow to Orquesta workflow
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.14.0
+
+Added new action:
+* `vsphere.network_get` - Retrieve a list of networks with summary information and an ID from vCenter
+
+Changed action:
+* `vsphere.datastore_get` - Updated the action to include the ID of the datastore in the return.
+* `vsphere.affinity_rule_create` - Updated the action to return the name of the hosts that were included in the rule.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.13.1
+* Force release to get latest tags on repo
+
+## v0.13.0
+
+Added new action:
+* `vsphere.get_tags_from_objects` - Retrieves all the tags from an object tags are returned in a dictionary of `category_name: tag_name`
+
+Changed action:
+* `vsphere.vm_bestfit` - Added `datastore_filter_strategy` input that is defaulted to `exclude_matches` which is the current behavior. This gives
+                         the user more flexibility as to how they want to filter the returned datastores.
+
+Contributed by Bradley Bishop (Encore Technologies).
+
+## v0.12.0
+
+Added new actions:
+* `vsphere.datastore_get` - Retrieve a list of datastores with summary information from vCenter
+* `vsphere.get_tag_value_from_objects` - Retrieve tag value on a list of object_ids
+
+Contributed by Bradley Bishop (Encore Technologies).
+
 ## v0.11.1
 
 Added vim.vm.device.VirtualLsiLogicController object to vmwarelib/serialize.py which was

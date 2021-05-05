@@ -193,6 +193,42 @@ At line:1 char:1
 
 Changing the script_arguments to another number results in the action failing.
 
+## VM Bestfit
+
+The `vsphere.vm_bestfit` action accepts a VMware Cluster Name an optional datastore filter optional disks array and a defaulted datastore filter strategy. This action uses the information provided to return a Cluster Name, Host information, and Datastore information from VMware that has been checked to make sure the VM can exist.
+
+Before the action returns Host or Datastore information it checks utilizations to recommend the Host or Datastore that is least utilized to make sure the VM will not be put somewhere that does not have capacity. In addition to those checks for Datastores a `datastore_filter_regex_list` and `datastore_filter_strategy` can be included to match the names of Datastores. After the name filtering has happened the utilizations of returned datastores will be checked.
+
+The `datastore_filter_strategy` is defaulted to `exclude_matches` meaning if a `datastore_filter_regex_list` is passed and it matches the name of a datastore then that datastore will be filtered out and not be able to be used for storage.
+
+example:
+```
+datastore_filter_regex_list = ['test1']
+datastores = ['test1', 'test2', 'test3']
+
+returned_usuable_datastores = ['test2', 'test3']
+```
+
+The `datastore_filter_strategy` can be changed to `include_matches` meaning if a `datastore_filter_regex_list` is passed and it does not match the name of a datastore then that datastore will be filtered out and not be able to be used for storage.
+
+example:
+```
+datastore_filter_regex_list = ['test1']
+datastores = ['test1', 'test2', 'test3']
+
+returned_usuable_datastores = ['test1']
+```
+
+In addition to supplying names the action also accepts regex expressions for the filtering.
+
+example (include_matches):
+```
+datastore_filter_regex_list = ["(?i)(iso)"]
+datastores = ['test_isos', 'test1', 'test2', 'test3']
+
+returned_usuable_datastores = ['test_isos']
+```
+
 ## Todo
 
 * Create actions for vsphere environment data retrieval. Allow for integration with external systems for accurate action calls with informed parameter values.
@@ -205,57 +241,78 @@ The version specification is to ensure compatibility with Python 2.7.6 (standard
 PYVMOMI 6.0 requires alternative connection coding and Python 2.7.9 minimum due to elements of the SSL module being used.
 
 ## Actions
-* `vsphere.affinity_rule_create` - Creates an affinity rule for vms to hosts
-* `vsphere.affinity_rule_delete` - Deletes an affinity rule and the groups associated with it
-* `vsphere.custom_attr_assign` - Assign a custom attribute to a given object
-* `vsphere.custom_attr_assign_or_create` - Create a custom attribute if it doesn't exist and asssign it to a given object
-* `vsphere.custom_attr_create` - Create a custom attribute with the given name
-* `vsphere.custom_attr_get` - Return the value of the given Custom Attribute on an object
-* `vsphere.get_moid` - Returns the MOID of vSphere managed entity corresponding to the specified parameters
-* `vsphere.get_objects_with_tag` - Returns a list of objects with a given vmware tag id or name.
-* `vsphere.get_tags_on_object` - Returns a list of vmware tags on a given object.
-* `vsphere.get_vmconsole_urls` - Retrieves urls of the virtual machines' consoles
-* `vsphere.get_vms` - Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.
-* `vsphere.guest_dir_create` - Create a directory inside the guest.
-* `vsphere.guest_dir_delete` - Delete a directory inside the guest.
-* `vsphere.guest_file_create` - Create a file inside the guest.
-* `vsphere.guest_file_delete` - Delete a file inside the guest.
-* `vsphere.guest_file_read` - Read the contents of a file inside the guest.
-* `vsphere.guest_file_upload` - Upload the contents of a file to the guest.
-* `vsphere.guest_process_start` - Start a process inside the guest.
-* `vsphere.guest_process_wait` - Wait for a process to finish inside the guest.
-* `vsphere.guest_script_run` - Orquesta workflow to upload and run a script inside the guest, and capture results.
-* `vsphere.hello_vsphere` - Wait for a Task to complete and returns its result.
-* `vsphere.host_get` - Retrieves the Summary information for an ESX host.
-* `vsphere.host_network_hints_get` - Retrieves the Network Hints for an ESX host.
-* `vsphere.set_vm` - Changes configuration of a Virtual Machine.
-* `vsphere.tag_id_get` - Retrieves the ID of a tag with the given category and name.
-* `vsphere.tags_attach_by_id` - Attach a list of tags to a given object
-* `vsphere.vm_bestfit` - Determines the best host and datastore to provision a new VM to on a given cluster
-* `vsphere.vm_check_tools` - Wait for a Task to complete and returns its result.
-* `vsphere.vm_config_info_get` - Retrieve config details of a VM object
-* `vsphere.vm_create_from_template` - Create a new VM from existing template.
-* `vsphere.vm_env_items_get` - Retrieve list of Objects from VSphere
-* `vsphere.vm_guest_info_get` - Retrieve Guest details of a VM object
-* `vsphere.vm_hw_barebones_create` - Create BareBones VM (CPU, Ram, Graphics Only)
-* `vsphere.vm_hw_basic_build` - Minstral Flow to Build Basic Server and power it on.
-* `vsphere.vm_hw_cpu_mem_edit` - Adjust the CPU and RAM values assigned to a Virtual Machine
-* `vsphere.vm_hw_detail_get` - Retrieve Vsphere Data about a virtual machine
-* `vsphere.vm_hw_hdd_add` - Add a HardDrive Object to a Virtual Machine
-* `vsphere.vm_hw_hdds_get` - Retrieve a list of HDD information from the given VM
-* `vsphere.vm_hw_moid_get` - Retrieve VM MOID
-* `vsphere.vm_hw_nic_add` - Add a Network Device to VM and attach to designated network.
-* `vsphere.vm_hw_nic_edit` - Edit Network Device on Virtual machine (V0.2 only allows to switch network)
-* `vsphere.vm_hw_power_off` - Perform VM Power off - Equivilant of Holding power button
-* `vsphere.vm_hw_power_on` - Power on Virtual Machine
-* `vsphere.vm_hw_remove` - Removes the Virtual Machine.
-* `vsphere.vm_hw_scsi_controller_add` - Add SCSI HDD Controller device to VM
-* `vsphere.vm_hw_scsi_controllers_get` - Retrieve a list of SCSI controllers on the given VM
-* `vsphere.vm_hw_uuid_get` - Retrieve VM UUID
-* `vsphere.vm_runtime_info_get` - Retrieves the Runtime information for a VM.
-* `vsphere.vm_snapshots_delete`	- Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given regex patterns
-* `vsphere.vm_snapshots_get` - Returns detailed information about the snapshots.
-* `vsphere.wait_task` - Wait for a Task to complete and returns its result.
+|  Action  |  Description  |
+|---|---|
+|  affinity_rule_create  |  Creates an affinity rule for vms to hosts  |
+|  affinity_rule_delete  |  Deletes an affinity rule and the groups associated with it  |
+|  custom_attr_assign  |  Assign a custom attribute to a given object  |
+|  custom_attr_assign_or_create  |  Create a custom attribute if it doesn't exist and asssign it to a given object  |
+|  custom_attr_create  |  Assign a custom attribute to a given object  |
+|  custom_attr_get  |  Return the value of the given Custom Attribute on an object  |
+|  datastore_get  |  Retrieve summary information for given Datastores or All Datastores if none are given  |
+|  get_moid  |  Returns the MOID of vSphere managed entity corresponding to the specified parameters. If the corresponding entities are not found then the action will fail.  |
+|  get_objects_with_tag  |  Retrieves list of objects on a vCenter Server system that have the specified tag id OR name (not both)  |
+|  get_tag_value_from_object  |  Get the value of a tag with a given category and object  |
+|  get_tag_value_from_objects  |  Get the value of a tag with a given category and object  |
+|  get_tags_from_objects  |  Get all tags from objects  |
+|  get_tags_on_object  |  Retrieves list of tags that are present on a given object  |
+|  get_vmconsole_urls  |  Retrieves urls of the virtual machines' consoles  |
+|  get_vms  |  Retrieves the virtual machines on a vCenter Server system. It computes the union of Virtual Machine sets based on each parameter.  |
+|  guest_dir_create  |  Creates a temporary directory inside the guest.  |
+|  guest_dir_delete  |  Deletes a directory inside the guest.  |
+|  guest_file_create  |  Creates a temporary file inside the guest.  |
+|  guest_file_delete  |  Deletes a file inside the guest.  |
+|  guest_file_read  |  Read a file inside the guest.  |
+|  guest_file_upload  |  Upload a file to the guest.  |
+|  guest_process_run  |  Run a process inside the guest.  |
+|  guest_process_start  |  Start a process inside the guest.  |
+|  guest_process_wait  |  Wait for a process inside the guest to exit.  |
+|  guest_script_run  |  Run a script inside the guest.  |
+|  hello_vsphere  |  Wait for a Task to complete and returns its result.  |
+|  host_get  |  Retrieve summary information for given Hosts (ESXi)  |
+|  host_network_hits_get  |  Retrieve Network Hints for given Hosts (ESXi)  |
+|  set_vm  |  Changes configuration of a Virtual Machine.  |
+|  tag_attach_or_create  |  Attach a tag to a given object and create the tag and category if they don't exist  |
+|  tag_attach_bulk | Query a parent object and "bulk" tag all of the children under that parent. |
+|  tag_category_create  |  Create a vsphere tag category  |
+|  tag_category_delete  |  Delete a tag category from vSphere  |
+|  tag_category_list  |  List all tag categories from vsphere  |
+|  tag_create  |  Create a vsphere tag with the given category  |
+|  tag_delete  |  Delete a tag from vSphere  |
+|  tag_id_get  |  Retrieves the ID of a tag with the given category and name  |
+|  tag_list  |  List all tags from a given category or all tags if no category is given  |
+|  tags_attach_by_id  |  Attach a list of tag IDs to a given object  |
+|  vm_bestfit  |  This action is used to determine the best host and datastore to provision a new VM to on a given cluster  |
+|  vm_check_tools  |  Wait for a Task to complete and returns its result.  |
+|  vm_config_info_get  |  Retrieve config details of a VM object  |
+|  vm_create_from_template  |  Create a new VM from existing template.  |
+|  vm_env_items_get  |  Retrieve list of Objects from VSphere  |
+|  vm_folder_get  |  Retrieve the containing folder of a VM object  |
+|  vm_guest_info_get  |  Retrieve Guest details of a VM object  |
+|  vm_hw_barebones_create  |  Create BareBones VM (CPU, Ram, Graphics Only)  |
+|  vm_hw_basic_build  |  WorkFlow to build a base VM hardware and optional power on (CPU, RAM, HDD, NIC)  |
+|  vm_hw_cpu_mem_edit  |  Adjust CPU and RAM allocation for a Virtual Machine  |
+|  vm_hw_detail_get  |  Retrieve details of a VM object  |
+|  vm_hw_hdd_add  |  Add New Hdd to Virtual Machine. You must Provide Either VM_ID or Name.  |
+|  vm_hw_hdds_get  |  Retrieve a list of HDD information from the given VM. You must Provide Either VM_ID or Name.  |
+|  vm_hw_moid_get  |  Retrieve moid of a VM object  |
+|  vm_hw_nic_add  |  Add New Hdd to Virtual Machine. You must Provide Either VM_ID or Name.  |
+|  vm_hw_nic_edit  |  Alter Configuration of Network Adapater  |
+|  vm_hw_power_off  |  Performs a Hardware Power Off of a VM. Note: This is not an OS shutdown.  |
+|  vm_hw_power_on  |  Performs a Hardware Power On of a VM.  |
+|  vm_hw_remove  |  Removes the Virtual Machine.  |
+|  vm_hw_scsi_controller_add  |  Add SCSI Controller to VM. You must provide at least one of VM_ID or Name  |
+|  vm_hw_scsi_controllers_get  |  Retrieve a list of SCSI controllers on the given VM  |
+|  vm_hw_uuid_get  |  Retrieve uuid of a VM object  |
+|  vm_networks_get  |  Retrieve a list of network names that the given VM is on  |
+|  vm_rename  |  Renames the Virtual Machine.  |
+|  vm_resource_pool_get  |  Retrieve the MOID of the of the given VM's containing resource pool  |
+|  vm_runtime_info_get  |  Retrieve Runtime details of a VM object  |
+|  vm_shutdown  |  Initiates a clean shutdown of the guest.  Returns immediately without waiting for the guest to complete shutdown.  |
+|  vm_snapshots_delete  |  Removes any snapshots older than the specified age. Ignores any snapshots with names that match the given rexex patterns  |
+|  vm_snapshots_get  |  Return the list of snapshots  |
+|  vm_tools_options_update  |  Changes configuration of a Virtual Machine tools options.  |
+|  wait_task  |  Wait for a Task to complete and returns its result.  |
 
 ## Known Bugs
 * Bug: `vm_hw_hdd_add`, Specifying datastore does not work. New files will be added to the same datastore as the core VM files. Note: Specifying a Datastore Cluster does still install files to the correct set of datastores.

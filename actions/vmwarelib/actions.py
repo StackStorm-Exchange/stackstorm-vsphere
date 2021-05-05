@@ -23,7 +23,7 @@ from pyVmomi import vim  # pylint: disable-msg=E0611
 
 from st2common.runners.base_action import Action
 
-from vmwarelib.tagging import VmwareTagActions
+from vmwarelib.tagging import VmwareTagging
 
 CONNECTION_ITEMS = ['host', 'port', 'user', 'passwd']
 
@@ -41,8 +41,8 @@ class BaseAction(Action):
         else:
             raise ValueError("No connection configuration details found")
 
-        ssl_verify = config.get('ssl_verify', None)
-        if ssl_verify is False:
+        self.ssl_verify = config.get('ssl_verify', None)
+        if self.ssl_verify is False:
             # Don't print out ssl warnings
             requests.packages.urllib3.disable_warnings()  # pylint: disable=no-member
 
@@ -52,6 +52,8 @@ class BaseAction(Action):
                 pass
             else:
                 ssl._create_default_https_context = _create_unverified_https_context
+
+        self.tagging = None
 
     def establish_connection(self, vsphere):
         """
@@ -96,26 +98,25 @@ class BaseAction(Action):
 
     def connect_rest(self, vsphere):
         connection = self._get_connection_info(vsphere)
-
-        session = requests.Session()
-        session.verify = self.config['ssl_verify']
-        session.auth = (connection['user'], connection['passwd'])
-
+        port = connection['port']
         if connection['port'] == 80:
-            transport = "http"
+            scheme = 'http'
+            port = None
         elif connection['port'] == 443:
-            transport = "https"
+            scheme = 'https'
+            port = None
         else:
-            raise ValueError("Port %s is invalid" % connection['port'])
+            raise ValueError("Port %s is invalid" % port)
 
-        url_base = "%s://%s" % (transport, connection['host'])
-        self.tagging = VmwareTagActions(session=session, url_base=url_base)
-
-        login_url = url_base + "/rest/com/vmware/cis/session"
-
-        session.post(login_url)
-
-        return session
+        self.tagging = VmwareTagging(server=connection['host'],
+                                     username=connection['user'],
+                                     password=connection['passwd'],
+                                     scheme=scheme,
+                                     port=port,
+                                     ssl_verify=self.ssl_verify,
+                                     logger=self.logger)
+        self.tagging.login()
+        return self.tagging.session
 
     def _rest_api_call(self, vsphere, api_endpoint, api_verb, payload=None):
         # The connection info is needed to add the hostname to the API endpoint

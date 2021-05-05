@@ -1,0 +1,24 @@
+---
+name: datacenter_get
+pack: vsphere
+runner_type: python-script
+description: Retrieve summary information for given Datacenters or All Datacenters if none are given
+entry_point: datacenter_get.py
+parameters:
+  datacenter_ids:
+    type: array
+    description: Comma seperated list of Datacenter IDs
+    required: false
+    position: 0
+    default: []
+  datacenter_names:
+    type: array
+    description: Comma seperated list of Datacenter Names
+    required: false
+    position: 1
+    default: []
+  vsphere:
+    type: string
+    description: Pre-configured vsphere endpoint
+    required: false
+    position: 2

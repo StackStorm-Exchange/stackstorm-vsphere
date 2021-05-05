@@ -1,0 +1,24 @@
+---
+name: template_get
+pack: vsphere
+runner_type: python-script
+description: Retrieve summary information for given Templates or All Templates if none are given
+entry_point: template_get.py
+parameters:
+  template_ids:
+    type: array
+    description: Comma seperated list of Template IDs
+    required: false
+    position: 0
+    default: []
+  template_names:
+    type: array
+    description: Comma seperated list of Template Names
+    required: false
+    position: 1
+    default: []
+  vsphere:
+    type: string
+    description: Pre-configured vsphere endpoint
+    required: false
+    position: 2

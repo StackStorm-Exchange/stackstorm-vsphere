@@ -10,6 +10,13 @@ parameters:
         type: string
         description: Name of the cluster in vSphere
         required: true
+    datastore_filter_strategy:
+        type: string
+        description: Filter strategy for if you want to exclude or include the datastore matches found.
+        default: "exclude_matches"
+        enum:
+          - 'exclude_matches'
+          - 'include_matches'
     datastore_filter_regex_list:
         type: array
         items:
