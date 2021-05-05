@@ -59,7 +59,13 @@
         no_recursion:
             type: 'boolean'
             description: >
-                Specifies, whether or not to disable the recursive behavior or the command. By default it is False
+                Specifies, whether or not to disable the recursive behavior or the command. By default it is false.
+            required: false
+            default: false
+        return_empty_array_if_not_found:
+            type: 'boolean'
+            description: >
+                Flag to specify whether to return success with an empty array if no VMs are found, otherwise return error.  By default it is false.
             required: false
             default: false
         vsphere:

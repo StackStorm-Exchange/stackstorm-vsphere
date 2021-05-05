@@ -24,7 +24,8 @@ class GetVMs(BaseAction):
             datastore_clusters=None, resource_pools=None,
             vapps=None, hosts=None, folders=None, clusters=None,
             datacenters=None, virtual_switches=None,
-            no_recursion=False, vsphere=None):
+            no_recursion=False, return_empty_array_if_not_found=False, 
+            vsphere=None):
         # TODO: food for thought. PowerCli contains additional
         # parameters that are not present here for the folliwing reason:
         # <server> - we may need to bring it in if we decide to have
@@ -138,7 +139,8 @@ class GetVMs(BaseAction):
             retOptions = vim.PropertyCollector.RetrieveOptions()
             retProps = self.si_content.propertyCollector.RetrievePropertiesEx(
                 specSet=[pfSpec], options=retOptions)
-            if retProps is not None:
+            # if there's items in the returned array, or want to process anyway
+            if retProps is not None or not return_empty_array_if_not_found:
                 vms_from_containers += retProps.objects
                 while retProps.token:
                     retProps = self.si_content.propertyCollector.\

@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.1.1
+
+Changed action:
+* `vsphere.get_vms` - Added flag `return_empty_array_if_not_found` which is defaulted to `false`.  If set to `true`, an empty array and success status will now be returned if no VMs are found.  Default behavior is to return an error.
+
 ## v1.0.1
 
 Addition:
