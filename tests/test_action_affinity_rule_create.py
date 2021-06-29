@@ -139,7 +139,7 @@ class AffinityRuleCreateTestCase(VsphereBaseActionTestCase):
             'rule_name': 'test_rule',
             'cluster_name': 'test_cluster',
             'vm_names': ['test_vm'],
-            'vm_wait_retry': '1'
+            'vm_wait_retry': 1
         }
 
         mock_cluster = mock.Mock()

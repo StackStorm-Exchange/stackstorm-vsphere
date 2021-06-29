@@ -55,13 +55,13 @@ class VMSnapshotsGet(BaseAction):
 
         for s in snapshots:
             snap = {}
-            snap["name"] = s.name.encode('utf-8')
-            snap["description"] = s.description.encode('utf-8')
+            snap["name"] = s.name
+            snap["description"] = s.description
             snap["id"] = s.id
             snap["created"] = str(s.createTime)
-            snap["vm_moid"] = str(s.vm).encode('utf-8').split(':')[-1]
-            snap["snapshot_moid"] = str(s.snapshot).encode('utf-8').split(':')[-1]
-            snap["state"] = s.state.encode('utf-8')
+            snap["vm_moid"] = str(s.vm).split(':')[-1]
+            snap["snapshot_moid"] = str(s.snapshot).split(':')[-1]
+            snap["state"] = s.state
 
             retval.append(snap)
             if s.childSnapshotList:

@@ -110,13 +110,13 @@ class ClusterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'summary': expected_summary_4
             }, {
-                'name': 'test_cluster_5',
-                'id': '5',
-                'summary': expected_summary_5
-            }, {
                 'name': 'test_cluster_2',
                 'id': '2',
                 'summary': expected_summary_2
+            }, {
+                'name': 'test_cluster_5',
+                'id': '5',
+                'summary': expected_summary_5
             }
         ]
 
@@ -241,13 +241,13 @@ class ClusterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'summary': expected_summary_4
             }, {
-                'name': 'test_cluster_5',
-                'id': '5',
-                'summary': expected_summary_5
-            }, {
                 'name': 'test_cluster_2',
                 'id': '2',
                 'summary': expected_summary_2
+            }, {
+                'name': 'test_cluster_5',
+                'id': '5',
+                'summary': expected_summary_5
             }
         ]
 
