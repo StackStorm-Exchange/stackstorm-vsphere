@@ -1,1 +1,1 @@
-pyvmomi
+pyvmomi==7.0.2

@@ -1,6 +1,6 @@
 # Change Log
 
-## v1.0.2
+## v1.1.0
 
 Fixes:
 * Updated all actions to work with Python 3
