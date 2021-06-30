@@ -110,13 +110,13 @@ class DatacenterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'configuration': expected_configuration_4
             }, {
-                'name': 'test_datacenter_5',
-                'id': '5',
-                'configuration': expected_configuration_5
-            }, {
                 'name': 'test_datacenter_2',
                 'id': '2',
                 'configuration': expected_configuration_2
+            }, {
+                'name': 'test_datacenter_5',
+                'id': '5',
+                'configuration': expected_configuration_5
             }
         ]
 
@@ -241,13 +241,13 @@ class DatacenterGetTestCase(VsphereBaseActionTestCase):
                 'id': '4',
                 'configuration': expected_configuration_4
             }, {
-                'name': 'test_datacenter_5',
-                'id': '5',
-                'configuration': expected_configuration_5
-            }, {
                 'name': 'test_datacenter_2',
                 'id': '2',
                 'configuration': expected_configuration_2
+            }, {
+                'name': 'test_datacenter_5',
+                'id': '5',
+                'configuration': expected_configuration_5
             }
         ]
 

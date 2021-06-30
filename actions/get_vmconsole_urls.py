@@ -27,10 +27,7 @@ class GetVMConsoleUrls(BaseAction):
             'vm=urn:vmomi:VirtualMachine:{{vm}}:{si_uuid}'
 
         si_uuid = self.si_content.about.instanceUuid
-        if vsphere:
-            connection = self.config['vsphere'].get(vsphere)
-        else:
-            connection = self.config
+        connection = self._get_connection_info(vsphere)
 
         host = connection['host']
         port = connection['port']

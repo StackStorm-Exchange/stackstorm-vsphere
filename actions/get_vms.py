@@ -155,7 +155,7 @@ class GetVMs(BaseAction):
                     "runtime.powerState": vm.propSet[2].val
                 }
 
-        return moid_to_vm.values()
+        return list(moid_to_vm.values())
 
     @staticmethod
     def __add_vm_properties_to_map_from_vm_array(vm_map, vm_array):

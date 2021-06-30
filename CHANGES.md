@@ -1,5 +1,12 @@
 # Change Log
 
+## v1.1.0
+
+Fixes:
+* Updated all actions to work with Python 3
+* `vm_snapshots_delete` - This action was working as expected before v1.0.1. If no snapshots were found on a VM then we need to skip errors so the rest of the snapshots from other VMs still get deleted
+* `get_vmconsole_urls` - Fixed bug where if vsphere input wasn't passed the default vsphere connection from the config wasn't getting found
+
 ## v1.0.1
 
 Addition:
