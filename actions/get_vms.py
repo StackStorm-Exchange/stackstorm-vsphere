@@ -20,7 +20,7 @@ from vmwarelib.actions import BaseAction
 
 class GetVMs(BaseAction):
 
-    def run(self, ids=None, names=None, datastores=None,
+    def run(self, ids=None, names=None, uuids=None, datastores=None,
             datastore_clusters=None, resource_pools=None,
             vapps=None, hosts=None, folders=None, clusters=None,
             datacenters=None, virtual_switches=None,
@@ -39,13 +39,17 @@ class GetVMs(BaseAction):
         props = ['config.guestFullName', 'name', 'runtime.powerState']
         moid_to_vm = {}
 
-        # getting vms by their ids
-        vms_from_vmids = []
+        # getting vms by their moids
+        vms_from_moids = []
         if ids:
-            vms_from_vmids = [vim.VirtualMachine(moid, stub=self.si._stub)
-                              for moid in ids]
+            container = self.si_content.viewManager.CreateContainerView(
+                self.si_content.rootFolder, [vim.VirtualMachine], True)
+            for vm in container.view:
+                moid = str(vm).split(':')[1].replace('\'', '')
+                if moid in ids:
+                    vms_from_moids.append(vm)
             GetVMs.__add_vm_properties_to_map_from_vm_array(moid_to_vm,
-                                                            vms_from_vmids)
+                                                            vms_from_moids)
 
         # getting vms by their names
         vms_from_names = []
@@ -57,6 +61,17 @@ class GetVMs(BaseAction):
                     vms_from_names.append(vm)
             GetVMs.__add_vm_properties_to_map_from_vm_array(
                 moid_to_vm, vms_from_names)
+
+        # getting vms by their uuids
+        vms_from_uuids = []
+        if uuids:
+            container = self.si_content.viewManager.CreateContainerView(
+                self.si_content.rootFolder, [vim.VirtualMachine], True)
+            for vm in container.view:
+                if vm.config.uuid in uuids:
+                    vms_from_uuids.append(vm)
+            GetVMs.__add_vm_properties_to_map_from_vm_array(moid_to_vm,
+                                                            vms_from_uuids)
 
         # getting vms from datastore objects
         vms_from_datastores = []
