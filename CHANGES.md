@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.2.0
+
+Changed action:
+* `vsphere.get_vms` - Added option to get VMs with a list of UUIDs. Also changed MOID lookup to loop through all VMs instead of returning the first one in case any duplicates were found
+
 ## v1.1.0
 
 Fixes:

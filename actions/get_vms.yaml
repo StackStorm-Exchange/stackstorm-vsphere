@@ -7,11 +7,15 @@
     parameters:
         ids:
             type: 'array'
-            description: Comma-separated ids of Virtual Machines to retrieve.
+            description: Comma-separated moids of Virtual Machines to retrieve.
             required: false
         names:
             type: 'array'
             description: Comma-separated names of Virtual Machines to retrieve.
+            required: false
+        uuids:
+            type: 'array'
+            description: Comma-separated uuids of Virtual Machines to retrieve.
             required: false
         datastores:
             type: 'array'
