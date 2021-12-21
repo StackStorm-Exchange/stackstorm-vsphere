@@ -14,3 +14,4 @@ contributors:
   - James E. King III <jking@apache.org>
   - John Schoewe <jschoewe@gmail.com>
 python_versions:
+  - "3"
