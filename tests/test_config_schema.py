@@ -16,8 +16,8 @@ class ConfigSchemaTestCase(BasePackResourceTestCase):
         super(ConfigSchemaTestCase, self).setUp()
 
         self.shell = shell.Shell()
-        self._content_schema = yaml.load(self.get_fixture_content('config.schema.yaml'))
-        self._new_config = yaml.load(self.get_fixture_content('cfg_new.yaml'))
+        self._content_schema = yaml.safe_load(self.get_fixture_content('config.schema.yaml'))
+        self._new_config = yaml.safe_load(self.get_fixture_content('cfg_new.yaml'))
 
     @mock.patch.object(httpclient.HTTPClient, 'get')
     @mock.patch.object(ConfigManager, 'update')
