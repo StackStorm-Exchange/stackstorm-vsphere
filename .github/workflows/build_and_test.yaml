@@ -10,9 +10,44 @@ on:
 jobs:
   # This is mirrored in the release workflow.
   build_and_test:
-    name: 'Build and Test'
-    uses: StackStorm-Exchange/ci/.github/workflows/pack-build_and_test.yaml@master
-    with:
-      enable-common-libs: true
-      #apt-cache-version: v0
-      #py-cache-version: v0
+    runs-on: ubuntu-latest
+    name: 'Build and Test / Python ${{ matrix.python-version-short }}'
+    strategy:
+      matrix:
+        include:
+          - python-version-short: "3.6"
+            python-version: 3.6.13
+    steps:
+
+      - name: Checkout Pack Repo and CI Repos
+        uses: StackStorm-Exchange/ci/.github/actions/checkout@gha
+
+      - name: Install APT Dependencies
+        uses: StackStorm-Exchange/ci/.github/actions/apt-dependencies@gha
+        with:
+          cache-version: v0
+
+      - name: Install Python Dependencies
+        uses: StackStorm-Exchange/ci/.github/actions/py-dependencies@gha
+        with:
+          cache-version: v0
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run pack tests
+        uses: StackStorm-Exchange/ci/.github/actions/test@gha
+        with:
+          enable-common-libs: false
+
+    services:
+      mongo:
+        image: mongo:3.4
+        ports:
+          - 27017:27017
+      rabbitmq:
+        image: rabbitmq:3
+        ports:
+          - 5672:5672
+      #redis:
+      #  image: redis
+      #  ports:
+      #    - 6379:6379
