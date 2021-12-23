@@ -30,7 +30,12 @@ class ConfigSchemaTestCase(BasePackResourceTestCase):
             'pack': 'vsphere',
             'attributes': self._content_schema
         }
-        mock_http_get.return_value = FakeResponse(json.dumps(dummy_api_response), 200, 'OK')
+        # with the orjson change, st2client now expects to be able to use
+        # the response.content attribute, so populate it.
+        dummy_api_response_content = json.dumps(dummy_api_response)
+        dummy_api_response_object = FakeResponse(dummy_api_response_content, 200, 'OK')
+        dummy_api_response_object.content = dummy_api_response_content
+        mock_http_get.return_value = dummy_api_response_object
 
         # set dummy paramters
         def side_effect_prompt(msg, **kwargs):
