@@ -86,7 +86,14 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         test_endpoint = "https://%s/rest/com/vmware/cis/session" % \
                         self._new_config['vsphere']['default']['host']
 
+        expected_string = '{"fake": "data", "value": "123"}'
+        expected_cookies = {"auth": "data",
+                            "info": "cookie"}
+
         expected_result = mock.MagicMock()
+        expected_result.raise_for_status.return_value = None
+        expected_result.cookies = expected_cookies
+        expected_result.content = expected_string
 
         mock_session.return_value = expected_result
 
