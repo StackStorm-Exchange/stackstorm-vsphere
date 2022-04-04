@@ -89,7 +89,6 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         expected_string = '{"fake": "data", "value": "123"}'
         expected_cookies = {"auth": "data",
                             "info": "cookie"}
-        expected_headers = {'vmware-api-session-id': '123'}
 
         # mock
         mock_response = mock.MagicMock()
