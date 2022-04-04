@@ -130,7 +130,7 @@ class VmwareTagging(object):
         # however, we'll return the cookie value so that it may be returned
         # to the user
         result = json.loads(response.content)
-        self.session.headers.update({"vmware-api-session-id":result["value"]})
+        self.session.headers.update({"vmware-api-session-id": result["value"]})
         return dict(response.cookies)
 
     ############################################################################
