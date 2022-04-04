@@ -1,6 +1,6 @@
 # Change Log
 
-## v1.3.0
+## v1.3.1
 
 Fixes:
 * `login` - Cooking based authentication is deprecated, switched to header authentication (@dsbibby)

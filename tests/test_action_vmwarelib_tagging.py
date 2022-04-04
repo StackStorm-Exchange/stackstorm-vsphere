@@ -215,8 +215,6 @@ class TaggingTestCase(unittest.TestCase):
         # setup
         action = self.create_class_object()
 
-        expected = {"fake": "data",
-                    "value": "123"}
         expected_string = '{"fake": "data", "value": "123"}'
         expected_cookies = {"auth": "data",
                             "info": "cookie"}
@@ -238,7 +236,8 @@ class TaggingTestCase(unittest.TestCase):
         result = action.login()
 
         # assert
-        action.session.post.assert_called_with("https://vsphere.domain.tld/rest/com/vmware/cis/session",
+        vm_url = "https://vsphere.domain.tld/rest/com/vmware/cis/session"
+        action.session.post.assert_called_with(vm_url,
                                                headers={"vmware-use-header-authn": "true"})
         mock_response.raise_for_status.assert_called_with()
         self.assertEqual(result, expected_cookies)
