@@ -131,15 +131,15 @@ class NetworkGetTestCase(VsphereBaseActionTestCase):
                 'is_dvs': False,
                 'summary': expected_sumary_4
             }, {
-                'name': 'test_network_5',
-                'id': 5,
-                'is_dvs': True,
-                'summary': expected_sumary_5
-            }, {
                 'name': 'test_network_2',
                 'id': 2,
                 'is_dvs': False,
                 'summary': expected_sumary_2
+            }, {
+                'name': 'test_network_5',
+                'id': 5,
+                'is_dvs': True,
+                'summary': expected_sumary_5
             }
         ]
 
@@ -292,15 +292,15 @@ class NetworkGetTestCase(VsphereBaseActionTestCase):
                 'is_dvs': False,
                 'summary': expected_sumary_4
             }, {
-                'name': 'test_network_5',
-                'id': 5,
-                'is_dvs': True,
-                'summary': expected_sumary_5
-            }, {
                 'name': 'test_network_2',
                 'id': 2,
                 'is_dvs': False,
                 'summary': expected_sumary_2
+            }, {
+                'name': 'test_network_5',
+                'id': 5,
+                'is_dvs': True,
+                'summary': expected_sumary_5
             }
         ]
 

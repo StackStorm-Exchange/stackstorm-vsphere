@@ -16,8 +16,8 @@ class ConfigSchemaTestCase(BasePackResourceTestCase):
         super(ConfigSchemaTestCase, self).setUp()
 
         self.shell = shell.Shell()
-        self._content_schema = yaml.load(self.get_fixture_content('config.schema.yaml'))
-        self._new_config = yaml.load(self.get_fixture_content('cfg_new.yaml'))
+        self._content_schema = yaml.safe_load(self.get_fixture_content('config.schema.yaml'))
+        self._new_config = yaml.safe_load(self.get_fixture_content('cfg_new.yaml'))
 
     @mock.patch.object(httpclient.HTTPClient, 'get')
     @mock.patch.object(ConfigManager, 'update')
@@ -30,7 +30,12 @@ class ConfigSchemaTestCase(BasePackResourceTestCase):
             'pack': 'vsphere',
             'attributes': self._content_schema
         }
-        mock_http_get.return_value = FakeResponse(json.dumps(dummy_api_response), 200, 'OK')
+        # with the orjson change, st2client now expects to be able to use
+        # the response.content attribute, so populate it.
+        dummy_api_response_content = json.dumps(dummy_api_response)
+        dummy_api_response_object = FakeResponse(dummy_api_response_content, 200, 'OK')
+        dummy_api_response_object.content = dummy_api_response_content
+        mock_http_get.return_value = dummy_api_response_object
 
         # set dummy paramters
         def side_effect_prompt(msg, **kwargs):

@@ -13,9 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from actions import BaseAction
+from .actions import BaseAction
 from pyVmomi import vim  # pylint: disable-msg=E0611
-import inventory
+from . import inventory
 import os
 
 

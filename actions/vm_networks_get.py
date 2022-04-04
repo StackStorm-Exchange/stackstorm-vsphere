@@ -41,4 +41,4 @@ class GetVMNetworks(BaseAction):
                                           name=vm_name)
 
         # return a list of network names that the VM is on
-        return map(lambda x: x.name, vm.network)
+        return list(map(lambda x: x.name, vm.network))

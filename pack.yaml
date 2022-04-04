@@ -3,7 +3,7 @@ ref: vsphere
 name: vsphere
 description: VMware vSphere
 stackstorm_version: ">=2.9.0"
-version: 0.15.1
+version: 1.3.0
 author: Paul Mulvihill
 email: paul.mulvihill@pulsant.com
 contributors:
@@ -13,3 +13,5 @@ contributors:
   - Bradley Bishop <bishopbm1@gmail.com>
   - James E. King III <jking@apache.org>
   - John Schoewe <jschoewe@gmail.com>
+python_versions:
+  - "3"

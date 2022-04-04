@@ -124,10 +124,6 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
 
         expected_result = [
             {
-                'name': 'test_datastore_5',
-                'id': 5,
-                'summary': expected_sumary_5
-            }, {
                 'name': 'test_datastore_4',
                 'id': 4,
                 'summary': expected_sumary_4
@@ -135,6 +131,10 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
                 'name': 'test_datastore_2',
                 'id': 2,
                 'summary': expected_sumary_2
+            }, {
+                'name': 'test_datastore_5',
+                'id': 5,
+                'summary': expected_sumary_5
             }
         ]
 
@@ -279,10 +279,6 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
 
         expected_result = [
             {
-                'name': 'test_datastore_5',
-                'id': 5,
-                'summary': expected_sumary_5
-            }, {
                 'name': 'test_datastore_4',
                 'id': 4,
                 'summary': expected_sumary_4
@@ -290,6 +286,10 @@ class DatastoreGetTestCase(VsphereBaseActionTestCase):
                 'name': 'test_datastore_2',
                 'id': 2,
                 'summary': expected_sumary_2
+            }, {
+                'name': 'test_datastore_5',
+                'id': 5,
+                'summary': expected_sumary_5
             }
         ]
 

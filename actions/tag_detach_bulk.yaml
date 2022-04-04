@@ -1,0 +1,138 @@
+---
+name: tag_detach_bulk
+runner_type: python-script
+description: >
+  Query a parent object and "bulk" remove tags for all of the children under that parent.
+  If the category and tag do not exist, this will simply return without doing any work.
+
+  To bulk tag all of the VMs under a Cluster the invocation would look like:
+    st2 run vsphere.tag_detach_bulk \
+        category_name="automation_friendly"\
+        tag_name="true"\
+        query_object_name="cluster.dev1"\
+        query_object_type="ClusterComputeResource"\
+        bulk_object_type="VirtualMachine"
+
+  This would query the cluster (ClusterComputeResource) named "cluster.dev1" for
+  all VMs (VirtualMachine) that are a member of that cluster. It would then tag
+  all of these VMs with automation_friendly=true.
+enabled: true
+entry_point: tag_detach_bulk.py
+parameters:
+    bulk_object_type:
+        type: 'string'
+        description: Type of object to detach tags from (e.g. VirtualMachine)
+        required: true
+        enum:
+          - AuthorizationManager
+          - ClusterComputeResource
+          - ComputeResource
+          - CustomFieldsManager
+          - Datacenter
+          - Datastore
+          - DiagnosticManager
+          - DistributedVirtualSwitch
+          - DistributedVirtualPortgroup
+          - DrsStatsManager/InjectorWorkload
+          - Extension
+          - ExtensionManager
+          - HbrManager
+          - HostSystem
+          - HttpNfcLease
+          - IpPoolManager
+          - LatencySensitivity
+          - LicenseAssignmentManager
+          - LicenseManager
+          - LocalizationManager
+          - ManagedEntity
+          - Network
+          - OpaqueNetwork
+          - OvfConsumer
+          - OvfManager
+          - PerformanceManager
+          - ResourcePlanningManager
+          - ResourcePool
+          - ServiceInstance
+          - ServiceManager
+          - SessionManager
+          - SharesInfo
+          - SimpleCommand
+          - StoragePod
+          - StorageResourceManager
+          - TaskFilterSpec
+          - TaskInfo
+          - UpdateVirtualMachineFilesResult
+          - VirtualApp
+          - VirtualDiskManager
+          - VirtualMachine
+    category_cardinality:
+        type: 'string'
+        description: Cardinality of the tag category, only used if category needs to be created
+        required: false
+        default: 'SINGLE'
+        enum:
+          - 'SINGLE'
+          - 'MULTIPLE'
+    category_name:
+        type: 'string'
+        description: Category name of the tag to detach
+        required: true
+    query_object_name:
+        type: 'string'
+        description: ID of the object to detach tags from
+        required: true
+    query_object_type:
+        type: 'string'
+        description: Type of object to query for sub-objects (e.g. ClusterComputeResource)
+        required: true
+        enum:
+          - AuthorizationManager
+          - ClusterComputeResource
+          - ComputeResource
+          - CustomFieldsManager
+          - Datacenter
+          - Datastore
+          - DiagnosticManager
+          - DistributedVirtualSwitch
+          - DistributedVirtualPortgroup
+          - DrsStatsManager/InjectorWorkload
+          - Extension
+          - ExtensionManager
+          - HbrManager
+          - HostSystem
+          - HttpNfcLease
+          - IpPoolManager
+          - LatencySensitivity
+          - LicenseAssignmentManager
+          - LicenseManager
+          - LocalizationManager
+          - ManagedEntity
+          - Network
+          - OpaqueNetwork
+          - OvfConsumer
+          - OvfManager
+          - PerformanceManager
+          - ResourcePlanningManager
+          - ResourcePool
+          - ServiceInstance
+          - ServiceManager
+          - SessionManager
+          - SharesInfo
+          - SimpleCommand
+          - StoragePod
+          - StorageResourceManager
+          - TaskFilterSpec
+          - TaskInfo
+          - UpdateVirtualMachineFilesResult
+          - VirtualApp
+          - VirtualDiskManager
+          - VirtualMachine
+    tag_name:
+        type: 'string'
+        description: Name of the tag to detach
+        required: true
+    vsphere:
+        type: "string"
+        description: Pre-Configured vsphere connection details
+        required: false
+        default: ~

@@ -36,9 +36,7 @@ class VMSnapshotsDelete(BaseAction):
             # an item from name_ignore_patterns
             remove_date = snap.createTime + datetime.timedelta(days=max_age_days)
 
-            # we need to encode snap shot names because
-            # VM Snapshot 11/13/2019, 9:59:56 AM -> VM Snapshot 11%252f13%252f2019, 9:59:56 AM
-            snap_name = snap.name.encode('utf-8')
+            snap_name = snap.name
 
             # ignore if the snapshot name matches one of the regexes
             if self.matches_pattern_list(snap_name, name_ignore_patterns):
@@ -75,6 +73,7 @@ class VMSnapshotsDelete(BaseAction):
             try:
                 snapshots = vm.snapshot.rootSnapshotList
             except:
+                self.logger.exception('No snapshots found for VM: {}.'.format(vm.name))
                 continue
 
             result = self.delete_old_snapshots(snapshots, max_age_days, name_ignore_patterns)

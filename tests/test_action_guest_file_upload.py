@@ -25,8 +25,7 @@ class InitiateFileTransferToGuestTestCase(VsphereBaseActionTestCase):
     __test__ = True
     action_cls = InitiateFileTransferToGuest
 
-    @mock.patch('__builtin__.open',
-                mock.mock_open(read_data="mockfilecontents"))
+    @mock.patch('builtins.open', mock.mock_open(read_data="mockfilecontents"))
     @mock.patch('pyVmomi.vim.vm.guest.FileManager')
     @mock.patch('requests.put')
     def test_normal(self, mock_put, mock_guest_file_manager):

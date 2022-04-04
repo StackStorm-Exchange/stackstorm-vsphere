@@ -1,5 +1,53 @@
 # Change Log
 
+## v1.3.0
+
+Fixes:
+* `login` - Cooking based authentication is deprecated, switched to header authentication (@dsbibby)
+
+Updates:
+* `test` - Added tests for login method (@bishopbm1)
+
+## v1.2.0
+
+Changed action:
+* `vsphere.get_vms` - Added option to get VMs with a list of UUIDs. Also changed MOID lookup to loop through all VMs instead of returning the first one in case any duplicates were found
+
+## v1.1.0
+
+Fixes:
+* Updated all actions to work with Python 3
+* `vm_snapshots_delete` - This action was working as expected before v1.0.1. If no snapshots were found on a VM then we need to skip errors so the rest of the snapshots from other VMs still get deleted
+* `get_vmconsole_urls` - Fixed bug where if vsphere input wasn't passed the default vsphere connection from the config wasn't getting found
+
+## v1.0.1
+
+Addition:
+*  `vm_snapshots_delete` - Replaced continue statement with exception handling which is necessary so that error will not be skipped when run in production (non-debug).
+
+## v1.0.0
+
+* Drop Python 2.7 support
+
+## v0.16.1
+
+Fixes:
+* Fixed bug in `vsphere.tag_*_bulk` where it was erroring if it found no bulk objects
+  under the query object (example if a Cluster had no VMs in it).
+
+Contributed by Nick Maludy (@nmaludy Encore Technologies).
+
+## v0.16.0
+
+Additions:
+* Added lots of new back-end API functionality to the `vmwarelib.tagging.VmwareTagging` interface.
+* Added new `vsphere.tag_attach_bulk` action to attach a tag to a bulk set of resources.
+  Primary usecase is tagging all VMs in a cluster dynamically.
+* Added new `vsphere.tag_detach_bulk` action to detach a tag from a bulk set of resources.
+  Primary usecase is remoave a tag from all VMs in a cluster dynamically.
+
+Contributed by Nick Maludy (@nmaludy Encore Technologies).
+
 ## v0.15.1
 
 Changed action:

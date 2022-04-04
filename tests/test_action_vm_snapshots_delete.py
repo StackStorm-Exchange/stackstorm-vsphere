@@ -170,8 +170,13 @@ class VMSnapshotsDeleteTestCase(VsphereBaseActionTestCase):
         mock_vm2 = mock.MagicMock()
         mock_vm2.snapshot.rootSnapshotList = ["snap2"]
 
+        mock_vm_no_snaps = mock.MagicMock()
+        vm_name_property = mock.PropertyMock(return_value="vm_name")
+        type(mock_vm_no_snaps).name = vm_name_property
+        mock_vm_no_snaps.snapshot = "vm_no_snaps"
+
         # Mock a list of 2 VMs with "snapshots" and one without
-        test_vm_list = ["vm_no_snaps", mock_vm1, mock_vm2]
+        test_vm_list = [mock_vm_no_snaps, mock_vm1, mock_vm2]
         mock_vm_list = mock.MagicMock(view=test_vm_list)
         mock_inventory.return_value = mock_vm_list
 
