@@ -211,6 +211,41 @@ class TaggingTestCase(unittest.TestCase):
 
     ############################################################################
 
+    def test_login(self):
+        # setup
+        action = self.create_class_object()
+
+        expected = {"fake": "data",
+                    "value": "123"}
+        expected_string = '{"fake": "data", "value": "123"}'
+        expected_cookies = {"auth": "data",
+                            "info": "cookie"}
+        expected_headers = {'vmware-api-session-id': '123'}
+
+        # mock
+        mock_response = mock.MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.cookies = expected_cookies
+        mock_response.content = expected_string
+
+        mock_session = mock.MagicMock()
+        mock_session.headers = {}
+        mock_session.post.return_value = mock_response
+
+        action.session = mock_session
+
+        # execute
+        result = action.login()
+
+        # assert
+        action.session.post.assert_called_with("https://vsphere.domain.tld/rest/com/vmware/cis/session",
+                                               headers={"vmware-use-header-authn": "true"})
+        mock_response.raise_for_status.assert_called_with()
+        self.assertEqual(result, expected_cookies)
+        self.assertEqual(action.session.headers, expected_headers)
+
+    ############################################################################
+
     # Category Functions
 
     @mock.patch("vmwarelib.tagging.VmwareTagging.get")

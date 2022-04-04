@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import argparse
+import json
 import requests
 
 try:
@@ -123,11 +124,13 @@ class VmwareTagging(object):
 
     def login(self):
         url = self.make_url("/rest/com/vmware/cis/session")
-        response = self.session.post(url)
+        response = self.session.post(url, headers={"vmware-use-header-authn": "true"})
         response.raise_for_status()
         # if this succeeds, the cookie is automatically saved in our session
         # however, we'll return the cookie value so that it may be returned
         # to the user
+        result = json.loads(response.content)
+        self.session.headers.update({"vmware-api-session-id": result["value"]})
         return dict(response.cookies)
 
     ############################################################################
