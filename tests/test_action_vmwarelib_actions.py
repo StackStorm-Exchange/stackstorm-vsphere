@@ -106,7 +106,8 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         result = action.connect_rest(test_vsphere)
 
         self.assertEqual(result, expected_result)
-        expected_result.post.assert_called_with(test_endpoint)
+        expected_result.post.assert_called_with(test_endpoint,
+                                                headers={"vmware-use-header-authn": "true"})
 
     @mock.patch("vmwarelib.actions.requests.Request")
     @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
