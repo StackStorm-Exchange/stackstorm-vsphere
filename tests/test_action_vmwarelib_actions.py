@@ -86,7 +86,19 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         test_endpoint = "https://%s/rest/com/vmware/cis/session" % \
                         self._new_config['vsphere']['default']['host']
 
+        expected_string = '{"fake": "data", "value": "123"}'
+        expected_cookies = {"auth": "data",
+                            "info": "cookie"}
+
+        # mock
+        mock_response = mock.MagicMock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.cookies = expected_cookies
+        mock_response.content = expected_string
+
         expected_result = mock.MagicMock()
+        expected_result.headers = {}
+        expected_result.post.return_value = mock_response
 
         mock_session.return_value = expected_result
 
@@ -94,7 +106,8 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         result = action.connect_rest(test_vsphere)
 
         self.assertEqual(result, expected_result)
-        expected_result.post.assert_called_with(test_endpoint)
+        expected_result.post.assert_called_with(test_endpoint,
+                                                headers={"vmware-use-header-authn": "true"})
 
     @mock.patch("vmwarelib.actions.requests.Request")
     @mock.patch("vmwarelib.actions.BaseAction.connect_rest")
