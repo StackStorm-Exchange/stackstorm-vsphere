@@ -1,5 +1,6 @@
 [![CI](https://github.com/StackStorm-Exchange/stackstorm-vsphere/actions/workflows/build_and_test.yaml/badge.svg)](https://github.com/StackStorm-Exchange/stackstorm-vsphere/actions/workflows/build_and_test.yaml)
 
+
 # VSphere Integration Pack
 
 This pack integrates with vsphere and allows for the creation and management of Virtual Machines.
