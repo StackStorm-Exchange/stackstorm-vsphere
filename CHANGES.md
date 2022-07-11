@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.3.3
+
+Updates:
+* `vm_bestfit` - Added logic to account for scenario where there is more then one datacenter. (@bishopbm1)
+
 ## v1.3.2
 
 Fixes:
