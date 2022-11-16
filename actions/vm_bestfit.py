@@ -45,6 +45,8 @@ class BestFit(BaseAction):
             host_dc = host_cluster.parent.parent
             # Need to verify that the host is on, connected, and not in maintenance mode
             # powerState can be 'poweredOff' 'poweredOn' 'standBy' 'unknown'
+            # Since there can be multiple hosts with the same name in different clusters
+            # and datacenters we need to verify we are getting the correct host.
             if (host_dc.name == datacenter_name and
                     host_cluster.name == cluster_name and
                     host.runtime.powerState == 'poweredOn' and

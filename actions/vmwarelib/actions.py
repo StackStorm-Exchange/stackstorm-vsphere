@@ -16,7 +16,7 @@
 import ssl
 import atexit
 
-import eventlet
+import eventlet  # pylint: disable=import-error
 import requests
 from pyVim import connect
 from pyVmomi import vim  # pylint: disable-msg=E0611
