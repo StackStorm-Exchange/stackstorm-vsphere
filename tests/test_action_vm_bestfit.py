@@ -124,29 +124,40 @@ class BestFitTestCase(VsphereBaseActionTestCase):
     @mock.patch('vmwarelib.actions.BaseAction.get_vim_type')
     def test_get_host(self, mock_vim_type, mock_entities):
         test_cluster_name = "cls1"
+        test_datacetner_name = "dc1"
         test_vim_type = "vimType"
         mock_vim_type.return_value = test_vim_type
 
         # Mock function results
         mock_host1 = mock.MagicMock()
         mock_host1.parent.name = "cls1"
+        mock_host1.parent.parent.parent.name = "dc1"
         mock_host1.runtime.powerState = "poweredOn"
         mock_host1.runtime.inMaintenanceMode = False
         mock_host1.vm = ["vm1", "vm2"]
 
         mock_host2 = mock.MagicMock()
         mock_host2.parent.name = "cls1"
+        mock_host2.parent.parent.parent.name = "dc1"
         mock_host2.runtime.powerState = "poweredOn"
         mock_host2.runtime.inMaintenanceMode = False
         # This host will be the expected result since it has the fewest VMs
         mock_host2.vm = ["vm1"]
 
+        mock_host3 = mock.MagicMock()
+        mock_host3.parent.name = "cls1"
+        mock_host3.parent.parent.parent.name = "dc2"
+        mock_host3.runtime.powerState = "poweredOn"
+        mock_host3.runtime.inMaintenanceMode = False
+        # This host will be the expected result since it has the fewest VMs
+        mock_host3.vm = ["vm1"]
+
         # Mock a list of 2 hosts that are unavailable
-        test_host_list = [mock_host1, mock_host2]
+        test_host_list = [mock_host1, mock_host2, mock_host3]
         mock_host_list = mock.MagicMock(view=test_host_list)
         mock_entities.return_value = mock_host_list
 
-        result = self._action.get_host(test_cluster_name)
+        result = self._action.get_host(test_datacetner_name, test_cluster_name)
 
         self.assertEqual(result, mock_host2)
         mock_entities.assert_called_with(self._action.si_content, test_vim_type)
@@ -301,6 +312,7 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         test_vsphere = "vsphere"
 
         test_cluster_name = "test-cluster"
+        test_datacenter_name = "test-datacenter"
         test_host_name = "test-host"
         test_host_id = "host-123"
         test_ds_name = "test-ds"
@@ -312,6 +324,7 @@ class BestFitTestCase(VsphereBaseActionTestCase):
         mock_host = mock.MagicMock()
         type(mock_host).name = mock.PropertyMock(return_value=test_host_name)
         mock_host.parent.name = test_cluster_name
+        mock_host.parent.parent.parent.name = test_datacenter_name
         mock_host._moId = test_host_id
 
         mock_get_host.return_value = mock_host
@@ -328,7 +341,8 @@ class BestFitTestCase(VsphereBaseActionTestCase):
                            'datastoreName': test_ds_name,
                            'datastoreID': test_ds_id}
 
-        result = self._action.run(test_cluster_name,
+        result = self._action.run(test_datacenter_name,
+                                  test_cluster_name,
                                   'exclude_matches',
                                   test_ds_filter,
                                   test_disks,
@@ -336,7 +350,7 @@ class BestFitTestCase(VsphereBaseActionTestCase):
 
         self.assertEqual(result, expected_result)
         self._action.establish_connection.assert_called_with(test_vsphere)
-        mock_get_host.assert_called_with(test_cluster_name)
+        mock_get_host.assert_called_with(test_datacenter_name, test_cluster_name)
         mock_get_storage.assert_called_with(mock_host,
                                             'exclude_matches',
                                             test_ds_filter,
