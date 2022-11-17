@@ -14,7 +14,7 @@
 # limitations under the License.
 
 from vmwarelib.guest import GuestAction
-import eventlet
+import eventlet  # pylint: disable=import-error
 import sys
 
 

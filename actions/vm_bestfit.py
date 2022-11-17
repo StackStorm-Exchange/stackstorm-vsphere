@@ -26,7 +26,7 @@ class BestFit(BaseAction):
         """
         super(BestFit, self).__init__(config)
 
-    def get_host(self, cluster_name):
+    def get_host(self, datacenter_name, cluster_name):
         """Return a host from the given cluster that's powered on and has the least number of VMs
         :param cluster_name: Name of the cluster to retrieve a host from
         :returns host_obj: Host object from the given cluster
@@ -39,9 +39,16 @@ class BestFit(BaseAction):
         least_vms = None
 
         for host in hosts.view:
+            host_cluster = host.parent
+            # The first parent of a cluster is a folder
+            # and the parent of that is the Datacenter
+            host_dc = host_cluster.parent.parent
             # Need to verify that the host is on, connected, and not in maintenance mode
             # powerState can be 'poweredOff' 'poweredOn' 'standBy' 'unknown'
-            if (host.parent.name == cluster_name and
+            # Since there can be multiple hosts with the same name in different clusters
+            # and datacenters we need to verify we are getting the correct host.
+            if (host_dc.name == datacenter_name and
+                    host_cluster.name == cluster_name and
                     host.runtime.powerState == 'poweredOn' and
                     host.runtime.inMaintenanceMode is False):
                 # Find the host that has the least number of VMs on it
@@ -137,6 +144,7 @@ class BestFit(BaseAction):
         return default_return
 
     def run(self,
+            datacenter_name,
             cluster_name,
             datastore_filter_strategy,
             datastore_filter_regex_list,
@@ -159,7 +167,7 @@ class BestFit(BaseAction):
         self.establish_connection(vsphere)
 
         # Return a host from the given cluster that's powered on and has the least amount of VMs
-        host = self.get_host(cluster_name)
+        host = self.get_host(datacenter_name, cluster_name)
 
         # Return a datastore on the host that is either specified in the disks variable or
         # has the most free space and a name that doesn't match any filters

@@ -17,7 +17,7 @@ from vmwarelib.actions import BaseAction
 from vmwarelib import inventory
 import re
 import datetime
-import pytz
+import pytz  # pylint: disable=import-error
 
 
 class VMSnapshotsDelete(BaseAction):

@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import eventlet
+import eventlet  # pylint: disable=import-error
 import json
 
 from pyVmomi import vim  # pylint: disable-msg=E0611
