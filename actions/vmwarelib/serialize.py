@@ -27,6 +27,7 @@ NON_JSON_SERILIZABLE_TYPES = [
     vim.option.OptionValue,
     vim.SharesInfo,
     vim.StorageResourceManager.IOAllocationInfo,
+    vim.vm.BootOptions,
     vim.vm.ConfigInfo,
     vim.vm.Summary,
     vim.vm.Summary.ConfigSummary,
