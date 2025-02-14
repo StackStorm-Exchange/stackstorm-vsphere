@@ -28,19 +28,15 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
     # action_cls = BaseAction
     action_cls = GetObjectsWithTag
 
-    def test_init(self):
-        action = self.get_action_instance(self._new_config)
-        self.assertIsInstance(action, BaseAction)
+    def test_init_config_new(self):
+        action = self.get_action_instance(self.new_config)
+        self.assertIsInstance(action, self.action_cls)
 
     def test_init_config_blank(self):
         self.assertRaises(ValueError, self.action_cls, self.blank_config)
 
     def test_init_config_old(self):
         self.assertRaises(ValueError, self.action_cls, self.old_config)
-
-    def test_init_config_new(self):
-        action = self.get_action_instance(self.new_config)
-        self.assertIsInstance(action, self.action_cls)
 
     def test_init_config_old_partial(self):
         self.assertRaises(ValueError, self.action_cls, self.old_config_partial)
