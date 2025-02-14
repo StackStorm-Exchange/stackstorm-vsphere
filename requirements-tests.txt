@@ -1,9 +1,1 @@
-# these old pins conflict with those in st2 causing CI to fail
-# feel free to update if you still want a pack-local cache of the deps
-#mock>=1.3.0,<2.0
-#unittest2>=1.1.0,<2.0
-#nose>=1.3.7
-#eventlet==0.25.1
-#requests[security]==2.23.0
-#pytz==2019.1
-pyvmomi==7.0.2
+pyvmomi==8.0.3.0.1
