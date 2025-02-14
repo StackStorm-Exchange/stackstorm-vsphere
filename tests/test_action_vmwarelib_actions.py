@@ -32,9 +32,23 @@ class BaseActionTestCase(VsphereBaseActionTestCase):
         action = self.get_action_instance(self._new_config)
         self.assertIsInstance(action, BaseAction)
 
-    def test_init_blank_config(self):
-        with self.assertRaises(ValueError):
-            self.get_action_instance(self._blank_config)
+    def test_init_config_blank(self):
+        self.assertRaises(ValueError, self.action_cls, self.blank_config)
+
+    def test_init_config_old(self):
+        self.assertRaises(ValueError, self.action_cls, self.old_config)
+
+    def test_init_config_new(self):
+        action = self.get_action_instance(self.new_config)
+        self.assertIsInstance(action, self.action_cls)
+
+    def test_init_config_old_partial(self):
+        self.assertRaises(ValueError, self.action_cls, self.old_config_partial)
+
+    def test_init_config_new_partial(self):
+        action = self.get_action_instance(self.new_config_partial)
+        self.assertRaises(KeyError, action.establish_connection,
+                          vsphere="default")
 
     def test_get_connection_info(self):
         action = self.get_action_instance(self._new_config)
