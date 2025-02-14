@@ -331,9 +331,9 @@ class TaggingTestCase(unittest.TestCase):
         action = self.create_class_object()
         create_spec = action.category_create_spec()
         self.assertEqual(create_spec, {"name": "",
-                                        "description": "",
-                                        "cardinality": "SINGLE",
-                                        "associable_types": []})
+                                       "description": "",
+                                       "cardinality": "SINGLE",
+                                       "associable_types": []})
 
     @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_category_create_all_params(self, mock_post):
@@ -563,8 +563,8 @@ class TaggingTestCase(unittest.TestCase):
         action = self.create_class_object()
         create_spec = action.tag_create_spec()
         self.assertEqual(create_spec, {"name": "",
-                                        "description": "",
-                                        "category_id": ""})
+                                       "description": "",
+                                       "category_id": ""})
 
     @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_create(self, mock_post):
@@ -633,13 +633,13 @@ class TaggingTestCase(unittest.TestCase):
         action = self.create_class_object()
         result = action.tag_association_endpoint()
         self.assertEqual(result,
-                          "/rest/com/vmware/cis/tagging/tag-association")
+                         "/rest/com/vmware/cis/tagging/tag-association")
 
     def test_tag_association_endpoint_tag_id(self):
         action = self.create_class_object()
         result = action.tag_association_endpoint("123")
         self.assertEqual(result,
-                          "/rest/com/vmware/cis/tagging/tag-association/id:123")
+                         "/rest/com/vmware/cis/tagging/tag-association/id:123")
 
     @mock.patch("vmwarelib.tagging.VmwareTagging.post")
     def test_tag_association_attach(self, mock_post):
