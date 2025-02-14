@@ -13,8 +13,6 @@
 # See the License for the specific language governing permissions and
 
 import mock
-
-from vmwarelib.actions import BaseAction
 from vsphere_base_action_test_case import VsphereBaseActionTestCase
 from get_objects_with_tag import GetObjectsWithTag
 
