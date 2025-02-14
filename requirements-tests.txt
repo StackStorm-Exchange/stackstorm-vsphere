@@ -6,5 +6,5 @@
 #eventlet==0.25.1
 #requests[security]==2.23.0
 #pytz==2019.1
-pyvmomi==7.0.2
+pyvmomi==8.0.3.0.1
 pytest-cov

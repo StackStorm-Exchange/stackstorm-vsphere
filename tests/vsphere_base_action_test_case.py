@@ -66,7 +66,6 @@ class VsphereBaseActionTestCase(BaseActionTestCase):
     def test_run_config_new(self):
         action = self.get_action_instance(self.new_config)
         self.assertIsInstance(action, self.action_cls)
-        return action
 
     def test_run_config_old_partial(self):
         self.assertRaises(ValueError, self.action_cls, self.old_config_partial)
@@ -86,7 +85,7 @@ class VsphereBaseActionTestCase(BaseActionTestCase):
         Returns:
         - (action, mock_vm)
         """
-        action = self.test_run_config_new()
+        action = self.get_action_instance(self.new_config)
         action.establish_connection = mock.Mock()
         action.si_content = mock.Mock()
         action.si_content.rootFolder = mock.Mock()

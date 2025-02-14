@@ -1,5 +1,10 @@
 # Change Log
 
+## v1.3.5
+
+Updates:
+* Updated test files to work with latest CI updates (@jschoewe)
+
 ## v1.3.4
 
 Updates:
